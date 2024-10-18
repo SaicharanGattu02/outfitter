@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:outfitter/Authentication/Login.dart';
+import 'package:outfitter/Screens/dashbord.dart';
 import 'package:outfitter/utils/Mywidgets.dart';
 
 import '../utils/ShakeWidget.dart';
@@ -574,7 +575,7 @@ class _RegisterState extends State<Register> {
                       const SizedBox(width: 6),
                       InkWell(
                         onTap: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>Login()));
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>Dashbord()));
                         },
                         child: Text(
                           "Login",
