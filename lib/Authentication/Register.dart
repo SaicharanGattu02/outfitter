@@ -575,7 +575,7 @@ class _RegisterState extends State<Register> {
                       const SizedBox(width: 6),
                       InkWell(
                         onTap: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>Dashbord()));
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>Login()));
                         },
                         child: Text(
                           "Login",

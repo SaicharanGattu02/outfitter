@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:outfitter/Authentication/Register.dart';
 
 
 class Splash extends StatefulWidget {
@@ -14,25 +15,30 @@ class _SplashState extends State<Splash> {
   @override
   void initState() {
     super.initState();
-    // fetchDetails();
+    fetchDetails();
   }
-  //
-  // fetchDetails() async {
-  //   // final Token = await PreferenceService().getString("token") ?? "";
-  //   // print("Token>>>${Token}");
-  //   setState(() {
-  //     token = Token;
-  //   });
-  //
-  //   // Wait for 2 seconds before navigating
-  //   Future.delayed(Duration(seconds: 2), () {
-  //     Navigator.of(context).pushReplacement(
-  //       MaterialPageRoute(
-  //         builder: (context) => (token.isEmpty) ? LogInScreen() : Dashboard(),
-  //       ),
-  //     );
-  //   });
-  // }
+
+  fetchDetails() async {
+    // final Token = await PreferenceService().getString("token") ?? "";
+    // print("Token>>>${Token}");
+    setState(() {
+      // token = Token;
+    });
+
+    // Wait for 2 seconds before navigating
+    Future.delayed(Duration(seconds: 2), () {
+      // Navigator.of(context).pushReplacement(
+      //   MaterialPageRoute(
+      //     builder: (context) => (token.isEmpty) ? LogInScreen() : Dashboard(),
+      //   ),
+      // );
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => Register(),
+        ),
+      );
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,23 +46,21 @@ class _SplashState extends State<Splash> {
     var w = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      backgroundColor: Color(0xff8856F4),
+
       body: Center(
         child: Container(
-          height:376,
+
           width: w,
           decoration: BoxDecoration(
             image: DecorationImage(
-              image: AssetImage("assets/Background.png"),
+              image: AssetImage("assets/SplashSuit.png"),
               fit: BoxFit.cover,
             ),
           ),
           child: Center(
             child: Image.asset(
-              "assets/skillLogo.png",
+              "assets/OutfiterText.png",color: Color(0xffE7C6A033),
               fit: BoxFit.contain,
-              height: h * 0.20,
-              width: w*0.35,
             ),
           ),
         ),

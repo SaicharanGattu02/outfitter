@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:outfitter/Authentication/Register.dart';
+import 'package:outfitter/Screens/CustomizeBar.dart';
+import 'package:outfitter/Screens/OrderSummary.dart';
 import 'package:outfitter/Screens/Splash.dart';
 
 void main() {
@@ -55,7 +57,7 @@ class MyApp extends StatelessWidget {
           colorScheme: const ColorScheme.light(background: Colors.white)
               .copyWith(background: Colors.white),
         ),
-      home:Register()
+      home:OrderSummary()
     );
   }
 }

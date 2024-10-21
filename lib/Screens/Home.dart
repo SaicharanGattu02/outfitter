@@ -149,7 +149,8 @@ class _HomeState extends State<Home> {
                                   width: 1,
                                 ),
                               ),
-                              child: Column(
+                              child:
+                              Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -291,7 +292,8 @@ class _HomeState extends State<Home> {
               ),
               SizedBox(height: h * 0.01),
               Center(
-                child: Container(
+                child:
+                Container(
                   width: w * 0.35,
                   padding: EdgeInsets.all(12),
                   decoration: BoxDecoration(
