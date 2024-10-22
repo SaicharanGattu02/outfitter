@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:outfitter/Screens/CustomizeBar.dart';
 import 'package:outfitter/Screens/Filters.dart';
+import 'package:outfitter/Screens/UploderProfile.dart';
 import 'package:outfitter/utils/CustomAppBar.dart';
 
 class Home extends StatefulWidget {
@@ -171,12 +172,16 @@ class _HomeState extends State<Home> {
                                   const SizedBox(height: 15),
                                   Row(
                                     children: [
-                                      CircleAvatar(
-                                        radius: 12,
-                                        child: ClipOval(
-                                          child: Image.asset(
-                                            "assets/postedBY.png",
-                                            fit: BoxFit.contain,
+                                      InkWell(onTap:(){
+                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>UploaderProfile()));
+                  },
+                                        child: CircleAvatar(
+                                          radius: 12,
+                                          child: ClipOval(
+                                            child: Image.asset(
+                                              "assets/postedBY.png",
+                                              fit: BoxFit.contain,
+                                            ),
                                           ),
                                         ),
                                       ),
