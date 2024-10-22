@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:outfitter/Screens/Profile.dart';
 
 class CustomApp extends StatelessWidget implements PreferredSizeWidget {
   final double w;
@@ -72,7 +73,8 @@ class CustomApp extends StatelessWidget implements PreferredSizeWidget {
                 SizedBox(width: w * 0.025),
                 InkWell(
                   onTap: () {
-                    // Handle profile icon tap
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => Profile()));
                   },
                   child: Container(
                     alignment: Alignment.center,
