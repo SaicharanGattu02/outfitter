@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 class CustomApp extends StatelessWidget implements PreferredSizeWidget {
   final double w;
-  final String  title;
+  final String title;
 
-  CustomApp({required this.title,required this.w});
+  CustomApp({required this.title, required this.w});
 
   @override
   Widget build(BuildContext context) {
@@ -19,10 +19,12 @@ class CustomApp extends StatelessWidget implements PreferredSizeWidget {
         child: Row(
           children: [
             InkResponse(
-              onTap: () {},
+              onTap: () {
+                Navigator.pop(context);
+              },
               child: Row(
                 children: [
-                  Icon(Icons.arrow_back,color: Color(0xffffffff),),
+                  Icon(Icons.arrow_back, color: Color(0xffffffff)),
                   const SizedBox(width: 12),
                 ],
               ),
@@ -95,4 +97,51 @@ class CustomApp extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Size get preferredSize => Size.fromHeight(50);
+}
+
+class DashedLine extends StatelessWidget {
+  final double width;
+  final double height;
+
+  const DashedLine({
+    Key? key,
+    this.width = double.infinity,
+    this.height = 1.0,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: width,
+      height: height,
+      child: CustomPaint(
+        painter: DashedLinePainter(),
+      ),
+    );
+  }
+}
+
+class DashedLinePainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    double dashWidth = 5.0;
+    double dashSpace = 3.0;
+    double startX = 0;
+
+    while (startX < size.width) {
+      canvas.drawLine(
+        Offset(startX, 0),
+        Offset(startX + dashWidth, 0),
+        Paint()
+          ..color = Color(0xffCBDAF3)
+          ..strokeWidth = size.height,
+      );
+      startX += dashWidth + dashSpace;
+    }
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) {
+    return false;
+  }
 }

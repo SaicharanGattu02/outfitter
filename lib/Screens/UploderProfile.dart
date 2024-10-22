@@ -27,10 +27,14 @@ class _UploaderProfileState extends State<UploaderProfile> {
     return Scaffold(
       backgroundColor: Color(0xff110B0F),
       appBar: AppBar(
-        leading: Icon(
-          Icons.arrow_back_ios_outlined,
-          color: Color(0xffffffff),
-          size: 18,
+        leading: InkWell(onTap: (){
+          Navigator.pop(context);
+        },
+          child: Icon(
+            Icons.arrow_back_ios_outlined,
+            color: Color(0xffffffff),
+            size: 18,
+          ),
         ),
         title: Text(
           "Back",
@@ -65,7 +69,7 @@ class _UploaderProfileState extends State<UploaderProfile> {
                   Row(
                     children: [
                       CircleAvatar(
-                        radius: 22,
+                        radius: 18,
                         child: ClipOval(
                           child: Image.asset(
                             "assets/postedBY.png",

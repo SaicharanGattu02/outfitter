@@ -9,11 +9,11 @@ class CuffTypeCustomize extends StatefulWidget {
 
 class _CuffTypeCustomizeState extends State<CuffTypeCustomize> {
   final List<Map<String, String>> grid = [
-    {"image": 'assets/c1.png', 'name': 'Peaked Collar'},
-    {"image": 'assets/c2.png', 'name': 'Spread Collar'},
-    {"image": 'assets/c3.png', 'name': 'Small Peaked'},
-    {"image": 'assets/c4.png', 'name': 'Button Down'},
-    {"image": 'assets/c4.png', 'name': 'Pin Collar'},
+    {"image": 'assets/cuff1.png', 'name': 'Large Round '},
+    {"image": 'assets/cuff2.png', 'name': 'Are-Shape'},
+    {"image": 'assets/cuff3.png', 'name': 'Double Button '},
+    {"image": 'assets/cuff4.png', 'name': 'Cham Fering '},
+
   ];
   bool _isDescriptionVisible = false;
   final List<Map<String, String>> size = [
@@ -222,7 +222,9 @@ class _CuffTypeCustomizeState extends State<CuffTypeCustomize> {
                                 ),
                                 borderRadius: BorderRadius.circular(8),
                               ),
-                              child: ClipOval(
+                              child: Container(
+                                decoration: BoxDecoration(borderRadius: BorderRadius.circular(7)),
+                                clipBehavior: Clip.hardEdge,
                                 child: Image.asset(
                                   grid[index]['image']!,
                                   width: 45,

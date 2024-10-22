@@ -9,11 +9,11 @@ class BackBodyCustomize extends StatefulWidget {
 
 class _BackBodyCustomizeState extends State<BackBodyCustomize> {
   final List<Map<String, String>> grid = [
-    {"image": 'assets/c1.png', 'name': 'Peaked Collar'},
-    {"image": 'assets/c2.png', 'name': 'Spread Collar'},
-    {"image": 'assets/c3.png', 'name': 'Small Peaked'},
-    {"image": 'assets/c4.png', 'name': 'Button Down'},
-    {"image": 'assets/c4.png', 'name': 'Pin Collar'},
+    {"image": 'assets/backbody1.png', 'name': 'Bow Pleat'},
+    {"image": 'assets/backbody2.png', 'name': 'Both Sides'},
+    {"image": 'assets/backbody3.png', 'name': 'Waist Pleat'},
+
+
   ];
   bool _isDescriptionVisible = false;
   final List<Map<String, String>> size = [
@@ -222,7 +222,9 @@ class _BackBodyCustomizeState extends State<BackBodyCustomize> {
                                 ),
                                 borderRadius: BorderRadius.circular(8),
                               ),
-                              child: ClipOval(
+                              child: Container(
+                                decoration: BoxDecoration(borderRadius: BorderRadius.circular(7)),
+                                clipBehavior: Clip.hardEdge,
                                 child: Image.asset(
                                   grid[index]['image']!,
                                   width: 45,

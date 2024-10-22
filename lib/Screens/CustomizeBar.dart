@@ -69,7 +69,10 @@ class _CustomizeProductBarState extends State<CustomizeProductBar>
               children: [
                 Row(
                   children: [
-                    Icon(Icons.arrow_back_outlined, size: 24),
+                    InkWell(onTap:(){
+                      Navigator.pop(context);
+    },
+                        child: Icon(Icons.arrow_back_outlined, size: 24)),
                     SizedBox(width: w * 0.02),
                     Text(
                       "Regular Fit Poplin shirt",

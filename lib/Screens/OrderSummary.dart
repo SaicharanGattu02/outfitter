@@ -35,21 +35,6 @@ class _OrderSummaryState extends State<OrderSummary> {
       'quantity': '1',
     },
   ];
-  void _incrementQuantity(int index) {
-    setState(() {
-      grid[index]['quantity'] =
-          (int.parse(grid[index]['quantity']!) + 1).toString();
-    });
-  }
-
-  void _decrementQuantity(int index) {
-    setState(() {
-      if (int.parse(grid[index]['quantity']!) > 1) {
-        grid[index]['quantity'] =
-            (int.parse(grid[index]['quantity']!) - 1).toString();
-      }
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -171,84 +156,75 @@ class _OrderSummaryState extends State<OrderSummary> {
               SizedBox(height: h * 0.008),
               _buildItemList(w, h),
               SizedBox(height: h * 0.008),
-              Container(
-                padding: EdgeInsets.only(top: 8, bottom: 8),
-                height: h * 0.04,
-                decoration: BoxDecoration(color: Color(0xffE7C6A0)),
-                child: Center(
-                  child: Text(
-                    "Available until 10hrs 30mins 20secs",
-                    style: TextStyle(
-                      color: Color(0xff110B0F),
-                      fontFamily: 'RozhaOne',
-                      fontSize: 16,
-                      height: 20 / 16,
-                      fontWeight: FontWeight.w400,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ),
 
             ],
           ),
         ),
       ),
-      // bottomNavigationBar: Column(children: [
-      //   Container(
-      //     padding: EdgeInsets.only(top: 8, bottom: 8),
-      //     height: h * 0.04,
-      //     decoration: BoxDecoration(color: Color(0xffE7C6A0)),
-      //     child: Center(
-      //       child: Text(
-      //         "Available until 10hrs 30mins 20secs",
-      //         style: TextStyle(
-      //           color: Color(0xff110B0F),
-      //           fontFamily: 'RozhaOne',
-      //           fontSize: 16,
-      //           height: 20 / 16,
-      //           fontWeight: FontWeight.w400,
-      //         ),
-      //         textAlign: TextAlign.center,
-      //       ),
-      //     ),
-      //   ),
-      //   Row(children: [
-      //     Text(
-      //       "₹5209",
+      bottomNavigationBar:
+      // Container(
+      //   padding: EdgeInsets.only(top: 8, bottom: 8),
+      //   height: h * 0.04,
+      //   decoration: BoxDecoration(color: Color(0xffE7C6A0)),
+      //   child: Center(
+      //     child: Text(
+      //       "Available until 10hrs 30mins 20secs",
       //       style: TextStyle(
-      //         color: Color(0xff617C9D),
+      //         color: Color(0xff110B0F),
       //         fontFamily: 'RozhaOne',
-      //         fontSize: 20,
-      //         height: 24 / 20,
+      //         fontSize: 16,
+      //         height: 20 / 16,
       //         fontWeight: FontWeight.w400,
       //       ),
+      //       textAlign: TextAlign.center,
       //     ),
-      //     Spacer(),
-      //     Container(
-      //       width: w * 0.45,
-      //       height: h*0.06,
-      //       padding: EdgeInsets.all(12),
-      //       decoration: BoxDecoration(
-      //           border: Border.all(color: Color(0xff110B0F), width: 1),
-      //           borderRadius: BorderRadius.circular(6)),
-      //       child: Center(
-      //         child: Text(
-      //           "CHECK OUT",
-      //           style: TextStyle(
-      //             color: Color(0xffCAA16C),
-      //             fontFamily: 'RozhaOne',
-      //             fontSize: 16,
-      //             height: 21.06 / 16,
-      //             fontWeight: FontWeight.w400,
-      //           ),
-      //           textAlign: TextAlign.center,
-      //         ),
-      //       ),
-      //     ),
+      //   ),
       //
-      //   ],)
-      // ],),
+      //
+      // ),
+
+      Padding(
+        padding: const EdgeInsets.only(left: 16,right: 16,bottom: 5),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              "₹5209",
+              style: TextStyle(
+                color: Color(0xff617C9D),
+                fontFamily: 'RozhaOne',
+                fontSize: 20,
+                height: 24 / 20,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+
+            Container(
+              width: w * 0.45,
+              height: h * 0.05,
+              padding: EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                  color: Color(0xff110B0F),
+                  borderRadius: BorderRadius.circular(6)),
+              child: Center(
+                child: Text(
+                  "CONTINUE",
+                  style: TextStyle(
+                    color: Color(0xffCAA16C),
+                    fontFamily: 'RozhaOne',
+                    fontSize: 16,
+                    height: 21.06 / 16,
+                    fontWeight: FontWeight.w400,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+          ],
+        ),
+      )
+
+
     );
   }
 
@@ -344,15 +320,14 @@ class _OrderSummaryState extends State<OrderSummary> {
   }
 
   Widget _buildItemList(double w, double h) {
-    return ListView.builder(
+    return
+      ListView.builder(
       padding: EdgeInsets.all(0),
       physics: NeverScrollableScrollPhysics(),
       shrinkWrap: true,
       itemCount: grid.length,
       itemBuilder: (context, index) {
         final item = grid[index];
-
-        // Ensure quantity is correctly parsed from string
         int quantity = int.parse(item['quantity']!);
 
         return Container(
@@ -452,7 +427,7 @@ class _OrderSummaryState extends State<OrderSummary> {
                     ),
                     SizedBox(height: h * 0.008), // Corrected spacing
                     Container(
-                      width: w * 0.37,
+                      width: w * 0.4,
                       padding: EdgeInsets.symmetric(horizontal: 10),
                       decoration: BoxDecoration(
                         color: Color(0xffFFFFFF),
@@ -490,7 +465,8 @@ class _OrderSummaryState extends State<OrderSummary> {
                                     fontWeight: FontWeight.w400,
                                   ))),
                           IconButton(
-                            icon: Icon(Icons.add, size: 16, color: Color(0xfffE7C6A0)),
+                            icon: Icon(Icons.add,
+                                size: 16, color: Color(0xfffE7C6A0)),
                             onPressed: () {
                               setState(() {
                                 quantity++;

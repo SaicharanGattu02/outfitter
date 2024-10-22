@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:outfitter/Authentication/Register.dart';
+import 'package:outfitter/Screens/Category.dart';
 import 'package:outfitter/Screens/CustomizeBar.dart';
 import 'package:outfitter/Screens/OrderSummary.dart';
 import 'package:outfitter/Screens/Splash.dart';
+import 'package:outfitter/Screens/UploaderImageView.dart';
+import 'package:outfitter/Screens/dashbord.dart';
 
 void main() {
   runApp(const MyApp());
@@ -57,7 +60,7 @@ class MyApp extends StatelessWidget {
           colorScheme: const ColorScheme.light(background: Colors.white)
               .copyWith(background: Colors.white),
         ),
-      home:OrderSummary()
+      home:UploaderImageView()
     );
   }
 }

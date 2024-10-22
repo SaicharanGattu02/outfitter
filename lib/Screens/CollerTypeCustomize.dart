@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:outfitter/Screens/UploderProfile.dart';
 
 class CollerTypeCustomize extends StatefulWidget {
   const CollerTypeCustomize({super.key});
@@ -218,11 +219,13 @@ class _CollerTypeCustomizeState extends State<CollerTypeCustomize> {
                                   color: _selectedIndex == index
                                       ? Color(0xffCAA16C)
                                       : Colors.transparent,
-                                  width: 2,
+                                  width: 1,
                                 ),
                                 borderRadius: BorderRadius.circular(8),
                               ),
-                              child: ClipOval(
+                              child: Container(
+                                decoration: BoxDecoration(borderRadius: BorderRadius.circular(7)),
+                                clipBehavior: Clip.hardEdge,
                                 child: Image.asset(
                                   grid[index]['image']!,
                                   width: 45,
@@ -274,12 +277,16 @@ class _CollerTypeCustomizeState extends State<CollerTypeCustomize> {
                         ),
                       ),
                       Spacer(),
-                      CircleAvatar(
-                        radius: 12,
-                        child: ClipOval(
-                          child: Image.asset(
-                            "assets/postedBY.png",
-                            fit: BoxFit.contain,
+                      InkWell(onTap: (){
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>UploaderProfile()));
+                      },
+                        child: CircleAvatar(
+                          radius: 12,
+                          child: ClipOval(
+                            child: Image.asset(
+                              "assets/postedBY.png",
+                              fit: BoxFit.contain,
+                            ),
                           ),
                         ),
                       ),

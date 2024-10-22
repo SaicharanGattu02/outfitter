@@ -10,11 +10,9 @@ class PocketTypeCustomize extends StatefulWidget {
 
 class _PocketTypeCustomizeState extends State<PocketTypeCustomize> {
   final List<Map<String, String>> grid = [
-    {"image": 'assets/c1.png', 'name': 'Peaked Collar'},
-    {"image": 'assets/c2.png', 'name': 'Spread Collar'},
-    {"image": 'assets/c3.png', 'name': 'Small Peaked'},
-    {"image": 'assets/c4.png', 'name': 'Button Down'},
-    {"image": 'assets/c4.png', 'name': 'Pin Collar'},
+    {"image": 'assets/planket1.png', 'name': 'Bow Pleat'},
+    {"image": 'assets/planket2.png', 'name': 'Hidden Placket'},
+
   ];
   bool _isDescriptionVisible = false;
   final List<Map<String, String>> size = [
@@ -223,7 +221,9 @@ class _PocketTypeCustomizeState extends State<PocketTypeCustomize> {
                                 ),
                                 borderRadius: BorderRadius.circular(8),
                               ),
-                              child: ClipOval(
+                              child: Container(
+                                decoration: BoxDecoration(borderRadius: BorderRadius.circular(7)),
+                                clipBehavior: Clip.hardEdge,
                                 child: Image.asset(
                                   grid[index]['image']!,
                                   width: 45,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:outfitter/Screens/CustomizeBar.dart';
 import 'package:outfitter/Screens/Filters.dart';
 import 'package:outfitter/utils/CustomAppBar.dart';
 
@@ -155,13 +156,17 @@ class _HomeState extends State<Home> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Center(
-                                    child: Container(
-                                        child: Image.asset(
-                                      grid[index]['image']!,
-                                      fit: BoxFit.contain,
-                                      width: w * 0.3,
-                                      height: h * 0.2,
-                                    )),
+                                    child: InkWell(onTap:(){
+                                      Navigator.push(context, MaterialPageRoute(builder: (context)=>CustomizeProductBar()));
+                  },
+                                      child: Container(
+                                          child: Image.asset(
+                                        grid[index]['image']!,
+                                        fit: BoxFit.contain,
+                                        width: w * 0.3,
+                                        height: h * 0.2,
+                                      )),
+                                    ),
                                   ),
                                   const SizedBox(height: 15),
                                   Row(
