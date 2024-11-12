@@ -2,6 +2,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:outfitter/Screens/dashbord.dart';
+import 'package:outfitter/Services/UserApi.dart';
+import 'package:outfitter/utils/Preferances.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import '../utils/ShakeWidget.dart';
 
@@ -29,8 +31,8 @@ class _OtpState extends State<Otp> {
           : "";
     });
     if (_verifyMessage == "") {
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => Dashbord()));
+      VerifyOtp();
+
     } else {
       setState(() {
         _isLoading = false;
@@ -38,11 +40,41 @@ class _OtpState extends State<Otp> {
     }
   }
 
+
   @override
   void dispose() {
     otpController.dispose();
     super.dispose();
   }
+
+  Future<void> VerifyOtp() async{
+    var res = await Userapi.VerifyOtp(widget.mobileNumber, otpController.text);
+    if (res!=null){
+      setState(() {
+        if(res.settings?.success==1){
+          _isLoading=false;
+          PreferenceService().saveString('refresh',refresh)
+
+
+          Navigator.push(context, MaterialPageRoute(builder: (context)=>Dashbord()));
+        }else{
+          _isLoading=false;
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(
+              "Please enter a valid mobile number.",
+              style: TextStyle(color: Color(0xff000000)),
+            ),
+            duration: Duration(seconds: 1),
+            backgroundColor: Color(0xFFCDE2FB),
+          ));
+        }
+      });
+
+    }
+
+  }
+
+
 
   @override
   Widget build(BuildContext context) {

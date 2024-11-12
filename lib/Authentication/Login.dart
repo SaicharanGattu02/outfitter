@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:outfitter/Authentication/Otp.dart';
+import 'package:outfitter/Services/UserApi.dart';
 
 import '../utils/Mywidgets.dart';
 import '../utils/ShakeWidget.dart';
@@ -24,9 +25,36 @@ class _LoginState extends State<Login> {
     });
 
     if (_validatePhone.isEmpty) {
-      Navigator.push(context, MaterialPageRoute(builder: (context) => Otp(mobileNumber: _phoneController.text)));
+      LoginOtp();
+
     }
   }
+
+  Future<void> LoginOtp() async {
+    await Userapi.PostOtp(_phoneController.text).then((data) => {
+      if (data != null) {
+        setState(() {
+          if (data.settings?.success ==1) {
+            _loading=false;
+            Navigator.push(context, MaterialPageRoute(builder: (context) => Otp(mobileNumber: _phoneController.text)));
+
+          }else{
+            _loading=false;
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text(
+                "Please enter a valid mobile number.",
+                style: TextStyle(color: Color(0xff000000)),
+              ),
+              duration: Duration(seconds: 1),
+              backgroundColor: Color(0xFFCDE2FB),
+            ));
+          }
+        })
+      }
+    });
+  }
+
+
 
   @override
   Widget build(BuildContext context) {

@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:outfitter/Authentication/Login.dart';
-import 'package:outfitter/Screens/dashbord.dart';
+
+import 'package:outfitter/Services/UserApi.dart';
 import 'package:outfitter/utils/Mywidgets.dart';
 
+import '../utils/CustomSnackBar.dart';
 import '../utils/ShakeWidget.dart';
+import 'Otp.dart';
 
 class Register extends StatefulWidget {
   const Register({super.key});
@@ -18,6 +21,8 @@ class _RegisterState extends State<Register> {
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _pwdController = TextEditingController();
   bool _obscureText = true;
+  String _gender="";
+  String _validateGender="";
   // Focus nodes
   final FocusNode _focusNodeFullName = FocusNode();
   final FocusNode _focusNodeEmail = FocusNode();
@@ -28,7 +33,7 @@ class _RegisterState extends State<Register> {
   String _validateemail = "";
   String _validatePhone = "";
   String _validatePwd = "";
-  String _validateGender = "";
+
 
   bool _loading = false;
 
@@ -48,7 +53,33 @@ class _RegisterState extends State<Register> {
         _validateemail.isEmpty &&
         _validatePhone.isEmpty &&
         _validatePwd.isEmpty &&
-        _validateGender.isEmpty) {}
+        _validateGender.isEmpty) {
+      RegisterApi();
+    }
+  }
+
+
+
+  Future<void> RegisterApi() async {
+    var data = await Userapi.PostRegister(_fullNameController.text, _emailController.text, _phoneController.text, _pwdController.text, _gender??"");
+    if (data != null) {
+      setState(() {
+        if (data.settings?.success == 1) {
+          _loading=false;
+          CustomSnackBar.show(context, "${data.settings?.message}");
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => Login()));
+          // Navigator.push(
+          //     context, MaterialPageRoute(builder: (context) =>LogInScreen()));
+        } else {
+          _loading=false;
+          CustomSnackBar.show(context, "${data.settings?.message}");
+          print("Register failure");
+        }
+      });
+    } else {
+      print("Register >>>${data?.settings?.message}");
+    }
   }
 
   @override
@@ -59,7 +90,8 @@ class _RegisterState extends State<Register> {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       backgroundColor: Color(0xff),
-      body: Stack(
+      body:
+      Stack(
         fit: StackFit.expand,
         children: [
           Column(
@@ -79,7 +111,9 @@ class _RegisterState extends State<Register> {
             ],
           ),
 
+          SizedBox(height: h*0.1,),
           Positioned(
+
             bottom:0,
             child: Container(
               width: w,
@@ -529,6 +563,81 @@ class _RegisterState extends State<Register> {
                     ),
                   ),
 
+                  const SizedBox(height: 12),
+                  Text(
+                    "Gender",
+                    style: TextStyle(
+                      color: Color(0xff1C1C1C),
+                      fontFamily: "Inter",
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                      height: 19.36 / 12,
+                    ),
+                  ),
+                  Row(mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Transform.scale(
+                            scale: 0.9,
+                            child: Radio<String>(
+                              value: 'Female',
+                              groupValue: _gender,
+                              activeColor: Color(0xff8856F4), // Change the active color
+                              onChanged: (value) {
+                                setState(() {
+                                  _gender = value!;
+                                });
+                              },
+                            ),
+                          ), // Decrease the space between the Radio and the Text
+                          Text('Female'),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Transform.scale(
+                            scale: 0.9, // Adjust the scale to decrease the size
+                            child: Radio<String>(
+                              value: 'Male',
+                              groupValue: _gender,
+                              activeColor: Color(0xff8856F4), // Change the active color
+                              onChanged: (value) {
+                                setState(() {
+                                  _gender = value!;
+                                });
+                              },
+                            ),
+                          ),
+                          // Decrease the space between the Radio and the Text
+                          const Text('Male'),
+                        ],
+                      ),
+                    ],
+                  ),if (_validateGender.isNotEmpty) ...[
+                    Container(
+                      alignment: Alignment.topLeft,
+                      margin: EdgeInsets.only(
+                          left: 8, bottom: 10, top: 5),
+                      width: MediaQuery.of(context).size.width * 0.6,
+                      child: ShakeWidget(
+                        key: Key("value"),
+                        duration: Duration(milliseconds: 700),
+                        child: Text(
+                          _validateGender,
+                          style: TextStyle(
+                            fontFamily: "Poppins",
+                            fontSize: 12,
+                            color: Colors.red,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ] else ...[
+                    SizedBox(height: 8),
+                  ],
                   const SizedBox(height: 12),
                   InkResponse(
                     onTap: () {
