@@ -53,7 +53,7 @@ class _CategoryState extends State<Category> {
         child: Column(
           children: [
             Image.asset(
-              'assets/Banner.png',
+              'assets/category_banner.png',
               fit: BoxFit.contain,
             ),
             SizedBox(height: h * 0.02),

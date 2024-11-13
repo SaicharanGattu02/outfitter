@@ -1,4 +1,4 @@
-package com.example.outfitter
+package com.fitter.outfiter
 
 import io.flutter.embedding.android.FlutterActivity
 

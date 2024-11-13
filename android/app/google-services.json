@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "153000763658",
+    "project_id": "outfiter-e6ea4",
+    "storage_bucket": "outfiter-e6ea4.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:153000763658:android:6903860417d2c9cd0d1af3",
+        "android_client_info": {
+          "package_name": "com.fitter.outfiter"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA1ztuuICh3Vv-P9W4vSdRQliIjqHBKcNw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -75,7 +75,7 @@ class _DashHomeState extends State<DashHome> {
           children: [
             Container(
               child: Image.asset(
-                "assets/SplashSuit.png", // Your image path
+                "assets/Banner.png", // Your image path
                 fit: BoxFit.fill,
                 width: w,
               ),
