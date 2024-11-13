@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:outfitter/utils/CustomAppBar1.dart';
+import 'package:provider/provider.dart';
 
 import '../Model/CategoriesModel.dart';
 import '../Services/UserApi.dart';
+import '../providers/CategoriesProvider.dart';
 
 class Category extends StatefulWidget {
   const Category({super.key});
@@ -25,22 +27,22 @@ class _CategoryState extends State<Category> {
 
   @override
   void initState() {
-    GetCategoriesList();
+    // GetCategoriesList();
     super.initState();
   }
-  List<Categories> categories=[];
-  Future<void> GetCategoriesList() async{
-    var res = await Userapi.getCategories();
-    if (res!=null){
-      setState(() {
-        if(res.settings?.success==1){
-          categories=res.data??[];
-        }else{
-
-        }
-      });
-    }
-  }
+  // List<Categories> categories=[];
+  // Future<void> GetCategoriesList() async{
+  //   var res = await Userapi.getCategories();
+  //   if (res!=null){
+  //     setState(() {
+  //       if(res.settings?.success==1){
+  //         categories=res.data??[];
+  //       }else{
+  //
+  //       }
+  //     });
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -70,53 +72,59 @@ class _CategoryState extends State<Category> {
               ),
             ),
             SizedBox(height: h * 0.03),
-            GridView.builder(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 4,
-                crossAxisSpacing: 8.0,
-                mainAxisSpacing: 8.0,
-                childAspectRatio: 0.51,
-              ),
-              itemCount: categories.length,
-              itemBuilder: (context, index) {
-                final data=categories[index];
-                return Column(
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Color(0xff110B0F),
-                        borderRadius: BorderRadius.circular(7),
-                      ),
-                      padding: const EdgeInsets.all(8.0),
-                      child:Center(
-                        child: Image.network(
-                          data?.image ?? '', // Default to an empty string if image is null
-                          width: 80,
-                          height: 80,
-                          fit: BoxFit.contain,
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 8),
-                    Center(
-                      child: Text(
-                        data?.categoryName ?? '', // Default to an empty string if image is null
-                        style: TextStyle(
+            Consumer<CategoriesProvider>(
+                builder: (context, profileProvider, child) {
+              final categories_list = profileProvider.categoriesList;
+              return GridView.builder(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 4,
+                  crossAxisSpacing: 8.0,
+                  mainAxisSpacing: 8.0,
+                  childAspectRatio: 0.51,
+                ),
+                itemCount: categories_list.length,
+                itemBuilder: (context, index) {
+                  final data = categories_list[index];
+                  return Column(
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
                           color: Color(0xff110B0F),
-                          fontFamily: 'RozhaOne',
-                          fontSize: 14,
-                          height: 20 / 14,
-                          fontWeight: FontWeight.w400,
+                          borderRadius: BorderRadius.circular(7),
                         ),
-                        textAlign: TextAlign.center,
+                        padding: const EdgeInsets.all(8.0),
+                        child: Center(
+                          child: Image.network(
+                            data.image ?? '',
+                            // Default to an empty string if image is null
+                            width: 80,
+                            height: 80,
+                            fit: BoxFit.contain,
+                          ),
+                        ),
                       ),
-                    ),
-                  ],
-                );
-              },
-            ),
+                      SizedBox(height: 8),
+                      Center(
+                        child: Text(
+                          data.categoryName ?? '',
+                          // Default to an empty string if image is null
+                          style: TextStyle(
+                            color: Color(0xff110B0F),
+                            fontFamily: 'RozhaOne',
+                            fontSize: 14,
+                            height: 20 / 14,
+                            fontWeight: FontWeight.w400,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              );
+            }),
           ],
         ),
       ),

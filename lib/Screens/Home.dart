@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:outfitter/Screens/CustomizeBar.dart';
 import 'package:outfitter/Screens/Filters.dart';
 import 'package:outfitter/Screens/UploderProfile.dart';
+import 'package:provider/provider.dart';
 import '../Model/ProductsListModel.dart';
+import '../providers/CategoriesProvider.dart';
 import '../utils/CustomAppBar1.dart';
 import '../Model/CategoriesModel.dart';
 import '../Services/UserApi.dart';
@@ -41,27 +43,27 @@ class _HomeState extends State<Home> {
   }
   @override
   void initState() {
-    GetCategoriesList();
+    // GetCategoriesList();
     super.initState();
   }
 
 
 
-  List<Categories> categories=[];
-  Future<void> GetCategoriesList() async{
-    var res = await Userapi.getCategories();
-    if (res!=null){
-      setState(() {
-        if(res.settings?.success==1){
-          categories=res.data??[];
-          GetProductcategoryList(categories[0].id??"");
-          print("GetCategoriesList${categories}");
-        }else{
-
-        }
-      });
-    }
-  }
+  // List<Categories> categories=[];
+  // Future<void> GetCategoriesList() async{
+  //   var res = await Userapi.getCategories();
+  //   if (res!=null){
+  //     setState(() {
+  //       if(res.settings?.success==1){
+  //         categories=res.data??[];
+  //         GetProductcategoryList(categories[0].id??"");
+  //         print("GetCategoriesList${categories}");
+  //       }else{
+  //
+  //       }
+  //     });
+  //   }
+  // }
 
   List<ProductsList> productlist=[];
 
@@ -116,82 +118,85 @@ class _HomeState extends State<Home> {
             children: [
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
-                child: Row(
-                  children:
-                  List.generate(
-                    categories.length,
-                    (index) {
-                      final data = categories[index];
-                      return
-                        Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: Column(
-                          children: [
-                            InkResponse(
-                              onTap: () {
-                                setState(() {
-                                  _selectedIndex = index;
-                                  GetProductcategoryList(data.id??"");
-
-                                });
-                              },
-                              child: Container(   width: 80,
-                                height: 80,
-                                decoration: BoxDecoration(
-                                    border: Border.all(
-                                      color: _selectedIndex == index
-                                          ? Color(0xffCAA16C)
-                                          : Colors.transparent,
-                                      width: 3,
-                                    ),
-                                    borderRadius: BorderRadius.circular(100)),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    color: Color(0xff110B0F),
-                                    borderRadius: BorderRadius.circular(100),
-                                  ),
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Center(
-                                    child: Image.network(
-                                      data?.image ?? '', // Default to an empty string if image is null
-                                      width: 64,
-                                      height: 64,
-                                      fit: BoxFit.contain,
-                                    ),
-                                  ),
-                                ),
-                              ),
+                child:
+    Consumer<CategoriesProvider>(
+    builder: (context, profileProvider, child) {
+      final categories_list = profileProvider.categoriesList;
+     return Row(
+        children:
+        List.generate(
+          categories_list.length,
+              (index) {
+            final data = categories_list[index];
+            return
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: Column(
+                  children: [
+                    InkResponse(
+                      onTap: () {
+                        setState(() {
+                          _selectedIndex = index;
+                          GetProductcategoryList(data.id ?? "");
+                        });
+                      },
+                      child: Container(width: 80,
+                        height: 80,
+                        decoration: BoxDecoration(
+                            border: Border.all(
+                              color: _selectedIndex == index
+                                  ? Color(0xffCAA16C)
+                                  : Colors.transparent,
+                              width: 3,
                             ),
-                            const SizedBox(height: 8),
-                            Center(
-                              child: Text(
-                                data.categoryName??"",
-                                style: TextStyle(
-                                  color: Color(0xff110B0F),
-                                  fontFamily: 'RozhaOne',
-                                  fontSize: 14,
-                                  height: 20 / 14,
-                                  fontWeight: FontWeight.w400,
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
+                            borderRadius: BorderRadius.circular(100)),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Color(0xff110B0F),
+                            borderRadius: BorderRadius.circular(100),
+                          ),
+                          padding: const EdgeInsets.all(8.0),
+                          child: Center(
+                            child: Image.network(
+                              data?.image ?? '',
+                              // Default to an empty string if image is null
+                              width: 64,
+                              height: 64,
+                              fit: BoxFit.contain,
                             ),
-                          ],
+                          ),
                         ),
-                      );
-                    },
-                  ),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Center(
+                      child: Text(
+                        data.categoryName ?? "",
+                        style: TextStyle(
+                          color: Color(0xff110B0F),
+                          fontFamily: 'RozhaOne',
+                          fontSize: 14,
+                          height: 20 / 14,
+                          fontWeight: FontWeight.w400,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ],
                 ),
+              );
+          },
+        ),
+      );
+    }),
               ),
               SizedBox(height: h * 0.02),
               productlist.length==0?
-
                   Center(
                     child: Image.asset(
                       'assets/noitems.png',
                       width: 160,
                       height: 160,
-
                       fit: BoxFit.cover,
                     ),
                   ):

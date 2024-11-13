@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:outfitter/Screens/CustomizeBar.dart';
 import 'package:outfitter/Screens/UploderProfile.dart';
+import 'package:outfitter/providers/CategoriesProvider.dart';
+import 'package:provider/provider.dart';
 
 import 'Home.dart';
 import 'Orders.dart';
@@ -42,7 +44,6 @@ class _DashHomeState extends State<DashHome> {
   ];
 
   int _selectedIndex = 0;
-
   void onTabTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -64,6 +65,17 @@ class _DashHomeState extends State<DashHome> {
       selectedColors.clear();
       selectedColors.add(color);
     });
+  }
+
+  @override
+  void initState() {
+    GetCategoriesList();
+    super.initState();
+  }
+
+  Future<void> GetCategoriesList() async {
+    final categories_list_provider = Provider.of<CategoriesProvider>(context, listen: false);
+    categories_list_provider.fetchCategoriesList();
   }
 
 
@@ -211,61 +223,66 @@ class _DashHomeState extends State<DashHome> {
               ),
             ),
             SizedBox(height: h * 0.03),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: GridView.builder(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 4,
-                  crossAxisSpacing: 8.0,
-                  mainAxisSpacing: 8.0,
-                  childAspectRatio: 0.55,
-                ),
-                itemCount: grid.length,
-                itemBuilder: (context, index) {
-                  return Column(
-                    children: [
-                      InkWell(
-                        onTap: () {
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (context) => Home()));
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Color(0xff110B0F),
-                            borderRadius: BorderRadius.circular(7),
-                          ),
-                          padding: const EdgeInsets.all(8.0),
-                          child: Center(
-                            child: Image.asset(
-                              grid[index]['image']!,
-                              width: 80,
-                              height: 80,
-                              fit: BoxFit.contain,
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 8),
-                      Center(
-                        child: Text(
-                          grid[index]['name']!,
-                          style: TextStyle(
-                            color: Color(0xff110B0F),
-                            fontFamily: 'RozhaOne',
-                            fontSize: 14,
-                            height: 20 / 14,
-                            fontWeight: FontWeight.w400,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    ],
-                  );
-                },
+        Consumer<CategoriesProvider>(
+        builder: (context, profileProvider, child) {
+          final categories_list = profileProvider.categoriesList;
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: GridView.builder(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 4,
+                crossAxisSpacing: 8.0,
+                mainAxisSpacing: 8.0,
+                childAspectRatio: 0.55,
               ),
+              itemCount: categories_list.length,
+              itemBuilder: (context, index) {
+                final categorielist= categories_list[index];
+                return Column(
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => Home()));
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Color(0xff110B0F),
+                          borderRadius: BorderRadius.circular(7),
+                        ),
+                        padding: const EdgeInsets.all(8.0),
+                        child: Center(
+                          child: Image.network(
+                            categorielist?.image ?? '',
+                            width: 80,
+                            height: 80,
+                            fit: BoxFit.contain,
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 8),
+                    Center(
+                      child: Text(
+                        categorielist?.categoryName ?? '',
+                        style: TextStyle(
+                          color: Color(0xff110B0F),
+                          fontFamily: 'RozhaOne',
+                          fontSize: 14,
+                          height: 20 / 14,
+                          fontWeight: FontWeight.w400,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ],
+                );
+              },
             ),
+          );
+        }),
             SizedBox(height: h * 0.02),
             Center(
               child: Text(

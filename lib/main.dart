@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:outfitter/Screens/Splash.dart';
+import 'package:outfitter/providers/CategoriesProvider.dart';
 import 'package:outfitter/providers/ProductDetailsProvider.dart';
 import 'package:outfitter/utils/Preferances.dart';
 import 'package:provider/provider.dart';
@@ -159,7 +160,11 @@ Future<void> main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (context) => ProductDetailsProvider(),  // Provide ProfileProvider here
+          create: (context) => ProductDetailsProvider(),
+        ),
+
+        ChangeNotifierProvider(
+          create: (context) => CategoriesProvider(),
         ),
 
       ],
