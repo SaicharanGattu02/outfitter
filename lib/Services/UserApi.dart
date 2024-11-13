@@ -155,9 +155,9 @@ class Userapi {
   }
 
 
-  static Future<ProductDetailsModel?> getProductDetails(String category_id) async {
+  static Future<ProductsDetailsModel?> getProductDetails(String? product_id) async {
     try {
-      final url = Uri.parse("$host/api/product-details/${category_id}");  // Adjusted the endpoint URL
+      final url = Uri.parse("$host/api/product-details/1d2ad598-81c8-4187-a3d3-e7c1ec44f031");  // Adjusted the endpoint URL
       final headers = await getheader1();  // Ensuring headers are fetched asynchronously
       final response = await http.get(
         url,
@@ -169,7 +169,7 @@ class Userapi {
         print("getProductDetails response: ${response.body}");
 
         // Parse the JSON response into a model
-        return ProductDetailsModel.fromJson(jsonResponse);
+        return ProductsDetailsModel.fromJson(jsonResponse);
       } else {
         // Handle non-200 responses (e.g., 401, 404, etc.)
         print("Request failed with status: ${response.statusCode}");

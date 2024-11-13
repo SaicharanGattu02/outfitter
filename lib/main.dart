@@ -10,7 +10,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:outfitter/Screens/Splash.dart';
+import 'package:outfitter/providers/ProductDetailsProvider.dart';
 import 'package:outfitter/utils/Preferances.dart';
+import 'package:provider/provider.dart';
 
 
 const AndroidNotificationChannel channel = AndroidNotificationChannel(
@@ -113,7 +115,7 @@ Future<void> main() async {
       ?.createNotificationChannel(channel);
 
   const InitializationSettings initializationSettings = InitializationSettings(
-      android: AndroidInitializationSettings('@mipmap/ic_launcher'),
+      android: AndroidInitializationSettings('@mipmap/logo'),
       iOS: DarwinInitializationSettings());
 
   flutterLocalNotificationsPlugin.initialize(
@@ -153,8 +155,17 @@ Future<void> main() async {
     print("Errrrrrrrrrr:${details.exceptionAsString()}");
     // Optionally report the error to a remote server
   };
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => ProductDetailsProvider(),  // Provide ProfileProvider here
+        ),
 
-  runApp( const MyApp(),);
+      ],
+      child: MyApp(),
+    ),
+  );
 }
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -178,7 +189,7 @@ void showNotification(RemoteNotification notification,
     importance: Importance.max,
     priority: Priority.high,
     playSound: false,
-    icon: '@mipmap/skillicon',
+    icon: '@mipmap/logo',
   );
   NotificationDetails platformChannelSpecifics =
   NotificationDetails(android: androidPlatformChannelSpecifics);
@@ -233,7 +244,6 @@ class MyApp extends StatelessWidget {
           ),
           textButtonTheme: TextButtonThemeData(
             style: ButtonStyle(
-
             ),
           ),
           bottomSheetTheme: const BottomSheetThemeData(
