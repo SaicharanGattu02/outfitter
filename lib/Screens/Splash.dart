@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:outfitter/Authentication/Login.dart';
 import 'package:outfitter/Authentication/Register.dart';
+import 'package:outfitter/Screens/dashbord.dart';
+
+import '../utils/Preferances.dart';
 
 
 class Splash extends StatefulWidget {
@@ -19,24 +23,24 @@ class _SplashState extends State<Splash> {
   }
 
   fetchDetails() async {
-    // final Token = await PreferenceService().getString("token") ?? "";
-    // print("Token>>>${Token}");
+    final Token = await PreferenceService().getString("token") ?? "";
+    print("Token>>>${Token}");
     setState(() {
-      // token = Token;
+      token = Token;
     });
 
     // Wait for 2 seconds before navigating
     Future.delayed(Duration(seconds: 2), () {
-      // Navigator.of(context).pushReplacement(
-      //   MaterialPageRoute(
-      //     builder: (context) => (token.isEmpty) ? LogInScreen() : Dashboard(),
-      //   ),
-      // );
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (context) => Register(),
+          builder: (context) => (token.isEmpty) ? Login() : Dashbord(),
         ),
       );
+      // Navigator.of(context).pushReplacement(
+      //   MaterialPageRoute(
+      //     builder: (context) => Register(),
+      //   ),
+      // );
     });
   }
 

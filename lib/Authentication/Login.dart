@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:outfitter/Authentication/Otp.dart';
+import 'package:outfitter/Authentication/Register.dart';
 import 'package:outfitter/Services/UserApi.dart';
 
 import '../utils/Mywidgets.dart';
@@ -231,7 +232,49 @@ class _LoginState extends State<Login> {
                             ),
                           ),
                         ),
-                        SizedBox(height: 20),
+                        SizedBox(
+                          height: 8,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text(
+                              "you don't  have an account?",
+                              style: TextStyle(
+                                fontFamily: 'RozhaOne',
+                                fontSize: 14,
+                                color: Color(0xff6C7278),
+                                fontWeight: FontWeight.w400,
+                                height: 19.6 / 14,
+                                letterSpacing: -0.01,
+                              ),
+                            ),
+                            const SizedBox(width: 6),
+                            InkWell(
+                              onTap: () {
+                                Navigator.push(context, MaterialPageRoute(builder: (context)=>Register()));
+                              },
+                              child: Text(
+                                "Register",
+                                style: TextStyle(
+                                  fontFamily: 'RozhaOne',
+                                  fontSize: 14,
+                                  decoration: TextDecoration.underline,
+                                  decorationColor: Color(0xff110B0F),
+                                  color: Color(0xff110B0F),
+                                  fontWeight: FontWeight.w400,
+                                  height: 19.6 / 14,
+                                  letterSpacing: -0.01,
+                                ),
+                              ),
+
+                            )
+
+                          ],
+                        ),
+                        SizedBox(
+                          height: 8,
+                        ),
                       ],
                     ),
                   ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:outfitter/Screens/Orders.dart';
 import 'package:outfitter/Screens/WishList.dart';
 import 'package:outfitter/utils/CustomAppBar1.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -312,29 +313,36 @@ class _ProfileState extends State<Profile> {
             SizedBox(height: h*0.02,),
             DashedLine(width: w, height: 1.0),
             Spacer(),
-            Row(
-              children: [
-                Image.asset(
-                  "assets/logout.png",
-                  width: 24,
-                  height: 24,
-                  color: Color(0xffED1C24),
-                  fit: BoxFit.contain,
-                ),
-                SizedBox(width: w*0.03),
-                Text(
-                  'Logout',
-                  style: TextStyle(
-                    color: Color(0xffED1C24),
-                    fontFamily: 'Poppins',
-                    fontSize: 15,
-                    height: 20 / 15,
-                    fontWeight: FontWeight.w400,
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                ),
+            InkResponse(onTap: () async{
+              SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+              sharedPreferences.remove('token');
+              print("Token removed");
 
-              ],),
+            },
+              child: Row(
+                children: [
+                  Image.asset(
+                    "assets/logout.png",
+                    width: 24,
+                    height: 24,
+                    color: Color(0xffED1C24),
+                    fit: BoxFit.contain,
+                  ),
+                  SizedBox(width: w*0.03),
+                  Text(
+                    'Logout',
+                    style: TextStyle(
+                      color: Color(0xffED1C24),
+                      fontFamily: 'Poppins',
+                      fontSize: 15,
+                      height: 20 / 15,
+                      fontWeight: FontWeight.w400,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+
+                ],),
+            ),
             SizedBox(height: h*0.02,),
           ],
         ),

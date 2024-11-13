@@ -53,9 +53,7 @@ class _OtpState extends State<Otp> {
       setState(() {
         if(res.settings?.success==1){
           _isLoading=false;
-          PreferenceService().saveString('token',res.data.)
-
-
+          PreferenceService().saveString('token',res.data?.access??"");
           Navigator.push(context, MaterialPageRoute(builder: (context)=>Dashbord()));
         }else{
           _isLoading=false;

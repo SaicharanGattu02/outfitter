@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 
 import '../Model/RegisterModel.dart';
+import '../Model/VerifyOtpModel.dart';
 class Userapi {
   static String host = "http://192.168.0.169:8000";
   // static String host = "https://stage.skil.in";
@@ -71,7 +72,7 @@ class Userapi {
       return null;
     }
   }
-  static Future<RegisterModel?> VerifyOtp(
+  static Future<VerifyOtpModel?> VerifyOtp(
       String phone,String otp) async {
     try {
       Map<String, String> data = {
@@ -91,7 +92,7 @@ class Userapi {
       if (response != null) {
         final jsonResponse = jsonDecode(response.body);
         print("VerifyOtp Status:${response.body}");
-        return RegisterModel.fromJson(jsonResponse);
+        return VerifyOtpModel.fromJson(jsonResponse);
       } else {
         print("Request failed with status: ${response.statusCode}");
         return null;
