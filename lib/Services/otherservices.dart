@@ -27,6 +27,16 @@ Future<Map<String, String>> getheader1() async {
   };
   return headers;
 }
+Future<Map<String, String>> getheader2() async {
+  final sessionid = await PreferenceService().getString("token");
+  print(sessionid);
+  String Token = "Bearer ${sessionid}";
+  Map<String, String> headers = {
+    'Authorization': Token,
+    'Content-Type': 'application/x-www-form-urlencoded',
+  };
+  return headers;
+}
 
 class NoInternetWidget extends StatelessWidget {
   @override

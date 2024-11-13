@@ -81,6 +81,21 @@ class _HomeState extends State<Home> {
     }
   }
 
+  Future<void> Addwish(String product)async{
+    var res =await Userapi.AddWishList(product);
+    if(res!= null){
+      setState(() {
+        if(res.settings?.success==1){
+
+        }else{
+
+        }
+      });
+
+    }
+
+  }
+
 
 
   int _selectedIndex = 0;
@@ -344,18 +359,23 @@ class _HomeState extends State<Home> {
                           Positioned(
                             top: 8,
                             right: 8,
-                            child: Container(
-                              padding: const EdgeInsets.all(8),
-                              decoration: BoxDecoration(
-                                color: Color(0xffFFE5E6),
-                                borderRadius: BorderRadius.circular(100),
-                              ),
-                              child: Image.asset(
-                                "assets/fav.png",
-                                width: 18,
-                                height: 18,
-                                fit: BoxFit.contain,
-                                color: Color(0xff000000),
+                            child: InkResponse(onTap:(){
+                              Addwish(productData.id.toString());
+
+                  },
+                              child: Container(
+                                padding: const EdgeInsets.all(8),
+                                decoration: BoxDecoration(
+                                  color: Color(0xffFFE5E6),
+                                  borderRadius: BorderRadius.circular(100),
+                                ),
+                                child: Image.asset(
+                                  "assets/fav.png",
+                                  width: 18,
+                                  height: 18,
+                                  fit: BoxFit.contain,
+                                  color: Color(0xff000000),
+                                ),
                               ),
                             ),
                           ),
