@@ -1,14 +1,13 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
-
+import 'package:outfitter/Services/otherservices.dart';
+import '../Model/CategoriesModel.dart';
 import '../Model/RegisterModel.dart';
 import '../Model/VerifyOtpModel.dart';
+
 class Userapi {
   static String host = "http://192.168.0.169:8000";
-  // static String host = "https://stage.skil.in";
-
-
 
   static Future<RegisterModel?> PostRegister(String fullname, String mail,
       String phone, String password, String gender) async {
@@ -42,14 +41,10 @@ class Userapi {
     }
   }
 
-
-  static Future<RegisterModel?> PostOtp(
-      String phone) async {
+  static Future<RegisterModel?> PostOtp(String phone) async {
     try {
       Map<String, String> data = {
-
         "mobile": phone,
-
       };
       final url = Uri.parse("${host}/auth/login-otp");
       final response = await http.post(
@@ -72,14 +67,12 @@ class Userapi {
       return null;
     }
   }
-  static Future<VerifyOtpModel?> VerifyOtp(
-      String phone,String otp) async {
+
+  static Future<VerifyOtpModel?> VerifyOtp(String phone, String otp) async {
     try {
       Map<String, String> data = {
-
         "mobile": phone,
         "otp": otp,
-
       };
       final url = Uri.parse("${host}/auth/verify-otp");
       final response = await http.post(
@@ -103,5 +96,31 @@ class Userapi {
     }
   }
 
+  static Future<CategoriesModel?> getCategories() async {
+    try {
+      final url = Uri.parse("$host/api/categories");  // Adjusted the endpoint URL
+      final headers = await getheader1();  // Ensuring headers are fetched asynchronously
+      final response = await http.get(
+        url,
+        headers: headers,
+      );
+      // Check the response status code
+      if (response.statusCode == 200) {
+        final jsonResponse = jsonDecode(response.body);
+        print("getCategories response: ${response.body}");
+
+        // Parse the JSON response into a model
+        return CategoriesModel.fromJson(jsonResponse);
+      } else {
+        // Handle non-200 responses (e.g., 401, 404, etc.)
+        print("Request failed with status: ${response.statusCode}");
+        return null;
+      }
+    } catch (e) {
+      // Catch any exceptions (e.g., network failure, JSON parsing error)
+      print("Error occurred: $e");
+      return null;
+    }
+  }
 
 }

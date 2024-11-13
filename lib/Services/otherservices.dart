@@ -21,7 +21,7 @@ Future<Map<String, String>> getheader1() async {
   print(sessionid);
   String Token = "Bearer ${sessionid}";
   Map<String, String> headers = {
-    'Content-Type': 'application/json',
+    'Authorization': Token,
   };
   return headers;
 }

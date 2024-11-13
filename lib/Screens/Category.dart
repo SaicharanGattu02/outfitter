@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:outfitter/utils/CustomAppBar1.dart';
 
+import '../Model/CategoriesModel.dart';
+import '../Services/UserApi.dart';
+
 class Category extends StatefulWidget {
   const Category({super.key});
 
@@ -9,16 +12,36 @@ class Category extends StatefulWidget {
 }
 
 class _CategoryState extends State<Category> {
-  final List<Map<String, String>> grid = [
-    {"image": 'assets/hoodie.png', 'name': 'HOODIE'},
-    {"image": 'assets/jeans.png', 'name': 'JEANS'},
-    {"image": 'assets/sleaves.png', 'name': 'HALF SLEEVES'},
-    {"image": 'assets/cargo.png', 'name': 'CARGO'},
-    {"image": 'assets/shirt.png', 'name': 'SHIRT'},
-    {"image": 'assets/formals.png', 'name': 'FORMALS'},
-    {"image": 'assets/polo.png', 'name': 'POLO'},
-    {"image": 'assets/trousar.png', 'name': 'TROUSERS'},
-  ];
+  // final List<Map<String, String>> grid = [
+  //   {"image": 'assets/hoodie.png', 'name': 'HOODIE'},
+  //   {"image": 'assets/jeans.png', 'name': 'JEANS'},
+  //   {"image": 'assets/sleaves.png', 'name': 'HALF SLEEVES'},
+  //   {"image": 'assets/cargo.png', 'name': 'CARGO'},
+  //   {"image": 'assets/shirt.png', 'name': 'SHIRT'},
+  //   {"image": 'assets/formals.png', 'name': 'FORMALS'},
+  //   {"image": 'assets/polo.png', 'name': 'POLO'},
+  //   {"image": 'assets/trousar.png', 'name': 'TROUSERS'},
+  // ];
+
+  @override
+  void initState() {
+    GetCategoriesList();
+    super.initState();
+  }
+  List<Categories> categories=[];
+  Future<void> GetCategoriesList() async{
+    var res = await Userapi.getCategories();
+    if (res!=null){
+      setState(() {
+        if(res.settings?.success==1){
+          categories=res.data??[];
+        }else{
+
+        }
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     var w = MediaQuery.of(context).size.width;
@@ -56,8 +79,9 @@ class _CategoryState extends State<Category> {
                 mainAxisSpacing: 8.0,
                 childAspectRatio: 0.51,
               ),
-              itemCount: grid.length,
+              itemCount: categories.length,
               itemBuilder: (context, index) {
+                final data=categories[index];
                 return Column(
                   children: [
                     Container(
@@ -66,9 +90,9 @@ class _CategoryState extends State<Category> {
                         borderRadius: BorderRadius.circular(7),
                       ),
                       padding: const EdgeInsets.all(8.0),
-                      child: Center(
-                        child: Image.asset(
-                          grid[index]['image']!,
+                      child:Center(
+                        child: Image.network(
+                          data?.image ?? '', // Default to an empty string if image is null
                           width: 80,
                           height: 80,
                           fit: BoxFit.contain,
@@ -78,7 +102,7 @@ class _CategoryState extends State<Category> {
                     SizedBox(height: 8),
                     Center(
                       child: Text(
-                        grid[index]['name']!,
+                        data?.categoryName ?? '', // Default to an empty string if image is null
                         style: TextStyle(
                           color: Color(0xff110B0F),
                           fontFamily: 'RozhaOne',

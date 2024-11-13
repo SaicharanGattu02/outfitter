@@ -69,7 +69,6 @@ class _OtpState extends State<Otp> {
       });
 
     }
-
   }
 
 
