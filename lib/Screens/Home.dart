@@ -170,11 +170,12 @@ class _HomeState extends State<Home> {
               ),
               SizedBox(height: h * 0.02),
               productlist.length==0?
+
                   Center(
                     child: Image.asset(
-                      'assets/nodata4.png',
-                      width: 60,
-                      height: 60,
+                      'assets/noitems.png',
+                      width: 160,
+                      height: 160,
 
                       fit: BoxFit.cover,
                     ),
