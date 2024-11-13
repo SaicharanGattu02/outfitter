@@ -3,6 +3,9 @@ import 'package:outfitter/Screens/CustomizeBar.dart';
 import 'package:outfitter/Screens/UploderProfile.dart';
 
 import 'Home.dart';
+import 'Orders.dart';
+import 'Profile.dart';
+import 'WishList.dart';
 
 class DashHome extends StatefulWidget {
   const DashHome({super.key});
@@ -68,6 +71,118 @@ class _DashHomeState extends State<DashHome> {
     var w = MediaQuery.of(context).size.width;
     var h = MediaQuery.of(context).size.height;
     return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        leading: null,
+        actions: <Widget>[Container()],
+        toolbarHeight: 50,
+        backgroundColor: const Color(0xff110B0F),
+        title: Padding(
+          padding: const EdgeInsets.only(bottom: 10),
+          child: Row(
+            children: [
+              Image.asset(
+                "assets/OutfiterText.png",
+                width: w * 0.35,
+                fit: BoxFit.contain,
+                color: Color(0xffE7C6A0),
+              ),
+              Spacer(),
+              Row(
+                children: [
+
+                  if (_selectedIndex == 1)
+                    ...[InkWell(
+                      onTap: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>Orders()));
+                      },
+                      child: Container(
+                        alignment: Alignment.center,
+                        child:
+
+                        Image.asset(
+                          "assets/orders.png",
+                          width: 28,
+                          height: 28,
+                          color: Color(0xffffffff),
+                          fit: BoxFit.contain,
+                        ),
+                      ),
+                    ),]
+                  else ...[
+                    InkWell(
+                      onTap: () {
+                        // Handle search icon tap
+                      },
+                      child: Container(
+                        alignment: Alignment.center,
+                        child: Image.asset(
+                          "assets/search.png",
+                          width: 28,
+                          height: 28,
+                          fit: BoxFit.contain,
+                        ),
+                      ),
+                    ),
+                  ],
+
+                  SizedBox(width: w * 0.025),
+                  if (_selectedIndex == 1)
+                    ...[InkWell(
+                      onTap: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>Wishlist()));
+                      },
+                      child: Container(
+                        alignment: Alignment.center,
+                        child: Image.asset(
+                          "assets/fav.png",
+                          width: 28,
+                          height: 28,
+                          color: Color(0xffffffff),
+                          fit: BoxFit.contain,
+                        ),
+                      ),
+                    ),]
+                  else ...[
+                    InkWell(
+                      onTap: () {
+                        // Handle notifications icon tap
+                      },
+                      child: Container(
+                        alignment: Alignment.center,
+                        child: Image.asset(
+                          "assets/notification.png",
+                          width: 28,
+                          height: 28,
+                          fit: BoxFit.contain,
+                        ),
+                      ),
+                    ),
+                  ],
+                  SizedBox(width: w * 0.025),
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=>Profile()));
+                    },
+                    child: Container(
+                      alignment: Alignment.center,
+                      child: ClipOval(
+                        child: CircleAvatar(
+                          radius: w * 0.038,
+                          child: Image.asset(
+                            "assets/Passphoto.png",
+                            fit: BoxFit.contain,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
       body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,

@@ -4,6 +4,8 @@ import 'package:outfitter/Screens/Filters.dart';
 import 'package:outfitter/Screens/UploderProfile.dart';
 import 'package:outfitter/utils/CustomAppBar.dart';
 
+import '../utils/CustomAppBar1.dart';
+
 class Home extends StatefulWidget {
   const Home({super.key});
 
@@ -26,8 +28,6 @@ class _HomeState extends State<Home> {
     Colors.red,
     Colors.blue,
     Colors.green,
-
-    // Add more colors as needed
   ];
 
   List<Color> selectedColors = [];
@@ -48,8 +48,8 @@ class _HomeState extends State<Home> {
     var h = MediaQuery.of(context).size.height;
 
     return Scaffold(
+      appBar: CustomApp(title: 'SHOP', w: w),
       key: _scaffoldKey,
-      appBar: CustomAppBar(scaffoldKey: _scaffoldKey, w: w),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),

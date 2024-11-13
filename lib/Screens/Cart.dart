@@ -44,7 +44,7 @@ class _CartState extends State<Cart> {
     var w = MediaQuery.of(context).size.width;
     var h = MediaQuery.of(context).size.height;
     return Scaffold(
-        // appBar: CustomApp(title: 'Cart', w: w),
+        appBar: CustomApp(title: 'Cart', w: w),
         body: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.only(left: 20, right: 20, top: 8),

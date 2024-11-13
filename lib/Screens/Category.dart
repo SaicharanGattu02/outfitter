@@ -47,7 +47,7 @@ class _CategoryState extends State<Category> {
     var w = MediaQuery.of(context).size.width;
     var h = MediaQuery.of(context).size.height;
     return Scaffold(
-      // appBar: CustomApp(title: 'Category', w: w),
+      appBar: CustomApp(title: 'Category', w: w),
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(

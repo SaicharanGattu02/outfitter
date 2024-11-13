@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
+import 'package:outfitter/Model/ProductsListModel.dart';
 import 'package:outfitter/Services/otherservices.dart';
 import '../Model/CategoriesModel.dart';
+import '../Model/ProductsDetailsModel.dart';
 import '../Model/RegisterModel.dart';
 import '../Model/VerifyOtpModel.dart';
 
@@ -111,6 +113,61 @@ class Userapi {
 
         // Parse the JSON response into a model
         return CategoriesModel.fromJson(jsonResponse);
+      } else {
+        // Handle non-200 responses (e.g., 401, 404, etc.)
+        print("Request failed with status: ${response.statusCode}");
+        return null;
+      }
+    } catch (e) {
+      // Catch any exceptions (e.g., network failure, JSON parsing error)
+      print("Error occurred: $e");
+      return null;
+    }
+  }
+
+
+  static Future<ProductsListModel?> getProductsList(String category_id) async {
+    try {
+      final url = Uri.parse("${host}/api/products?category=${category_id}");  // Adjusted the endpoint URL
+      final headers = await getheader1();  // Ensuring headers are fetched asynchronously
+      final response = await http.get(
+        url,
+        headers: headers,
+      );
+      // Check the response status code
+      if (response.statusCode == 200) {
+        final jsonResponse = jsonDecode(response.body);
+        print("getProductsList response: ${response.body}");
+        // Parse the JSON response into a model
+        return ProductsListModel.fromJson(jsonResponse);
+      } else {
+        // Handle non-200 responses (e.g., 401, 404, etc.)
+        print("Request failed with status: ${response.statusCode}");
+        return null;
+      }
+    } catch (e) {
+      // Catch any exceptions (e.g., network failure, JSON parsing error)
+      print("Error occurred: $e");
+      return null;
+    }
+  }
+
+
+  static Future<ProductDetailsModel?> getProductDetails(String category_id) async {
+    try {
+      final url = Uri.parse("$host/api/product-details/${category_id}");  // Adjusted the endpoint URL
+      final headers = await getheader1();  // Ensuring headers are fetched asynchronously
+      final response = await http.get(
+        url,
+        headers: headers,
+      );
+      // Check the response status code
+      if (response.statusCode == 200) {
+        final jsonResponse = jsonDecode(response.body);
+        print("getProductDetails response: ${response.body}");
+
+        // Parse the JSON response into a model
+        return ProductDetailsModel.fromJson(jsonResponse);
       } else {
         // Handle non-200 responses (e.g., 401, 404, etc.)
         print("Request failed with status: ${response.statusCode}");

@@ -6,6 +6,8 @@ import 'package:outfitter/Screens/Orders.dart';
 import 'package:outfitter/Screens/Profile.dart';
 import 'package:outfitter/Screens/WishList.dart';
 
+import 'Home.dart';
+
 class Dashbord extends StatefulWidget {
   const Dashbord({super.key});
 
@@ -17,7 +19,7 @@ class _DashbordState extends State<Dashbord> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   int _selectedIndex = 0;
 
-  final List<Widget> _screens = [DashHome(), Cart(), Category()];
+  final List<Widget> _screens = [DashHome(), Cart(),Home(), Category()];
   final PageController _pageController = PageController();
 
   void onTabTapped(int index) {
@@ -47,134 +49,6 @@ class _DashbordState extends State<Dashbord> {
 
     return Scaffold(
       key: _scaffoldKey,
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        leading: null,
-        actions: <Widget>[Container()],
-        toolbarHeight: 50,
-        backgroundColor: const Color(0xff110B0F),
-        title: Padding(
-          padding: const EdgeInsets.only(bottom: 10),
-          child: Row(
-            children: [
-              InkResponse(
-                onTap: () {
-                  _scaffoldKey.currentState?.openDrawer();
-                },
-                child: Row(
-                  children: [
-                    Image.asset(
-                      "assets/menu.png",
-                      color: Color(0xffE7C6A0),
-                      width: 24,
-                      fit: BoxFit.contain,
-                    ),
-                    const SizedBox(width: 12),
-                    Image.asset(
-                      "assets/OutfiterText.png",
-                      width: w * 0.35,
-                      fit: BoxFit.contain,
-                      color: Color(0xffE7C6A0),
-                    ),
-                  ],
-                ),
-              ),
-              Spacer(),
-              Row(
-                children: [
-
-                  if (_selectedIndex == 1)
-                    ...[InkWell(
-                      onTap: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=>Orders()));
-                      },
-                      child: Container(
-                        alignment: Alignment.center,
-                        child:
-
-                        Image.asset(
-                          "assets/orders.png",
-                          width: 28,
-                          height: 28,
-                          color: Color(0xffffffff),
-                          fit: BoxFit.contain,
-                        ),
-                      ),
-                    ),]
-                  else ...[
-                    InkWell(
-                      onTap: () {
-                        // Handle search icon tap
-                      },
-                      child: Container(
-                        alignment: Alignment.center,
-                        child: Image.asset(
-                          "assets/search.png",
-                          width: 28,
-                          height: 28,
-                          fit: BoxFit.contain,
-                        ),
-                      ),
-                    ),
-                  ],
-
-                  SizedBox(width: w * 0.025),
-                  if (_selectedIndex == 1)
-                    ...[InkWell(
-                      onTap: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=>Wishlist()));
-                      },
-                      child: Container(
-                        alignment: Alignment.center,
-                        child: Image.asset(
-                          "assets/fav.png",
-                          width: 28,
-                          height: 28,
-                          color: Color(0xffffffff),
-                          fit: BoxFit.contain,
-                        ),
-                      ),
-                    ),]
-                  else ...[
-                    InkWell(
-                      onTap: () {
-                        // Handle notifications icon tap
-                      },
-                      child: Container(
-                        alignment: Alignment.center,
-                        child: Image.asset(
-                          "assets/notification.png",
-                          width: 28,
-                          height: 28,
-                          fit: BoxFit.contain,
-                        ),
-                      ),
-                    ),
-                  ],
-                  SizedBox(width: w * 0.025),
-                  InkWell(
-                    onTap: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=>Profile()));
-                    },
-                    child: Container(
-                      alignment: Alignment.center,
-                      child: ClipOval(
-                        child: CircleAvatar(
-                          radius: w * 0.038,
-                          child: Image.asset(
-                            "assets/Passphoto.png",
-                            fit: BoxFit.contain,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ),
       body: PageView(
         controller: _pageController,
         onPageChanged: onPageChanged,
