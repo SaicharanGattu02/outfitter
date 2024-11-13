@@ -35,7 +35,7 @@ class ProductDetails {
   String? description;
   String? productDetails;
   String? shippingDetails;
-  String? reviews;
+  // String? reviews;
   // List<Null>? sleeve;
   // List<Null>? neck;
   // List<Null>? placket;
@@ -54,7 +54,7 @@ class ProductDetails {
         this.description,
         this.productDetails,
         this.shippingDetails,
-        this.reviews,
+        // this.reviews,
         // this.sleeve,
         // this.neck,
         // this.placket,
@@ -74,7 +74,7 @@ class ProductDetails {
     description = json['description'];
     productDetails = json['product_details'];
     shippingDetails = json['shipping_details'];
-    reviews = json['reviews'];
+    // reviews = json['reviews'];
   //   if (json['sleeve'] != null) {
   //     sleeve = <Null>[];
   //     json['sleeve'].forEach((v) {
@@ -120,7 +120,7 @@ class ProductDetails {
     data['description'] = this.description;
     data['product_details'] = this.productDetails;
     data['shipping_details'] = this.shippingDetails;
-    data['reviews'] = this.reviews;
+    // data['reviews'] = this.reviews;
     // if (this.sleeve != null) {
     //   data['sleeve'] = this.sleeve!.map((v) => v.toJson()).toList();
     // }

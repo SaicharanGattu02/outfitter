@@ -212,7 +212,35 @@ class Userapi {
     }
   }
 
+  static Future<RegisterModel?> RemoveWishList(String product) async {
+    print("product>>>${product}");
 
+    try {
+      Map<String, String> data = {
+        "product": product,
+      };
+      final url = Uri.parse("${host}/api/wishlists");
+      final headers = await getheader2();
+      final response = await http.put(
+        url,
+        headers: headers,
+        body: data,
+      );
+      if (response != null) {
+        final jsonResponse = jsonDecode(response.body);
+        print("AddWishList Status:${response.body}");
+        return RegisterModel.fromJson(jsonResponse);
+      } else {
+        print("Request failed with status: ${response.statusCode}");
+        return null;
+      }
+    } catch (e) {
+      print("Error occurred: $e");
+      return null;
+    }
+  }
+
+  //
   // static Future<void> GetWishList() async {
   //   try {
   //     final url = Uri.parse("${host}/api/wishlists");

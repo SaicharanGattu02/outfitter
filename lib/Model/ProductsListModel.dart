@@ -1,14 +1,14 @@
 class ProductsListModel {
-  List<ProductsList>? productlistData;
+  List<ProductsList>? data;
   Settings? settings;
 
-  ProductsListModel({this.productlistData, this.settings});
+  ProductsListModel({this.data, this.settings});
 
   ProductsListModel.fromJson(Map<String, dynamic> json) {
     if (json['data'] != null) {
-      productlistData = <ProductsList>[];
+      data = <ProductsList>[];
       json['data'].forEach((v) {
-        productlistData!.add(new ProductsList.fromJson(v));
+        data!.add(new ProductsList.fromJson(v));
       });
     }
     settings = json['settings'] != null
@@ -18,8 +18,8 @@ class ProductsListModel {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.productlistData != null) {
-      data['data'] = this.productlistData!.map((v) => v.toJson()).toList();
+    if (this.data != null) {
+      data['data'] = this.data!.map((v) => v.toJson()).toList();
     }
     if (this.settings != null) {
       data['settings'] = this.settings!.toJson();
@@ -30,36 +30,64 @@ class ProductsListModel {
 
 class ProductsList {
   String? id;
+  Product? product;
+
+  ProductsList({this.id, this.product});
+
+  ProductsList.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    product =
+    json['product'] != null ? new Product.fromJson(json['product']) : null;
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    if (this.product != null) {
+      data['product'] = this.product!.toJson();
+    }
+    return data;
+  }
+}
+
+class Product {
+  String? id;
   String? title;
   String? category;
-  Null? brand;
+  String? brand;
+  List<String>? colors;
   String? postedBy;
   int? mrp;
   int? salePrice;
   bool? isInWishlist;
   String? image;
+  int? rating;
 
-  ProductsList(
+  Product(
       {this.id,
         this.title,
         this.category,
         this.brand,
+        this.colors,
         this.postedBy,
         this.mrp,
         this.salePrice,
         this.isInWishlist,
-        this.image});
+        this.image,
+        this.rating});
 
-  ProductsList.fromJson(Map<String, dynamic> json) {
+  Product.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     title = json['title'];
     category = json['category'];
     brand = json['brand'];
+    colors = json['colors'].cast<String>();
     postedBy = json['posted_by'];
     mrp = json['mrp'];
     salePrice = json['sale_price'];
     isInWishlist = json['is_in_wishlist'];
     image = json['image'];
+    rating = json['rating'];
   }
 
   Map<String, dynamic> toJson() {
@@ -68,11 +96,13 @@ class ProductsList {
     data['title'] = this.title;
     data['category'] = this.category;
     data['brand'] = this.brand;
+    data['colors'] = this.colors;
     data['posted_by'] = this.postedBy;
     data['mrp'] = this.mrp;
     data['sale_price'] = this.salePrice;
     data['is_in_wishlist'] = this.isInWishlist;
     data['image'] = this.image;
+    data['rating'] = this.rating;
     return data;
   }
 }
