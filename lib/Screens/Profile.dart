@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:outfitter/Authentication/Login.dart';
 import 'package:outfitter/Screens/Orders.dart';
 import 'package:outfitter/Screens/WishList.dart';
 import 'package:outfitter/utils/CustomAppBar1.dart';
@@ -316,7 +317,7 @@ class _ProfileState extends State<Profile> {
             InkResponse(onTap: () async{
               SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
               sharedPreferences.remove('token');
-              print("Token removed");
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>Login()));
 
             },
               child: Row(

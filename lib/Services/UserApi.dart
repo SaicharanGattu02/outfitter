@@ -100,8 +100,10 @@ class Userapi {
 
   static Future<CategoriesModel?> getCategories() async {
     try {
-      final url = Uri.parse("$host/api/categories");  // Adjusted the endpoint URL
-      final headers = await getheader1();  // Ensuring headers are fetched asynchronously
+      final url =
+          Uri.parse("$host/api/categories"); // Adjusted the endpoint URL
+      final headers =
+          await getheader1(); // Ensuring headers are fetched asynchronously
       final response = await http.get(
         url,
         headers: headers,
@@ -180,4 +182,25 @@ class Userapi {
     }
   }
 
+
+  //
+  // static Future<void> GetWishList() async {
+  //   try {
+  //     final url = Uri.parse("${host}/api/wishlists");
+  //     final headers = await getheader1();
+  //     final response = await http.get(url, headers: headers);
+  //     if (response.statusCode == 200) {
+  //       final jsonResponse = jsonDecode(response.body);
+  //       print("GetWishList response: ${response.body}");
+  //       return CategoriesModel.fromJson(jsonResponse);
+  //     } else {
+  //       print("Request failed with status: ${response.statusCode}");
+  //       return null;
+  //     }
+  //   } catch (e) {
+  //     // Catch any exceptions (e.g., network failure, JSON parsing error)
+  //     print("Error occurred: $e");
+  //     return null;
+  //   }
+  // }
 }

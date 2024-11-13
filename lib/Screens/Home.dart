@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:outfitter/Screens/CustomizeBar.dart';
 import 'package:outfitter/Screens/Filters.dart';
 import 'package:outfitter/Screens/UploderProfile.dart';
-import 'package:outfitter/utils/CustomAppBar.dart';
-
+import '../Model/ProductsListModel.dart';
 import '../utils/CustomAppBar1.dart';
+
+import '../Model/CategoriesModel.dart';
+import '../Services/UserApi.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -38,6 +40,48 @@ class _HomeState extends State<Home> {
       selectedColors.add(color);
     });
   }
+  @override
+  void initState() {
+    GetCategoriesList();
+    super.initState();
+  }
+
+
+
+  List<Categories> categories=[];
+  Future<void> GetCategoriesList() async{
+    var res = await Userapi.getCategories();
+    if (res!=null){
+      setState(() {
+        if(res.settings?.success==1){
+          categories=res.data??[];
+          
+        }else{
+
+        }
+      });
+    }
+  }
+
+  List<ProductsList> productlist=[];
+
+  Future<void> GetProductcategoryList(String id) async{
+    var res =await Userapi.getProductsList(id);
+    if(res != null){
+      setState(() {
+        if(res.settings?.success==1){
+          productlist=res.productlistdata??[];
+
+        }else{
+
+        }
+      });
+
+
+    }
+  }
+
+
 
   int _selectedIndex = 0;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -58,9 +102,11 @@ class _HomeState extends State<Home> {
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
-                  children: List.generate(
-                    grid.length,
+                  children:
+                  List.generate(
+                    categories.length,
                     (index) {
+                      final data = categories[index];
                       return Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 8.0),
                         child: Column(
@@ -69,9 +115,12 @@ class _HomeState extends State<Home> {
                               onTap: () {
                                 setState(() {
                                   _selectedIndex = index;
+                                  GetProductcategoryList(data.id??"");
+
                                 });
                               },
-                              child: Container(
+                              child: Container(   width: 80,
+                                height: 80,
                                 decoration: BoxDecoration(
                                     border: Border.all(
                                       color: _selectedIndex == index
@@ -87,10 +136,10 @@ class _HomeState extends State<Home> {
                                   ),
                                   padding: const EdgeInsets.all(8.0),
                                   child: Center(
-                                    child: Image.asset(
-                                      grid[index]['image']!,
-                                      width: 45,
-                                      height: 45,
+                                    child: Image.network(
+                                      data?.image ?? '', // Default to an empty string if image is null
+                                      width: 64,
+                                      height: 64,
                                       fit: BoxFit.contain,
                                     ),
                                   ),
@@ -100,7 +149,7 @@ class _HomeState extends State<Home> {
                             const SizedBox(height: 8),
                             Center(
                               child: Text(
-                                grid[index]['name']!,
+                                data.categoryName??"",
                                 style: TextStyle(
                                   color: Color(0xff110B0F),
                                   fontFamily: 'RozhaOne',
@@ -128,8 +177,10 @@ class _HomeState extends State<Home> {
                   mainAxisSpacing: 8.0,
                   childAspectRatio: 0.46,
                 ),
-                itemCount: grid.length,
+                itemCount: productlist.length,
                 itemBuilder: (context, index) {
+                  final productData=productlist[index];
+
                   return Column(
                     children: [
                       Stack(
@@ -163,6 +214,7 @@ class _HomeState extends State<Home> {
                                       child: Container(
                                           child: Image.asset(
                                         grid[index]['image']!,
+
                                         fit: BoxFit.contain,
                                         width: w * 0.3,
                                         height: h * 0.2,
@@ -200,7 +252,7 @@ class _HomeState extends State<Home> {
                                   ),
                                   const SizedBox(height: 10),
                                   Text(
-                                    "Straight Regular Jeans",
+                                    "",
                                     style: TextStyle(
                                       color: Color(0xff121926),
                                       fontFamily: 'RozhaOne',

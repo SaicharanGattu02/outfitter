@@ -93,14 +93,17 @@ shimmerLinearProgress(double height) {
 
 Widget Label({
   required String text,
+  TextAlign? textalign
 }) {
   return Text(text,
+      textAlign: textalign,
       style: TextStyle(
           color: Color(0xff110B0F),
           fontFamily: 'RozhaOne',
           fontSize: 15,
           height: 21.3/ 15,
-          fontWeight: FontWeight.w400));
+          fontWeight: FontWeight.w400)
+  );
 }
 
 class DateTimeFormatter {

@@ -8,6 +8,8 @@ import 'package:outfitter/Screens/WishList.dart';
 
 import 'Home.dart';
 
+import '../utils/NoInternet.dart';
+
 class Dashbord extends StatefulWidget {
   const Dashbord({super.key});
 
@@ -16,6 +18,8 @@ class Dashbord extends StatefulWidget {
 }
 
 class _DashbordState extends State<Dashbord> {
+  // final ConnectivityService connectivityService = ConnectivityService();
+
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   int _selectedIndex = 0;
 
@@ -44,6 +48,7 @@ class _DashbordState extends State<Dashbord> {
 
   @override
   Widget build(BuildContext context) {
+    // connectivityService.checkConnectivity();
     var w = MediaQuery.of(context).size.width;
     var h = MediaQuery.of(context).size.height;
 

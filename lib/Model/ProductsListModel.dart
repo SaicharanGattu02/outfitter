@@ -1,14 +1,14 @@
 class ProductsListModel {
-  List<ProductsList>? data;
+  List<ProductsList>? productlistdata;
   Settings? settings;
 
-  ProductsListModel({this.data, this.settings});
+  ProductsListModel({this.productlistdata, this.settings});
 
   ProductsListModel.fromJson(Map<String, dynamic> json) {
     if (json['data'] != null) {
-      data = <ProductsList>[];
+      productlistdata = <ProductsList>[];
       json['data'].forEach((v) {
-        data!.add(new ProductsList.fromJson(v));
+        productlistdata!.add(new ProductsList.fromJson(v));
       });
     }
     settings = json['settings'] != null
@@ -18,8 +18,8 @@ class ProductsListModel {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.data != null) {
-      data['data'] = this.data!.map((v) => v.toJson()).toList();
+    if (this.productlistdata != null) {
+      data['data'] = this.productlistdata!.map((v) => v.toJson()).toList();
     }
     if (this.settings != null) {
       data['settings'] = this.settings!.toJson();
