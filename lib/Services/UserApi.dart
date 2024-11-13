@@ -130,8 +130,8 @@ class Userapi {
 
   static Future<ProductsListModel?> getProductsList(String category_id) async {
     try {
-      final url = Uri.parse("${host}/api/products?category=${category_id}");  // Adjusted the endpoint URL
-      final headers = await getheader1();  // Ensuring headers are fetched asynchronously
+      final url = Uri.parse("${host}/api/products?category=${category_id}");
+      final headers = await getheader1();
       final response = await http.get(
         url,
         headers: headers,

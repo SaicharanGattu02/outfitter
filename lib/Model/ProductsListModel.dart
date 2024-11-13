@@ -1,14 +1,14 @@
 class ProductsListModel {
-  List<ProductsList>? productlistdata;
+  List<ProductsList>? productlistData;
   Settings? settings;
 
-  ProductsListModel({this.productlistdata, this.settings});
+  ProductsListModel({this.productlistData, this.settings});
 
   ProductsListModel.fromJson(Map<String, dynamic> json) {
     if (json['data'] != null) {
-      productlistdata = <ProductsList>[];
+      productlistData = <ProductsList>[];
       json['data'].forEach((v) {
-        productlistdata!.add(new ProductsList.fromJson(v));
+        productlistData!.add(new ProductsList.fromJson(v));
       });
     }
     settings = json['settings'] != null
@@ -18,8 +18,8 @@ class ProductsListModel {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.productlistdata != null) {
-      data['data'] = this.productlistdata!.map((v) => v.toJson()).toList();
+    if (this.productlistData != null) {
+      data['data'] = this.productlistData!.map((v) => v.toJson()).toList();
     }
     if (this.settings != null) {
       data['settings'] = this.settings!.toJson();
@@ -32,10 +32,12 @@ class ProductsList {
   String? id;
   String? title;
   String? category;
-  String? brand;
+  Null? brand;
   String? postedBy;
   int? mrp;
   int? salePrice;
+  bool? isInWishlist;
+  String? image;
 
   ProductsList(
       {this.id,
@@ -44,7 +46,9 @@ class ProductsList {
         this.brand,
         this.postedBy,
         this.mrp,
-        this.salePrice});
+        this.salePrice,
+        this.isInWishlist,
+        this.image});
 
   ProductsList.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -54,6 +58,8 @@ class ProductsList {
     postedBy = json['posted_by'];
     mrp = json['mrp'];
     salePrice = json['sale_price'];
+    isInWishlist = json['is_in_wishlist'];
+    image = json['image'];
   }
 
   Map<String, dynamic> toJson() {
@@ -65,6 +71,8 @@ class ProductsList {
     data['posted_by'] = this.postedBy;
     data['mrp'] = this.mrp;
     data['sale_price'] = this.salePrice;
+    data['is_in_wishlist'] = this.isInWishlist;
+    data['image'] = this.image;
     return data;
   }
 }
