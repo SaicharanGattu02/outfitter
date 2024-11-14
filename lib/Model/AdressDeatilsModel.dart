@@ -1,16 +1,11 @@
-class AddressListModel {
-  List<AddressList>? data;
+class AdressDeatilsModel {
+  AddressDetails? data;
   Settings? settings;
 
-  AddressListModel({this.data, this.settings});
+  AdressDeatilsModel({this.data, this.settings});
 
-  AddressListModel.fromJson(Map<String, dynamic> json) {
-    if (json['data'] != null) {
-      data = <AddressList>[];
-      json['data'].forEach((v) {
-        data!.add(new AddressList.fromJson(v));
-      });
-    }
+  AdressDeatilsModel.fromJson(Map<String, dynamic> json) {
+    data = json['data'] != null ? new AddressDetails.fromJson(json['data']) : null;
     settings = json['settings'] != null
         ? new Settings.fromJson(json['settings'])
         : null;
@@ -19,7 +14,7 @@ class AddressListModel {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     if (this.data != null) {
-      data['data'] = this.data!.map((v) => v.toJson()).toList();
+      data['data'] = this.data!.toJson();
     }
     if (this.settings != null) {
       data['settings'] = this.settings!.toJson();
@@ -28,26 +23,32 @@ class AddressListModel {
   }
 }
 
-class AddressList {
+class AddressDetails {
   String? id;
   String? mobile;
-  String? name;
+  Null? alternateMobile;
+  String? fullName;
+  bool? default_address;
   String? address;
   String? addressType;
   String? pincode;
 
-  AddressList(
+  AddressDetails(
       {this.id,
-        this.mobile,
-        this.name,
-        this.address,
-        this.addressType,
-        this.pincode});
+      this.mobile,
+      this.alternateMobile,
+      this.fullName,
+      this.default_address,
+      this.address,
+      this.addressType,
+      this.pincode});
 
-  AddressList.fromJson(Map<String, dynamic> json) {
+  AddressDetails.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     mobile = json['mobile'];
-    name = json['full_name'];
+    alternateMobile = json['alternate_mobile'];
+    fullName = json['full_name'];
+    default_address = json['default'];
     address = json['address'];
     addressType = json['address_type'];
     pincode = json['pincode'];
@@ -57,7 +58,9 @@ class AddressList {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
     data['mobile'] = this.mobile;
-    data['full_name'] = this.name;
+    data['alternate_mobile'] = this.alternateMobile;
+    data['full_name'] = this.fullName;
+    data['default'] = this.default_address;
     data['address'] = this.address;
     data['address_type'] = this.addressType;
     data['pincode'] = this.pincode;

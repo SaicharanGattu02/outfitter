@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:outfitter/Authentication/Login.dart';
+import 'package:outfitter/Screens/AddressList.dart';
 import 'package:outfitter/Screens/Orders.dart';
 import 'package:outfitter/Screens/WishList.dart';
 import 'package:outfitter/utils/CustomAppBar1.dart';
@@ -236,29 +237,33 @@ class _ProfileState extends State<Profile> {
             SizedBox(height: h*0.02,),
             DashedLine(width: w, height: 1.0),
             SizedBox(height: h*0.02,),
-            Row(
-              children: [
-                Image.asset(
-                  "assets/address.png",
-                  width: 24,
-                  height: 24,
-                  color: Color(0xff110B0F),
-                  fit: BoxFit.contain,
-                ),
-                SizedBox(width: w*0.03),
-                Text(
-                  'Address',
-                  style: TextStyle(
+            InkResponse(onTap: (){
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>AddressListScreen()));
+            },
+              child: Row(
+                children: [
+                  Image.asset(
+                    "assets/address.png",
+                    width: 24,
+                    height: 24,
                     color: Color(0xff110B0F),
-                    fontFamily: 'Poppins',
-                    fontSize: 16,
-                    height: 19 / 16,
-                    fontWeight: FontWeight.w400,
+                    fit: BoxFit.contain,
                   ),
-                  overflow: TextOverflow.ellipsis,
-                ),
+                  SizedBox(width: w*0.03),
+                  Text(
+                    'Address',
+                    style: TextStyle(
+                      color: Color(0xff110B0F),
+                      fontFamily: 'Poppins',
+                      fontSize: 16,
+                      height: 19 / 16,
+                      fontWeight: FontWeight.w400,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
 
-              ],),
+                ],),
+            ),
             SizedBox(height: h*0.02,),
             DashedLine(width: w, height: 1.0),
             SizedBox(height: h*0.02,),

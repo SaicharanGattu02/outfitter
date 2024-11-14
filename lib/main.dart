@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:outfitter/Screens/Splash.dart';
+import 'package:outfitter/providers/AddressProvider.dart';
 import 'package:outfitter/providers/CategoriesProvider.dart';
 import 'package:outfitter/providers/ProductDetailsProvider.dart';
 import 'package:outfitter/providers/ProductListProvider.dart';
@@ -169,6 +170,9 @@ Future<void> main() async {
         ),
         ChangeNotifierProvider(
           create: (context) => ProductListProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => AddressListProvider(),
         ),
         // Use ChangeNotifierProxyProvider to pass ProductListProvider to WishlistProvider
         ChangeNotifierProxyProvider<ProductListProvider, WishlistProvider>(
