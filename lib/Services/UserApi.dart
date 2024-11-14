@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:outfitter/Model/ProductsListModel.dart';
 import 'package:outfitter/Services/otherservices.dart';
 import '../Model/CategoriesModel.dart';
+import '../Model/GetCartListModel.dart';
 import '../Model/ProductsDetailsModel.dart';
 import '../Model/RegisterModel.dart';
 import '../Model/VerifyOtpModel.dart';
@@ -237,6 +238,56 @@ class Userapi {
     }
   }
 
+  //
+  static Future<RegisterModel?> AddCartList(String product,String quantity) async {
+
+
+    try {
+      Map<String, String> data = {
+        "product": product,
+        "quantity": quantity
+      };
+      final url = Uri.parse("${host}/api/carts");
+      final headers = await getheader2();
+
+      final response = await http.post(
+        url,
+        headers: headers,
+        body: data,
+      );
+      if (response != null) {
+        final jsonResponse = jsonDecode(response.body);
+        print("AddCartList Status:${response.body}");
+        return RegisterModel.fromJson(jsonResponse);
+      } else {
+        print("Request failed with status: ${response.statusCode}");
+        return null;
+      }
+    } catch (e) {
+      print("Error occurred: $e");
+      return null;
+    }
+  }
+
+  static Future<GetCartListModel?> GetCartList() async {
+    try {
+      final url = Uri.parse("${host}/api/carts");
+      final headers = await getheader2();
+      final response = await http.get(url, headers: headers);
+      if (response.statusCode == 200) {
+        final jsonResponse = jsonDecode(response.body);
+        print("GetCartList response: ${response.body}");
+        return GetCartListModel.fromJson(jsonResponse);
+      } else {
+        print("Request failed with status: ${response.statusCode}");
+        return null;
+      }
+    } catch (e) {
+      // Catch any exceptions (e.g., network failure, JSON parsing error)
+      print("Error occurred: $e");
+      return null ;
+    }
+  }
 
   static Future<WishlistModel?> getWishList() async {
     try {

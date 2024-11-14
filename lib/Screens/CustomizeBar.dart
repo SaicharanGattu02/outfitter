@@ -9,7 +9,8 @@ import 'package:provider/provider.dart';
 import '../providers/ProductDetailsProvider.dart';
 
 class CustomizeProductBar extends StatefulWidget {
-  const CustomizeProductBar({super.key});
+  String productid;
+   CustomizeProductBar({super.key, required this.productid});
 
   @override
   State<CustomizeProductBar> createState() => _CustomizeProductBarState();
@@ -202,7 +203,7 @@ class _CustomizeProductBarState extends State<CustomizeProductBar>
                 controller: _pageController,
                 physics: NeverScrollableScrollPhysics(),
                 children: [
-                  CollerTypeCustomize(),
+                  CollerTypeCustomize(productid: widget.productid,),
                   CuffTypeCustomize(),
                   PocketTypeCustomize(),
                   BackBodyCustomize(),

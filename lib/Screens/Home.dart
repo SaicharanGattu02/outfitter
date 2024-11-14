@@ -248,7 +248,7 @@ class _HomeState extends State<Home> {
                                                 context,
                                                 MaterialPageRoute(
                                                     builder: (context) =>
-                                                        CustomizeProductBar()));
+                                                        CustomizeProductBar(productid: productData.id.toString(),)));
                                           },
                                           child: Container(
                                             child: Image.network(

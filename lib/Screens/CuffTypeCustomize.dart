@@ -821,24 +821,28 @@ class _CuffTypeCustomizeState extends State<CuffTypeCustomize> {
                 ),
               ),
             ),
-            Container(
-              width: w * 0.45,
-              height: h*0.06,
-              padding: EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                  color: Color(0xff110B0F),
-                  borderRadius: BorderRadius.circular(6)),
-              child: Center(
-                child: Text(
-                  "ADD TO CART",
-                  style: TextStyle(
-                    color: Color(0xffE7C6A0),
-                    fontFamily: 'RozhaOne',
-                    fontSize: 16,
-                    height: 21.06 / 16,
-                    fontWeight: FontWeight.w400,
+            InkResponse(onTap: (){
+
+            },
+              child: Container(
+                width: w * 0.45,
+                height: h*0.06,
+                padding: EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                    color: Color(0xff110B0F),
+                    borderRadius: BorderRadius.circular(6)),
+                child: Center(
+                  child: Text(
+                    "ADD TO CART",
+                    style: TextStyle(
+                      color: Color(0xffE7C6A0),
+                      fontFamily: 'RozhaOne',
+                      fontSize: 16,
+                      height: 21.06 / 16,
+                      fontWeight: FontWeight.w400,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
-                  textAlign: TextAlign.center,
                 ),
               ),
             ),

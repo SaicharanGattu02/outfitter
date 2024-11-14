@@ -325,7 +325,7 @@ class _DashHomeState extends State<DashHome> {
                             children: [
                               Center(
                                 child: InkWell(onTap:(){
-                                 Navigator.push(context, MaterialPageRoute(builder: (context)=>CustomizeProductBar())) ;
+                                 // Navigator.push(context, MaterialPageRoute(builder: (context)=>CustomizeProductBar())) ;
                 },
                                     child: Image.asset(gridList[index]['image']!,height: h*0.2,width: w*0.45,fit: BoxFit.contain,),),
                               ),
