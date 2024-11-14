@@ -5,6 +5,7 @@ import 'package:outfitter/Model/OrdersListModel.dart';
 import 'package:outfitter/Model/ProductsListModel.dart';
 import 'package:outfitter/Services/otherservices.dart';
 import '../Model/AddressListModel.dart';
+import '../Model/AdressDeatilsModel.dart';
 import '../Model/CategoriesModel.dart';
 import '../Model/GetCartListModel.dart';
 import '../Model/ProductsDetailsModel.dart';
@@ -341,6 +342,8 @@ class Userapi {
     String mobile,
     String address,
     String address_type,
+    String fullname,
+    String alternate,
   ) async {
     try {
       // Define the form data
@@ -348,8 +351,12 @@ class Userapi {
         'pincode': pincode,
         'mobile': mobile,
         'address': address,
-        'address_type': address_type
+        'address_type': address_type,
+        'full_name': fullname,
+        'alternate_mobile': alternate,
       };
+
+      print("Formdata:${formData}");
       final url = Uri.parse("${host}/api/address");
       final headers = await getheader1();
       final response = await http.post(url, headers: headers, body: formData);
@@ -374,6 +381,8 @@ class Userapi {
       String mobile,
       String address,
       String address_type,
+      String fullname,
+      String alternate,
       ) async {
     try {
       // Define the form data
@@ -381,7 +390,9 @@ class Userapi {
         'pincode': pincode,
         'mobile': mobile,
         'address': address,
-        'address_type': address_type
+        'address_type': address_type,
+        'full_name': fullname,
+        'alternate_mobile': alternate,
       };
       final url = Uri.parse("${host}/api/update-address/$id");
       final headers = await getheader1();
@@ -410,6 +421,26 @@ class Userapi {
         final jsonResponse = jsonDecode(response.body);
         print("deleteAdress response: ${response.body}");
         return RegisterModel.fromJson(jsonResponse);
+      } else {
+        print("Request failed with status: ${response.statusCode}");
+        return null;
+      }
+    } catch (e) {
+      // Catch any exceptions (e.g., network failure, JSON parsing error)
+      print("Error occurred: $e");
+      return null;
+    }
+  }
+
+  static Future<AdressDeatilsModel?> getaddressdetails(String id) async {
+    try {
+      final url = Uri.parse("${host}/api/address-details/$id");
+      final headers = await getheader1();
+      final response = await http.get(url, headers: headers);
+      if (response.statusCode == 200) {
+        final jsonResponse = jsonDecode(response.body);
+        print("getaddress response: ${response.body}");
+        return AdressDeatilsModel.fromJson(jsonResponse);
       } else {
         print("Request failed with status: ${response.statusCode}");
         return null;
