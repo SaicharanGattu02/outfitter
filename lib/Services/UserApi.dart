@@ -432,6 +432,26 @@ class Userapi {
     }
   }
 
+  static Future<RegisterModel?> defaultAdress(String id) async {
+    try {
+      final url = Uri.parse("${host}/api/default-address/$id");
+      final headers = await getheader1();
+      final response = await http.delete(url, headers: headers);
+      if (response.statusCode == 200) {
+        final jsonResponse = jsonDecode(response.body);
+        print("defaultAdress response: ${response.body}");
+        return RegisterModel.fromJson(jsonResponse);
+      } else {
+        print("Request failed with status: ${response.statusCode}");
+        return null;
+      }
+    } catch (e) {
+      // Catch any exceptions (e.g., network failure, JSON parsing error)
+      print("Error occurred: $e");
+      return null;
+    }
+  }
+
   static Future<AdressDeatilsModel?> getaddressdetails(String id) async {
     try {
       final url = Uri.parse("${host}/api/address-details/$id");
@@ -542,6 +562,7 @@ class Userapi {
 
     return null; // Return null if there's an error
   }
+
   static Future<OrdersListModel?> getOrdersList() async {
     try {
       final url = Uri.parse("${host}/api/orders");

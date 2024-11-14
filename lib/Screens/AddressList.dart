@@ -29,6 +29,16 @@ class _AddressListScreenState extends State<AddressListScreen> {
   }
 
 
+  String? groupValue;
+  void onChanged(String? selectedValue) {
+    setState(() {
+      groupValue = selectedValue;
+    });
+    final address_list_provider =
+    Provider.of<AddressListProvider>(context, listen: false);
+    address_list_provider.defaultFromAddressList(groupValue??"");
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -107,10 +117,20 @@ class _AddressListScreenState extends State<AddressListScreen> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            Radio<String>(
+                              activeColor: Colors.blue,
+                              value: address.id??"",
+                              groupValue: groupValue,
+                              onChanged: (value) {
+                                onChanged(value); // Handle the radio button state change
+                              },
+                            ),
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
+
+
                                   Row(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,

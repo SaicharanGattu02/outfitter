@@ -49,7 +49,20 @@ class AddressListProvider with ChangeNotifier {
         print('remove successfully');
         fetchAddressList();
       } else {
-        throw Exception('Failed to remove product from wishlist');
+        throw Exception('Failed to remove address from addresslistt');
+      }
+    } catch (e) {
+      throw Exception('Failed to remove from wishlist: $e');
+    }
+  }
+
+  Future<void> defaultFromAddressList(String addressID) async {
+    try {
+      var res = await Userapi.defaultAdress(addressID);
+      if (res != null && res.settings?.success == 1) {
+        fetchAddressList();
+      } else {
+        throw Exception('Failed to default address from addresslist');
       }
     } catch (e) {
       throw Exception('Failed to remove from wishlist: $e');
@@ -76,10 +89,10 @@ class AddressListProvider with ChangeNotifier {
       if (res != null && res.settings?.success == 1) {
         _addressDetails=res.data;
       } else {
-        throw Exception('Failed to remove product from wishlist');
+        throw Exception('Failed to remove address from addresslist');
       }
     } catch (e) {
-      throw Exception('Failed to remove from wishlist: $e');
+      throw Exception('Failed to remove from addresslist: $e');
     }
   }
 
