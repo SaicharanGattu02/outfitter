@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
+import 'package:outfitter/Model/OrdersListModel.dart';
 import 'package:outfitter/Model/ProductsListModel.dart';
 import 'package:outfitter/Services/otherservices.dart';
 import '../Model/AddressListModel.dart';
@@ -8,6 +9,7 @@ import '../Model/CategoriesModel.dart';
 import '../Model/GetCartListModel.dart';
 import '../Model/ProductsDetailsModel.dart';
 import '../Model/RegisterModel.dart';
+import '../Model/ShippingDetailsModel.dart';
 import '../Model/VerifyOtpModel.dart';
 import '../Model/WishlistModel.dart';
 
@@ -160,7 +162,7 @@ class Userapi {
 
   static Future<ProductsDetailsModel?> getProductDetails(String? product_id) async {
     try {
-      final url = Uri.parse("$host/api/product-details/1d2ad598-81c8-4187-a3d3-e7c1ec44f031");  // Adjusted the endpoint URL
+      final url = Uri.parse("$host/api/product-details/$product_id");  // Adjusted the endpoint URL
       final headers = await getheader1();  // Ensuring headers are fetched asynchronously
       final response = await http.get(
         url,
@@ -240,7 +242,7 @@ class Userapi {
   }
 
   //
-  static Future<RegisterModel?> AddCartList(String product,String quantity) async {
+  static Future<RegisterModel?> addCartQuanitity(String product,String quantity) async {
     try {
       Map<String, String> data = {
         "product": product,
@@ -257,6 +259,32 @@ class Userapi {
       if (response != null) {
         final jsonResponse = jsonDecode(response.body);
         print("AddCartList Status:${response.body}");
+        return RegisterModel.fromJson(jsonResponse);
+      } else {
+        print("Request failed with status: ${response.statusCode}");
+        return null;
+      }
+    } catch (e) {
+      print("Error occurred: $e");
+      return null;
+    }
+  }
+
+  static Future<RegisterModel?> updateCartQuanitity(String productID,String quantity) async {
+    try {
+      Map<String, String> data = {
+        "quantity": quantity
+      };
+      final url = Uri.parse("${host}/api/update-cart/$productID");
+      final headers = await getheader2();
+      final response = await http.put(
+        url,
+        headers: headers,
+        body: data,
+      );
+      if (response != null) {
+        final jsonResponse = jsonDecode(response.body);
+        print("updateCartQuanitity Status:${response.body}");
         return RegisterModel.fromJson(jsonResponse);
       } else {
         print("Request failed with status: ${response.statusCode}");
@@ -412,4 +440,97 @@ class Userapi {
       return null;
     }
   }
+
+  static Future<ShippingDetailsModel?> getShippingDetails() async {
+    try {
+      final url = Uri.parse("${host}/api/shipping_details");
+      final headers = await getheader1();
+      final response = await http.get(url, headers: headers);
+      if (response.statusCode == 200) {
+        final jsonResponse = jsonDecode(response.body);
+        print("getShippingDetails response: ${response.body}");
+        return ShippingDetailsModel.fromJson(jsonResponse);
+      } else {
+        print("Request failed with status: ${response.statusCode}");
+        return null;
+      }
+    } catch (e) {
+      // Catch any exceptions (e.g., network failure, JSON parsing error)
+      print("Error occurred: $e");
+      return null;
+    }
+  }
+
+  static Future<RegisterModel?> placeOrder(
+      int order_value,
+      String address,
+      List<String> items, // Changed to accept a list of items
+      ) async {
+    // Set the URL of your API
+    final url = Uri.parse('${host}/api/orders');
+
+    // Get headers dynamically
+    final headers = await getheader2();
+
+    // Create a multipart request
+    var request = http.MultipartRequest('POST', url)
+      ..headers.addAll(headers)
+      ..fields['order_value'] = order_value.toString()
+      ..fields['payment_method'] = 'Case on delivery'
+      ..fields['address'] = "58aea724-442e-4455-93eb-4ab7a85b5561";
+
+    // Use this approach to handle multiple collaborators
+    request.fields.addAll({
+      for (int i = 0; i < items.length; i++) 'items[$i]': items[i],
+    });
+
+    try {
+      // Send the request
+      print("Request Fields: ${request.fields}");
+      var response = await request.send();
+
+      // Check for a successful response
+      if (response.statusCode == 200) {
+        print('Order placed successfully!');
+        final responseData = await response.stream.bytesToString();
+
+        // Decode the JSON response
+        final jsonResponse = jsonDecode(responseData);
+        print("placeOrder response: $jsonResponse");
+
+        // Assuming RegisterModel has a fromJson constructor
+        return RegisterModel.fromJson(jsonResponse);
+      } else {
+        print('Failed to place order. Status code: ${response.statusCode}');
+        final responseData = await response.stream.bytesToString();
+        print('Response: $responseData');
+      }
+    } catch (e) {
+      print('Error: $e');
+    }
+
+    return null; // Return null if there's an error
+  }
+
+  static Future<OrdersListModel?> getOrdersList() async {
+    try {
+      final url = Uri.parse("${host}/api/orders");
+      final headers = await getheader1();
+      final response = await http.get(url, headers: headers);
+      if (response.statusCode == 200) {
+        final jsonResponse = jsonDecode(response.body);
+        print("getOrdersList response: ${response.body}");
+        return OrdersListModel.fromJson(jsonResponse);
+      } else {
+        print("Request failed with status: ${response.statusCode}");
+        return null;
+      }
+    } catch (e) {
+      // Catch any exceptions (e.g., network failure, JSON parsing error)
+      print("Error occurred: $e");
+      return null;
+    }
+  }
+
+
 }

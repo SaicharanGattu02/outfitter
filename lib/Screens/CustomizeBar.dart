@@ -33,7 +33,7 @@ class _CustomizeProductBarState extends State<CustomizeProductBar>
 
   Future<void> GetProductDetails() async {
     final ProductdetailsProvider = Provider.of<ProductDetailsProvider>(context, listen: false);
-    ProductdetailsProvider.fetchProductDetails("");
+    ProductdetailsProvider.fetchProductDetails(widget.productid);
   }
 
   @override

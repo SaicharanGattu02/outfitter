@@ -26,7 +26,7 @@ class ProductListProvider with ChangeNotifier {
     // Search for the product with the given productId in _productlist
     var product = _productlist?.firstWhere(
           (p) => p.id == productId,
-      orElse: () => ProductsList(id: "-1", title: "", image: "", mrp: 0, salePrice: 0, isInWishlist: false), // Use a fallback object
+      orElse: () => ProductsList(id: "-1", title: "", image: "", mrp: 0, salePrice: 0, isInWishlist: false),
     );
 
     // Check if a valid product was found by confirming the id is not the fallback -1

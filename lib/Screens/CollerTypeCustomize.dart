@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:outfitter/Screens/UploderProfile.dart';
+import 'package:outfitter/providers/CartProvider.dart';
 import 'package:outfitter/providers/ProductDetailsProvider.dart';
+import 'package:outfitter/utils/CustomSnackBar.dart';
 import 'package:provider/provider.dart';
 
 import '../Model/ProductsDetailsModel.dart';
@@ -16,13 +18,6 @@ class CollerTypeCustomize extends StatefulWidget {
 
 class _CollerTypeCustomizeState extends State<CollerTypeCustomize> {
   int quantity = 0;
-
-  void addToCart() {
-    setState(() {
-      quantity += 1; // Increase the quantity by 1 when the button is clicked
-    });
-  }
-
   final List<Map<String, String>> grid = [
     {"image": 'assets/c1.png', 'name': 'Peaked Collar'},
     {"image": 'assets/c2.png', 'name': 'Spread Collar'},
@@ -120,19 +115,14 @@ class _CollerTypeCustomizeState extends State<CollerTypeCustomize> {
     });
   }
 
-  Future<void> Addcart( String quantity) async {
-    var res = await Userapi.AddCartList(widget.productid, quantity);
-
-    if (res != null) {
-      setState(() {
-        if (res.settings?.success == 1) {
-        } else {
-
-        }
-      });
+  Future<void>AddToCartApi(String productID,String quantity) async {
+    final cart_provider =
+    Provider.of<CartProvider>(context, listen: false);
+    var msg =await cart_provider.addToCartApi(productID,quantity);
+    if(msg!="" || msg!=null){
+      CustomSnackBar.show(context, msg??"");
     }
   }
-
   @override
   Widget build(BuildContext context) {
     var w = MediaQuery.of(context).size.width;
@@ -141,6 +131,7 @@ class _CollerTypeCustomizeState extends State<CollerTypeCustomize> {
       body: Consumer<ProductDetailsProvider>(
           builder: (context, profileProvider, child) {
         final productData = profileProvider.productData;
+        print("Image:${productData?.image}");
         return SingleChildScrollView(
           child: Column(
             children: [
@@ -156,8 +147,8 @@ class _CollerTypeCustomizeState extends State<CollerTypeCustomize> {
                           EdgeInsets.symmetric(horizontal: 8, vertical: 16),
                       decoration: BoxDecoration(color: Color(0xffEDF4FB)),
                       child: Center(
-                        child: Image.asset(
-                          'assets/shirt.png',
+                        child: Image.network(
+                          productData?.image??"",
                           fit: BoxFit.contain,
                           height: h * 0.25,
                           width: w * 0.8,
@@ -871,7 +862,7 @@ class _CollerTypeCustomizeState extends State<CollerTypeCustomize> {
             ),
             InkResponse(
                 onTap: () {
-                  addToCart();
+                  AddToCartApi(widget.productid, "1");
                 },
                 child: Container(
                     width: w * 0.45,
@@ -882,8 +873,7 @@ class _CollerTypeCustomizeState extends State<CollerTypeCustomize> {
                       borderRadius: BorderRadius.circular(6),
                     ),
                     child: Center(
-                      child: quantity == 0
-                          ? Text(
+                      child: Text(
                               "ADD TO CART",
                               style: TextStyle(
                                 color: Color(0xffE7C6A0),
@@ -894,57 +884,57 @@ class _CollerTypeCustomizeState extends State<CollerTypeCustomize> {
                               ),
                               textAlign: TextAlign.center,
                             )
-                          :
-                      Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Container(width:w*0.06,height: h*0.03,
-                                  decoration: BoxDecoration(
-                                      border: Border.all(
-                                          color: Color(0xffffffff), width: 1)),
-                                  child: IconButton( padding: EdgeInsets.all(0),
-                                    icon: Icon(Icons.remove,
-                                        size: 20,    color: Color(0xffE7C6A0),), // color11
-                                    onPressed: () {
-                                      setState(() {
-                                        if (quantity > 0) quantity--;
-                                      });
-                                      Addcart(quantity.toString());
-                                    },
-                                  ),
-                                ),
-                                SizedBox(
-                                    width:
-                                        8), // Space between the icon and quantity
-                                Text(
-                                  "$quantity", // Show the quantity next to the cart icon
-                                  style: TextStyle(
-                                    color: Color(0xffE7C6A0),
-                                    fontFamily: 'RozhaOne',
-                                    fontSize: 16,
-                                    height: 21.06 / 16,
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
-                                SizedBox(width: 8),
-                                Container(width:w*0.06,height: h*0.03,
-                                  decoration: BoxDecoration(
-                                      border: Border.all(
-                                          color: Color(0xffffffff), width: 1)),
-                                  child: IconButton( padding: EdgeInsets.all(0),
-                                    icon: Icon(Icons.add,
-                                      size: 20,    color: Color(0xffE7C6A0),), // color11
-                                    onPressed: () {
-                                      setState(() {
-                                        if (quantity > 0) quantity++;
-                                      });
-                                      Addcart(quantity.toString());
-                                    },
-                                  ),
-                                ),
-                              ],
-                            ),
+                      //     :
+                      // Row(
+                      //         mainAxisAlignment: MainAxisAlignment.center,
+                      //         children: [
+                      //           Container(width:w*0.06,height: h*0.03,
+                      //             decoration: BoxDecoration(
+                      //                 border: Border.all(
+                      //                     color: Color(0xffffffff), width: 1)),
+                      //             child: IconButton( padding: EdgeInsets.all(0),
+                      //               icon: Icon(Icons.remove,
+                      //                   size: 20,    color: Color(0xffE7C6A0),), // color11
+                      //               onPressed: () {
+                      //                 setState(() {
+                      //                   if (quantity > 0) quantity--;
+                      //                 });
+                      //                 AddToCartApi(quantity.toString());
+                      //               },
+                      //             ),
+                      //           ),
+                      //           SizedBox(
+                      //               width:
+                      //                   8), // Space between the icon and quantity
+                      //           Text(
+                      //             "$quantity", // Show the quantity next to the cart icon
+                      //             style: TextStyle(
+                      //               color: Color(0xffE7C6A0),
+                      //               fontFamily: 'RozhaOne',
+                      //               fontSize: 16,
+                      //               height: 21.06 / 16,
+                      //               fontWeight: FontWeight.w400,
+                      //             ),
+                      //             textAlign: TextAlign.center,
+                      //           ),
+                      //           SizedBox(width: 8),
+                      //           Container(width:w*0.06,height: h*0.03,
+                      //             decoration: BoxDecoration(
+                      //                 border: Border.all(
+                      //                     color: Color(0xffffffff), width: 1)),
+                      //             child: IconButton( padding: EdgeInsets.all(0),
+                      //               icon: Icon(Icons.add,
+                      //                 size: 20,    color: Color(0xffE7C6A0),), // color11
+                      //               onPressed: () {
+                      //                 setState(() {
+                      //                   if (quantity > 0) quantity++;
+                      //                 });
+                      //                 AddToCartApi(quantity.toString());
+                      //               },
+                      //             ),
+                      //           ),
+                      //         ],
+                      //       ),
                     )))
           ],
         ),

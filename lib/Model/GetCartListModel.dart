@@ -1,14 +1,14 @@
 class GetCartListModel {
-  List<Data>? data;
+  List<CartList>? data;
   Settings? settings;
 
   GetCartListModel({this.data, this.settings});
 
   GetCartListModel.fromJson(Map<String, dynamic> json) {
     if (json['data'] != null) {
-      data = <Data>[];
+      data = <CartList>[];
       json['data'].forEach((v) {
-        data!.add(new Data.fromJson(v));
+        data!.add(new CartList.fromJson(v));
       });
     }
     settings = json['settings'] != null
@@ -28,14 +28,14 @@ class GetCartListModel {
   }
 }
 
-class Data {
+class CartList {
   String? id;
   Product? product;
   int? quantity;
 
-  Data({this.id, this.product, this.quantity});
+  CartList({this.id, this.product, this.quantity});
 
-  Data.fromJson(Map<String, dynamic> json) {
+  CartList.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     product =
     json['product'] != null ? new Product.fromJson(json['product']) : null;
