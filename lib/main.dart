@@ -20,6 +20,8 @@ import 'package:outfitter/providers/WishlistProvider.dart';
 import 'package:outfitter/utils/Preferances.dart';
 import 'package:provider/provider.dart';
 
+import 'Screens/Profile.dart';
+
 
 const AndroidNotificationChannel channel = AndroidNotificationChannel(
     'high_importance_channel', // id

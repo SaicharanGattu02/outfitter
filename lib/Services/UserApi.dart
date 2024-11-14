@@ -10,6 +10,7 @@ import '../Model/CategoriesModel.dart';
 import '../Model/GetCartListModel.dart';
 import '../Model/ProductsDetailsModel.dart';
 import '../Model/RegisterModel.dart';
+import '../Model/UserDetailsModel.dart';
 import '../Model/ShippingDetailsModel.dart';
 import '../Model/VerifyOtpModel.dart';
 import '../Model/WishlistModel.dart';
@@ -491,6 +492,96 @@ class Userapi {
       return null;
     }
   }
+
+  static Future<UserDetailsModel?> getUserdetsils() async {
+    try {
+      final url = Uri.parse("${host}/auth/user-detail");
+      final headers = await getheader1();
+      final response = await http.get(url, headers: headers);
+      if (response.statusCode == 200) {
+        final jsonResponse = jsonDecode(response.body);
+        print("getUserdetsils response: ${response.body}");
+        return UserDetailsModel.fromJson(jsonResponse);
+      } else {
+        print("Request failed with status: ${response.statusCode}");
+        return null;
+      }
+    } catch (e) {
+      // Catch any exceptions (e.g., network failure, JSON parsing error)
+      print("Error occurred: $e");
+      return null;
+    }
+  }
+
+  static Future<RegisterModel?> updateprofile(
+      String id,
+      String pincode,
+      String mobile,
+      String address,
+      String address_type,
+      ) async {
+    try {
+      // Define the form data
+      final Map<String, String> formData = {
+        'pincode': pincode,
+        'mobile': mobile,
+        'address': address,
+        'address_type': address_type
+      };
+      final url = Uri.parse("${host}/api/update-address/$id");
+      final headers = await getheader1();
+      final response = await http.put(url, headers: headers,body: formData);
+      if (response.statusCode == 200) {
+        final jsonResponse = jsonDecode(response.body);
+        print("updateAdress response: ${response.body}");
+        return RegisterModel.fromJson(jsonResponse);
+      } else {
+        print("Request failed with status: ${response.statusCode}");
+        return null;
+      }
+    } catch (e) {
+      // Catch any exceptions (e.g., network failure, JSON parsing error)
+      print("Error occurred: $e");
+      return null;
+    }
+  }
+  static Future<RegisterModel?> updateProfile(
+      String fullname,
+      String mobile,
+      String image,  // Image parameter, can be a file path or image URL
+      String email,  // Image parameter, can be a file path or image URL
+      ) async {
+    try {
+      // Prepare form data (only fullname, mobile, and image)
+      final Map<String, String> formData = {
+        'name': fullname,
+        'mobile': mobile,
+        'image': image,  // Add the image file path or URL here
+        'email': email  // Add the image file path or URL here
+      };
+
+      // Replace with your actual URL for updating profile
+      final url = Uri.parse("${host}/auth/user-detail");  // Replace with your actual URL
+      final headers = await getheader1();  // Assuming this method provides necessary headers
+
+      final response = await http.put(url, headers: headers, body: formData);
+
+      if (response.statusCode == 200) {
+        final jsonResponse = jsonDecode(response.body);
+        print("updateProfile response: ${response.body}");
+        return RegisterModel.fromJson(jsonResponse);  // Assuming RegisterModel parses the response
+      } else {
+        print("Request failed with status: ${response.statusCode}");
+        return null;
+      }
+    } catch (e) {
+      print("Error occurred: $e");
+      return null;
+    }
+  }
+
+
+
 
   static Future<ShippingDetailsModel?> getShippingDetails() async {
     try {
