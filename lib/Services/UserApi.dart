@@ -542,7 +542,6 @@ class Userapi {
 
     return null; // Return null if there's an error
   }
-
   static Future<OrdersListModel?> getOrdersList() async {
     try {
       final url = Uri.parse("${host}/api/orders");
