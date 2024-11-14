@@ -59,7 +59,6 @@ class ProductsList {
     title = json['title'];
     category = json['category'];
     brand = json['brand'];
-    // Handle null case for 'colors'
     colors = json['colors'] != null ? List<String>.from(json['colors']) : [];
     postedBy = json['posted_by'];
     mrp = json['mrp'];
