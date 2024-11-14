@@ -170,15 +170,17 @@ Future<void> main() async {
         ChangeNotifierProvider(
           create: (context) => ProductListProvider(),
         ),
-
-        ChangeNotifierProvider(
-          create: (context) => Wishlistprovider(),
+        // Use ChangeNotifierProxyProvider to pass ProductListProvider to WishlistProvider
+        ChangeNotifierProxyProvider<ProductListProvider, WishlistProvider>(
+          create: (context) => WishlistProvider(context.read<ProductListProvider>()),
+          update: (context, productListProvider, wishlistProvider) =>
+          wishlistProvider!..updateProductListProvider(productListProvider),
         ),
-
       ],
       child: MyApp(),
     ),
   );
+
 }
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {

@@ -7,6 +7,7 @@ import '../Model/CategoriesModel.dart';
 import '../Model/ProductsDetailsModel.dart';
 import '../Model/RegisterModel.dart';
 import '../Model/VerifyOtpModel.dart';
+import '../Model/WishlistModel.dart';
 
 class Userapi {
   static String host = "http://192.168.0.169:8000";
@@ -212,23 +213,19 @@ class Userapi {
     }
   }
 
-  static Future<RegisterModel?> RemoveWishList(String product) async {
-    print("product>>>${product}");
-
+  static Future<RegisterModel?> RemoveWishList(String product_id) async {
+    print("product_id>>>${product_id}");
     try {
-      Map<String, String> data = {
-        "product": product,
-      };
-      final url = Uri.parse("${host}/api/wishlists");
+
+      final url = Uri.parse("${host}/api/update-wishlist/$product_id");
       final headers = await getheader2();
       final response = await http.put(
         url,
         headers: headers,
-        body: data,
       );
       if (response != null) {
         final jsonResponse = jsonDecode(response.body);
-        print("AddWishList Status:${response.body}");
+        print("RemoveWishList Status:${response.body}");
         return RegisterModel.fromJson(jsonResponse);
       } else {
         print("Request failed with status: ${response.statusCode}");
@@ -240,24 +237,24 @@ class Userapi {
     }
   }
 
-  //
-  // static Future<void> GetWishList() async {
-  //   try {
-  //     final url = Uri.parse("${host}/api/wishlists");
-  //     final headers = await getheader1();
-  //     final response = await http.get(url, headers: headers);
-  //     if (response.statusCode == 200) {
-  //       final jsonResponse = jsonDecode(response.body);
-  //       print("GetWishList response: ${response.body}");
-  //       return CategoriesModel.fromJson(jsonResponse);
-  //     } else {
-  //       print("Request failed with status: ${response.statusCode}");
-  //       return null;
-  //     }
-  //   } catch (e) {
-  //     // Catch any exceptions (e.g., network failure, JSON parsing error)
-  //     print("Error occurred: $e");
-  //     return null;
-  //   }
-  // }
+
+  static Future<WishlistModel?> getWishList() async {
+    try {
+      final url = Uri.parse("${host}/api/wishlists");
+      final headers = await getheader1();
+      final response = await http.get(url, headers: headers);
+      if (response.statusCode == 200) {
+        final jsonResponse = jsonDecode(response.body);
+        print("GetWishList response: ${response.body}");
+        return WishlistModel.fromJson(jsonResponse);
+      } else {
+        print("Request failed with status: ${response.statusCode}");
+        return null;
+      }
+    } catch (e) {
+      // Catch any exceptions (e.g., network failure, JSON parsing error)
+      print("Error occurred: $e");
+      return null;
+    }
+  }
 }

@@ -2,31 +2,42 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';  // For ChangeNotifier
+import 'package:outfitter/Model/WishlistModel.dart';
 import '../Model/CategoriesModel.dart';
 import '../Model/ProductsListModel.dart';
 import '../Services/UserApi.dart';
+import 'ProductListProvider.dart';
 
-class Wishlistprovider with ChangeNotifier {
-  List<ProductsList>? _wishlistproducts= [];
+class WishlistProvider with ChangeNotifier {
+  List<Wishlist>? _wishlistproducts = [];
 
-  List<ProductsList> get productList => _wishlistproducts??[];
+  List<Wishlist> get wishlistProducts => _wishlistproducts ?? [];
 
-  Future<void> fetchWishList() async{
+  ProductListProvider productListProvider;  // Remove 'final' to allow updating
+
+  WishlistProvider(this.productListProvider);
+
+  // Method to update ProductListProvider reference
+  void updateProductListProvider(ProductListProvider newProvider) {
+    productListProvider = newProvider;
+  }
+
+  Future<void> fetchWishList() async {
     try {
-      var response = await Userapi.getProductsList("");  // Use the passed productId here
-      _wishlistproducts = response?.data??[];
+      var response = await Userapi.getWishList();
+      _wishlistproducts = response?.data ?? [];
       notifyListeners();
     } catch (e) {
-      throw Exception('Failed to fetch product details: $e');
+      throw Exception('Failed to fetch wishlist details: $e');
     }
   }
 
-  // Method to add a product to the wishlist
-  Future<void> addToWishlist(int productId) async {
+  Future<void> addToWishlist(String productId) async {
     try {
-      var res = await Userapi.AddWishList(""); // Call API to add to wishlist
+      var res = await Userapi.AddWishList(productId.toString());
       if (res != null && res.settings?.success == 1) {
-
+        fetchWishList();
+        productListProvider.updateProductWishlistStatus(productId, true);
       } else {
         throw Exception('Failed to add product to wishlist');
       }
@@ -35,13 +46,12 @@ class Wishlistprovider with ChangeNotifier {
     }
   }
 
-  // Method to remove a product from the wishlist
-  Future<void> removeFromWishlist(int productId) async {
+  Future<void> removeFromWishlist(String productId) async {
     try {
-      var res = await Userapi.RemoveWishList(productId.toString()); // Call API to remove from wishlist
+      var res = await Userapi.RemoveWishList(productId.toString());
       if (res != null && res.settings?.success == 1) {
-
-        notifyListeners(); // Notify listeners to rebuild UI
+        fetchWishList();
+        productListProvider.updateProductWishlistStatus(productId, false);
       } else {
         throw Exception('Failed to remove product from wishlist');
       }
@@ -49,7 +59,4 @@ class Wishlistprovider with ChangeNotifier {
       throw Exception('Failed to remove from wishlist: $e');
     }
   }
-
-
-
 }

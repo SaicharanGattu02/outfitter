@@ -155,7 +155,7 @@ class _ProfileState extends State<Profile> {
             DashedLine(width: w, height: 1.0),
             SizedBox(height: h*0.02,),
             InkWell(onTap: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context)=>Wishlist()));
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>WishlistScreen()));
             },
               child: Row(
                 children: [

@@ -144,7 +144,7 @@ class _DashHomeState extends State<DashHome> {
                   if (_selectedIndex == 1)
                     ...[InkWell(
                       onTap: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=>Wishlist()));
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>WishlistScreen()));
                       },
                       child: Container(
                         alignment: Alignment.center,

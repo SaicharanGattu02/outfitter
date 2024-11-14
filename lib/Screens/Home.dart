@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:outfitter/Screens/CustomizeBar.dart';
 import 'package:outfitter/Screens/Filters.dart';
 import 'package:outfitter/Screens/UploderProfile.dart';
+import 'package:outfitter/providers/ProductListProvider.dart';
 import 'package:provider/provider.dart';
 import '../Model/ProductsListModel.dart';
 import '../providers/CategoriesProvider.dart';
+import '../providers/WishlistProvider.dart';
 import '../utils/CustomAppBar1.dart';
 import '../Model/CategoriesModel.dart';
 import '../Services/UserApi.dart';
@@ -48,6 +50,12 @@ class _HomeState extends State<Home> {
     super.initState();
   }
 
+  Future<void> GetProductcategoryList(String id) async {
+    final products_list_provider =
+        Provider.of<ProductListProvider>(context, listen: false);
+    products_list_provider.fetchProductsList(id);
+  }
+
   // List<Categories> categories=[];
   // Future<void> GetCategoriesList() async{
   //   var res = await Userapi.getCategories();
@@ -64,29 +72,26 @@ class _HomeState extends State<Home> {
   //   }
   // }
 
-  List<ProductsList> productlist = [];
-
-  Future<void> GetProductcategoryList(String id) async {
-    var res = await Userapi.getProductsList(id);
-    if (res != null) {
-      setState(() {
-        if (res.settings?.success == 1) {
-          productlist = res.data?? [];
-          print("GetProductcategoryList${productlist}");
-        } else {}
-      });
-    }
-  }
+  // List<ProductsList> productlist = [];
+  //
+  // Future<void> GetProductcategoryList(String id) async {
+  //   var res = await Userapi.getProductsList(id);
+  //   if (res != null) {
+  //     setState(() {
+  //       if (res.settings?.success == 1) {
+  //         productlist = res.data ?? [];
+  //         print("GetProductcategoryList${productlist}");
+  //       } else {}
+  //     });
+  //   }
+  // }
 
   Future<void> Addwish(String product) async {
     var res = await Userapi.AddWishList(product);
     if (res != null) {
       setState(() {
         if (res.settings?.success == 1) {
-
-        } else {
-
-        }
+        } else {}
       });
     }
   }
@@ -180,217 +185,236 @@ class _HomeState extends State<Home> {
                 }),
               ),
               SizedBox(height: h * 0.02),
-              productlist.length == 0
-                  ? Center(
+              Consumer<ProductListProvider>(
+                builder: (context, profileProvider, child) {
+                  final product_list = profileProvider.productList;
+                  print("Consumer product list:${product_list}");
+                  // Check if the product list is empty
+                  if (product_list.isEmpty) {
+                    return Center(
                       child: Image.asset(
-                        'assets/noitems.png',
+                        'assets/noitems.png', // Your "no items" image
                         width: 160,
                         height: 160,
                         fit: BoxFit.cover,
                       ),
-                    )
-                  : GridView.builder(
-                      physics: NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        crossAxisSpacing: 8.0,
-                        mainAxisSpacing: 8.0,
-                        childAspectRatio: 0.46,
-                      ),
-                      itemCount: productlist.length,
-                      itemBuilder: (context, index) {
-                        final productData = productlist[index];
-                        return Column(
-                          children: [
-                            Stack(
-                              children: [
-                                InkResponse(
-                                  onTap: () {
-                                    // Navigator.push(
-                                    //   context,
-                                    //   MaterialPageRoute(
-                                    //     builder: (context) => Home(),
-                                    //   ),
-                                    // );
-                                  },
-                                  child: Container(
-                                    padding: const EdgeInsets.all(8.0),
-                                    decoration: BoxDecoration(
-                                      border: Border.all(
-                                        color: Color(0xffEEF2F6),
-                                        width: 1,
-                                      ),
+                    );
+                  }
+
+                  // If product list is not empty, show GridView
+                  return GridView.builder(
+                    physics: NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 8.0,
+                      mainAxisSpacing: 8.0,
+                      childAspectRatio: 0.46,
+                    ),
+                    itemCount: product_list.length,
+                    itemBuilder: (context, index) {
+                      final productData = product_list[index];
+                      print("Consumer product name:${productData.title}");
+                      return Column(
+                        children: [
+                          Stack(
+                            children: [
+                              InkResponse(
+                                onTap: () {
+                                  // Navigator.push(
+                                  //   context,
+                                  //   MaterialPageRoute(
+                                  //     builder: (context) => Home(),
+                                  //   ),
+                                  // );
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.all(8.0),
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: Color(0xffEEF2F6),
+                                      width: 1,
                                     ),
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Center(
-                                          child: InkWell(
+                                  ),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Center(
+                                        child: InkWell(
+                                          onTap: () {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        CustomizeProductBar()));
+                                          },
+                                          child: Container(
+                                            child: Image.network(
+                                              productData.image ?? "",
+                                              fit: BoxFit.contain,
+                                              width: w * 0.3,
+                                              height: h * 0.2,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(height: 15),
+                                      Row(
+                                        children: [
+                                          InkWell(
                                             onTap: () {
                                               Navigator.push(
                                                   context,
                                                   MaterialPageRoute(
                                                       builder: (context) =>
-                                                          CustomizeProductBar()));
+                                                          UploaderProfile()));
                                             },
-                                            child: Container(
-                                                child: Image.network(
-                                              productData.product?.image ?? "",
-                                              fit: BoxFit.contain,
-                                              width: w * 0.3,
-                                              height: h * 0.2,
-                                            )),
-                                          ),
-                                        ),
-                                        const SizedBox(height: 15),
-                                        Row(
-                                          children: [
-                                            InkWell(
-                                              onTap: () {
-                                                Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            UploaderProfile()));
-                                              },
-                                              child: CircleAvatar(
-                                                radius: 12,
-                                                child: ClipOval(
-                                                  child: Image.asset(
-                                                    "assets/postedBY.png",
-                                                    fit: BoxFit.contain,
-                                                  ),
+                                            child: CircleAvatar(
+                                              radius: 12,
+                                              child: ClipOval(
+                                                child: Image.asset(
+                                                  "assets/postedBY.png",
+                                                  fit: BoxFit.contain,
                                                 ),
                                               ),
                                             ),
-                                            SizedBox(width: w * 0.03),
-                                            Text(
-                                              "POSTED BY",
-                                              style: TextStyle(
-                                                color: Color(0xff617C9D),
-                                                fontFamily: 'RozhaOne',
-                                                fontSize: 14,
-                                                height: 19.36 / 14,
-                                                fontWeight: FontWeight.w400,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        const SizedBox(height: 10),
-                                        Text(
-                                          productData.product?.title ?? '',
-                                          style: TextStyle(
-                                            color: Color(0xff121926),
-                                            fontFamily: 'RozhaOne',
-                                            fontSize: 16,
-                                            height: 24 / 16,
-                                            fontWeight: FontWeight.w400,
                                           ),
-                                        ),
-                                        const SizedBox(height: 10),
-                                        Row(
-                                          children: [
-                                            Text(
-                                              productData.product?.mrp.toString()??"",
-                                              style: TextStyle(
-                                                color: Color(0xff121926),
-                                                fontFamily: 'RozhaOne',
-                                                fontSize: 14,
-                                                height: 21 / 14,
-                                                fontWeight: FontWeight.w400,
-                                              ),
+                                          SizedBox(width: w * 0.03),
+                                          Text(
+                                            "POSTED BY",
+                                            style: TextStyle(
+                                              color: Color(0xff617C9D),
+                                              fontFamily: 'RozhaOne',
+                                              fontSize: 14,
+                                              height: 19.36 / 14,
+                                              fontWeight: FontWeight.w400,
                                             ),
-                                            SizedBox(width: w * 0.03),
-                                            Text(
-                                              productData.product?.salePrice.toString()??"",
-                                              style: TextStyle(
-                                                color: Color(0xff617C9D),
-                                                fontFamily: 'RozhaOne',
-                                                fontSize: 14,
-                                                height: 21 / 14,
-                                                fontWeight: FontWeight.w400,
-                                              ),
-                                            ),
-                                          ],
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(height: 10),
+                                      Text(
+                                        productData.title ?? '',
+                                        style: TextStyle(
+                                          color: Color(0xff121926),
+                                          fontFamily: 'RozhaOne',
+                                          fontSize: 16,
+                                          height: 24 / 16,
+                                          fontWeight: FontWeight.w400,
                                         ),
-                                        const SizedBox(height: 10),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          children: colors.map((color) {
-                                            return GestureDetector(
-                                              onTap: () =>
-                                                  _toggleColorSelection(color),
+                                      ),
+                                      const SizedBox(height: 10),
+                                      Row(
+                                        children: [
+                                          Text(
+                                            productData.mrp
+                                                    .toString() ??
+                                                "",
+                                            style: TextStyle(
+                                              color: Color(0xff121926),
+                                              fontFamily: 'RozhaOne',
+                                              fontSize: 14,
+                                              height: 21 / 14,
+                                              fontWeight: FontWeight.w400,
+                                            ),
+                                          ),
+                                          SizedBox(width: w * 0.03),
+                                          Text(
+                                            productData.salePrice
+                                                    .toString() ??
+                                                "",
+                                            style: TextStyle(
+                                              color: Color(0xff617C9D),
+                                              fontFamily: 'RozhaOne',
+                                              fontSize: 14,
+                                              height: 21 / 14,
+                                              fontWeight: FontWeight.w400,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(height: 10),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: colors.map((color) {
+                                          return GestureDetector(
+                                            onTap: () =>
+                                                _toggleColorSelection(color),
+                                            child: Container(
+                                              padding: EdgeInsets.all(3),
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(100),
+                                                border: Border.all(
+                                                  color: selectedColors
+                                                          .contains(color)
+                                                      ? Colors.black
+                                                      : Colors.transparent,
+                                                  width: 0.5,
+                                                ),
+                                              ),
                                               child: Container(
-                                                padding: EdgeInsets.all(3),
+                                                width: 20,
+                                                height: 20,
                                                 decoration: BoxDecoration(
+                                                  color: color,
                                                   borderRadius:
                                                       BorderRadius.circular(
                                                           100),
-                                                  border: Border.all(
-                                                    color: selectedColors
-                                                            .contains(color)
-                                                        ? Colors.black
-                                                        : Colors.transparent,
-                                                    width: 0.5,
-                                                  ),
-                                                ),
-                                                child: Container(
-                                                  width: 20,
-                                                  height: 20,
-                                                  decoration: BoxDecoration(
-                                                    color:
-                                                        // selectedColors.contains(color)
-                                                        //     ?
-                                                        color,
-                                                    // : Colors.grey[300],
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            100),
-                                                  ),
                                                 ),
                                               ),
-                                            );
-                                          }).toList(),
-                                        ),
-                                      ],
+                                            ),
+                                          );
+                                        }).toList(),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              Positioned(
+                                top: 8,
+                                right: 8,
+                                child: InkResponse(
+                                  onTap: () {
+                                    if (productData.isInWishlist??false) {
+                                      // Remove from wishlist
+                                      context.read<WishlistProvider>().removeFromWishlist(productData.id??"");
+                                    } else {
+                                      // Add to wishlist
+                                      context.read<WishlistProvider>().addToWishlist(productData.id??"");
+                                    }
+                                  },
+                                  child: Container(
+                                    padding: const EdgeInsets.all(8),
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey[200],
+                                      borderRadius: BorderRadius.circular(100),
+                                    ),
+                                    child: productData.isInWishlist ?? false
+                                        ? Icon(
+                                      Icons.favorite, // Filled heart icon when item is in wishlist
+                                      size: 18,
+                                      color: Colors.red, // Red color for filled icon
+                                    )
+                                        : Icon(
+                                      Icons.favorite_border, // Outline heart icon when item is NOT in wishlist
+                                      size: 18,
+                                      color: Colors.black, // Black color for outline icon
                                     ),
                                   ),
                                 ),
-                                Positioned(
-                                  top: 8,
-                                  right: 8,
-                                  child: InkResponse(
-                                    onTap: () {
-                                      Addwish(productData.id.toString());
-                                    },
-                                    child: Container(
-                                      padding: const EdgeInsets.all(8),
-                                      decoration: BoxDecoration(
-                                        color: Color(0xffFFE5E6),
-                                        borderRadius:
-                                            BorderRadius.circular(100),
-                                      ),
-                                      child: Image.asset(
-                                        "assets/fav.png",
-                                        width: 18,
-                                        height: 18,
-                                        fit: BoxFit.contain,
-                                        color: Color(0xff000000),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        );
-                      },
-                    ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
+              ),
               // SizedBox(height: h * 0.01),
               // Center(
               //   child:

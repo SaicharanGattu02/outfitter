@@ -1,14 +1,14 @@
-class ProductsListModel {
-  List<ProductsList>? data;
+class WishlistModel {
+  List<Wishlist>? data;
   Settings? settings;
 
-  ProductsListModel({this.data, this.settings});
+  WishlistModel({this.data, this.settings});
 
-  ProductsListModel.fromJson(Map<String, dynamic> json) {
+  WishlistModel.fromJson(Map<String, dynamic> json) {
     if (json['data'] != null) {
-      data = <ProductsList>[];
+      data = <Wishlist>[];
       json['data'].forEach((v) {
-        data!.add(new ProductsList.fromJson(v));
+        data!.add(new Wishlist.fromJson(v));
       });
     }
     settings = json['settings'] != null
@@ -28,7 +28,26 @@ class ProductsListModel {
   }
 }
 
-class ProductsList {
+class Wishlist {
+  Product? product;
+
+  Wishlist({this.product});
+
+  Wishlist.fromJson(Map<String, dynamic> json) {
+    product =
+    json['product'] != null ? new Product.fromJson(json['product']) : null;
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    if (this.product != null) {
+      data['product'] = this.product!.toJson();
+    }
+    return data;
+  }
+}
+
+class Product {
   String? id;
   String? title;
   String? category;
@@ -41,7 +60,7 @@ class ProductsList {
   String? image;
   int? rating;
 
-  ProductsList(
+  Product(
       {this.id,
         this.title,
         this.category,
@@ -54,12 +73,11 @@ class ProductsList {
         this.image,
         this.rating});
 
-  ProductsList.fromJson(Map<String, dynamic> json) {
+  Product.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     title = json['title'];
     category = json['category'];
     brand = json['brand'];
-    // Handle null case for 'colors'
     colors = json['colors'] != null ? List<String>.from(json['colors']) : [];
     postedBy = json['posted_by'];
     mrp = json['mrp'];
@@ -85,6 +103,7 @@ class ProductsList {
     return data;
   }
 }
+
 class Settings {
   int? success;
   String? message;
