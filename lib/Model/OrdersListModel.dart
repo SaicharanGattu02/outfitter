@@ -30,6 +30,7 @@ class OrdersListModel {
 
 class OrdersList {
   String? id;
+  String? orderid;
   String? status;
   String? paymentMethod;
   bool? isPaid;
@@ -38,6 +39,7 @@ class OrdersList {
 
   OrdersList(
       {this.id,
+      this.orderid,
         this.status,
         this.paymentMethod,
         this.isPaid,
@@ -46,6 +48,7 @@ class OrdersList {
 
   OrdersList.fromJson(Map<String, dynamic> json) {
     id = json['id'];
+    orderid = json['order_id'];
     status = json['status'];
     paymentMethod = json['payment_method'];
     isPaid = json['is_paid'];
@@ -56,6 +59,7 @@ class OrdersList {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
+    data['order_id'] = this.orderid;
     data['status'] = this.status;
     data['payment_method'] = this.paymentMethod;
     data['is_paid'] = this.isPaid;

@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:outfitter/Screens/OrderDetails.dart';
 
+import '../Model/OrdersListModel.dart';
+import '../Services/UserApi.dart';
 import '../utils/CustomAppBar1.dart';
+import '../utils/CustomSnackBar.dart';
 
-class OrderList extends StatefulWidget {
-  const OrderList({super.key});
+class OrderListScreen extends StatefulWidget {
+  const OrderListScreen({super.key});
 
   @override
-  State<OrderList> createState() => _OrderListState();
+  State<OrderListScreen> createState() => _OrderListScreenState();
 }
 
-class _OrderListState extends State<OrderList> {
+class _OrderListScreenState extends State<OrderListScreen> {
   final List<Map<String, String>> grid = [
     {
 
@@ -36,6 +39,43 @@ class _OrderListState extends State<OrderList> {
       'quantity': '1',
     },
   ];
+
+  bool isLoading=false;
+  List<OrdersList> orders_list = [];
+  @override
+  void initState() {
+    OrdersListApi();
+    super.initState();
+  }
+  Future<void> OrdersListApi() async {
+    try {
+      final res = await Userapi.getOrdersList();
+      if (res != null) {
+        setState(() {
+          if (res.settings?.success == 1) {
+            orders_list = res.data ?? [];
+          } else {
+            CustomSnackBar.show(context, res.settings?.message ?? "");
+          }
+        });
+      }
+    } catch (e) {
+      setState(() {
+        isLoading = false; // Hide loader if error occurs
+      });
+      CustomSnackBar.show(context, "Failed to load orders.");
+
+    } finally {
+      setState(() {
+        isLoading = false; // Hide loader after completion
+      });
+    }
+  }
+
+
+
+
+
   @override
   Widget build(BuildContext context) {
     var w = MediaQuery.of(context).size.width;
@@ -130,10 +170,10 @@ class _OrderListState extends State<OrderList> {
 
                     physics: NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
-                    itemCount: grid.length,
+                    itemCount: orders_list.length,
                     itemBuilder: (context, index) {
-                      final item = grid[index];
-                      int quantity = int.parse(item['quantity']!);
+                      final item = orders_list[index];
+
 
                       return
                   InkResponse(onTap: (){
@@ -169,7 +209,7 @@ class _OrderListState extends State<OrderList> {
                                     ),
                                   ),
                                   Text(
-                                    "ID 0D117216332413925000",
+                                      item.orderid??"",
                                     style: TextStyle(
                                       color: Color(0xff181725),
                                       fontFamily: 'RozhaOne',
@@ -194,7 +234,7 @@ class _OrderListState extends State<OrderList> {
                                     ),
                                   ),
                                   Text(
-                                    "21-11-2024",
+                                   item.createdAt??"",
                                     style: TextStyle(
                                       color: Color(0xff181725),
                                       fontFamily: 'RozhaOne',
@@ -222,7 +262,7 @@ class _OrderListState extends State<OrderList> {
                           Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                "Phone Pay",
+                                item.paymentMethod??"",
                                 style: TextStyle(
                                   color: Color(0xff181725),
                                   fontFamily: 'RozhaOne',
@@ -233,7 +273,7 @@ class _OrderListState extends State<OrderList> {
                               ),
 
                               Text(
-                                  item['price']!,
+                                item.orderValue.toString(),
 
                                 style: TextStyle(
                                   color: Color(0xff181725),
