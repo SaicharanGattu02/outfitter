@@ -47,10 +47,8 @@ class _DashbordState extends State<Dashbord> {
 
   @override
   Widget build(BuildContext context) {
-    // connectivityService.checkConnectivity();
     var w = MediaQuery.of(context).size.width;
     var h = MediaQuery.of(context).size.height;
-
     return Scaffold(
       key: _scaffoldKey,
       body: PageView(

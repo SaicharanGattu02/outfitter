@@ -7,12 +7,15 @@ import 'package:provider/provider.dart';
 
 import '../Model/ProductsDetailsModel.dart';
 import '../Services/UserApi.dart';
+import '../providers/ProductListProvider.dart';
 import '../utils/CustomAppBar.dart';
 import '../utils/CustomAppBar1.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
   String productid;
-  ProductDetailsScreen({super.key,required this.productid});
+  String category_id;
+  ProductDetailsScreen(
+      {super.key, required this.productid, required this.category_id});
 
   @override
   State<ProductDetailsScreen> createState() => _ProductDetailsScreenState();
@@ -32,18 +35,15 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     {"image": 'assets/cuff2.png', 'name': 'Are-Shape'},
     {"image": 'assets/cuff3.png', 'name': 'Double Button '},
     {"image": 'assets/cuff4.png', 'name': 'Cham Fering '},
-
   ];
   final List<Map<String, String>> grid2 = [
     {"image": 'assets/planket1.png', 'name': 'Bow Pleat'},
     {"image": 'assets/planket2.png', 'name': 'Hidden Placket'},
-
   ];
   final List<Map<String, String>> grid3 = [
     {"image": 'assets/backbody1.png', 'name': 'Bow Pleat'},
     {"image": 'assets/backbody2.png', 'name': 'Both Sides'},
     {"image": 'assets/backbody3.png', 'name': 'Waist Pleat'},
-
   ];
   bool _isDescriptionVisible = false;
   final List<Map<String, String>> size = [
@@ -69,21 +69,6 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   ];
   int _selectedIndex = 0;
 
-  List<Color> colors = [
-    Colors.red,
-    Colors.blue,
-    Colors.green,
-    Colors.orange,
-    Colors.purple,
-    Colors.yellow,
-    Colors.pink,
-    Colors.brown,
-    Colors.cyan,
-    Colors.teal,
-    Colors.indigo,
-    Colors.grey,
-  ];
-
   List<Color> colorss = [
     Colors.red,
     Colors.blue,
@@ -93,10 +78,27 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   List<Color> selectedColors = [];
   List<String> selectedSizes = []; // Change to List<String>
 
-  void _toggleColorSelection(Color color) {
+  // Function to convert hex string to Color object
+  Color hexToColor(String hexColor) {
+    final hex = hexColor.replaceAll('#', '');
+    if (hex.length == 6) {
+      return Color(int.parse('FF$hex', radix: 16)); // Adding FF for full opacity
+    } else {
+      throw FormatException("Invalid Hex color code");
+    }
+  }
+
+  // Function to handle the color selection
+  void _toggleColorSelection(String colorHex) {
     setState(() {
-      selectedColors.clear();
-      selectedColors.add(color);
+      Color color = hexToColor(colorHex);
+      if (selectedColors.contains(color)) {
+        selectedColors.remove(color); // Deselect color
+      } else {
+        selectedColors
+            .clear(); // Clear other selections if you want single selection
+        selectedColors.add(color); // Select new color
+      }
     });
   }
 
@@ -135,28 +137,169 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     });
   }
 
-  Future<void>AddToCartApi(String productID,String quantity) async {
-    final cart_provider =
-    Provider.of<CartProvider>(context, listen: false);
-    var msg =await cart_provider.addToCartApi(productID,quantity);
-    if(msg!="" || msg!=null){
-      CustomSnackBar.show(context, msg??"");
+  Future<void> AddToCartApi(String productID, String quantity) async {
+    final cart_provider = Provider.of<CartProvider>(context, listen: false);
+    var msg = await cart_provider.addToCartApi(productID, quantity);
+    if (msg != "" || msg != null) {
+      CustomSnackBar.show(context, msg ?? "");
     }
   }
-  final List<String> tabItems = ['Collar', 'CuffType', 'PlacketType', 'BackBody'];
+
+  final List<String> tabItems = [
+    'Collar',
+    'CuffType',
+    'PlacketType',
+    'BackBody'
+  ];
   int _selectedTabIndex = 0;
 
   @override
   void initState() {
     super.initState();
     GetProductDetails();
-
   }
+
+
   Future<void> GetProductDetails() async {
     final ProductdetailsProvider = Provider.of<ProductDetailsProvider>(context, listen: false);
+    final products_list_provider = Provider.of<ProductListProvider>(context, listen: false);
     ProductdetailsProvider.fetchProductDetails(widget.productid);
+    products_list_provider.fetchProductsList(widget.category_id);
   }
 
+  List<Widget> _getProductWidgets(ProductDetails? productData) {
+    switch (_selectedTabIndex) {
+      case 0:
+        // For the "neck" list
+        return _generateWidgetsFromNeck(productData?.neck);
+      case 1:
+        // For the "sleeve" list
+        return _generateWidgetsFromSleeve(productData?.sleeve);
+      case 2:
+        // For the "placket" list
+        return _generateWidgetsFromPlacket(productData?.placket);
+      case 3:
+        // For the "pleat" list
+        return _generateWidgetsFromPleat(productData?.pleat);
+      default:
+        return [];
+    }
+  }
+
+  List<Widget> _generateWidgetsFromNeck(List<Neck>? neckList) {
+    print("_generateWidgetsFromNeck called");
+
+    if (neckList == null || neckList.isEmpty) {
+      print("neckList is null or empty");
+      return [];
+    }
+
+    print("neckList has ${neckList.length} items.");
+
+    return List.generate(
+      neckList
+          .length, // No need for `?? 0` because we've already checked for null/empty
+      (index) {
+        final data = neckList[index];
+        if (data != null) {
+          print(
+              "Data at index $index: name = ${data.name}, image = ${data.image}");
+        } else {
+          print("Data at index $index is null");
+        }
+
+        return _buildProductWidget(data.image, data.name, index);
+      },
+    );
+  }
+
+  List<Widget> _generateWidgetsFromSleeve(List<Sleeve>? sleeveList) {
+    return List.generate(
+      sleeveList?.length ?? 0,
+      (index) {
+        final data = sleeveList?[index];
+        return _buildProductWidget(data?.image, data?.name, index);
+      },
+    );
+  }
+
+  List<Widget> _generateWidgetsFromPlacket(List<Placket>? placketList) {
+    return List.generate(
+      placketList?.length ?? 0,
+      (index) {
+        final data = placketList?[index];
+        return _buildProductWidget(data?.image, data?.name, index);
+      },
+    );
+  }
+
+  List<Widget> _generateWidgetsFromPleat(List<Pleat>? pleatList) {
+    return List.generate(
+      pleatList?.length ?? 0,
+      (index) {
+        final data = pleatList?[index];
+        return _buildProductWidget(data?.image, data?.name, index);
+      },
+    );
+  }
+
+  Widget _buildProductWidget(String? imageUrl, String? name, int index) {
+    var w = MediaQuery.of(context).size.width;
+    var h = MediaQuery.of(context).size.height;
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 3),
+      child: Column(
+        children: [
+          InkResponse(
+            onTap: () {
+              setState(() {
+                _selectedIndex = index;
+              });
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: _selectedIndex == index
+                      ? Color(0xffCAA16C)
+                      : Colors.transparent,
+                  width: 1,
+                ),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Container(
+                decoration:
+                    BoxDecoration(borderRadius: BorderRadius.circular(7)),
+                clipBehavior: Clip.hardEdge,
+                child: Image.network(
+                  imageUrl ?? "",
+                  width: 45,
+                  height: 45,
+                  fit: BoxFit.contain,
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 8),
+          Center(
+            child: Container(
+              width: w * 0.18,
+              child: Text(
+                name ?? "",
+                style: TextStyle(
+                  color: Color(0xff4B5565),
+                  fontFamily: 'RozhaOne',
+                  fontSize: 14,
+                  height: 20 / 14,
+                  fontWeight: FontWeight.w400,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -166,12 +309,11 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
       appBar: CustomApp(title: 'Product Details', w: w),
       body: Consumer<ProductDetailsProvider>(
           builder: (context, profileProvider, child) {
-        final productData = profileProvider.productData;
+            final productData = profileProvider.productData;
         print("Image:${productData?.image}");
         return SingleChildScrollView(
           child: Column(
             children: [
-              
               // Row(children: [
               //   Container(
               //       padding: EdgeInsets.only(left: 8, right: 8),
@@ -216,7 +358,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       children: [
                         SizedBox(width: w * 0.02),
                         Text(
-                          productData?.title??"",
+                          productData?.title ?? "",
                           style: TextStyle(
                             color: Color(0xff110B0F),
                             fontFamily: 'RozhaOne',
@@ -232,7 +374,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     Row(
                       children: [
                         Text(
-                          productData?.mrp.toString()??"",
+                          productData?.mrp.toString() ?? "",
                           style: TextStyle(
                             color: Color(0xffF04438),
                             fontFamily: 'RozhaOne',
@@ -246,7 +388,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                         ),
                         SizedBox(width: w * 0.01),
                         Text(
-                          productData?.salePrice.toString()??"",
+                          productData?.salePrice.toString() ?? "",
                           style: TextStyle(
                             color: Color(0xff4B5565),
                             fontFamily: 'RozhaOne',
@@ -271,40 +413,40 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   ],
                 ),
               ),
-            Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: tabItems.asMap().entries.map((entry) {
-              int index = entry.key;
-              String label = entry.value;
-
-              return GestureDetector(
-                onTap: () {
-                  setState(() {
-                    _selectedTabIndex = index; // Update selected tab
-                  });
-                },
-                child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 8),
-                  height: h * 0.03, // Set height based on screen height
-                  color: _selectedTabIndex == index
-                      ? Color(0xffE7C6A0) // Selected color
-                      : Colors.transparent,
-                  child: Center(
-                    child: Text(
-                      label,
-                     style: TextStyle( fontWeight: FontWeight.w400,fontFamily: 'RozhaOne',
-                       fontSize: 15,
-                       height: 1.6,
-                       color: Color(0xff110B0F),
-                       letterSpacing: 0.15,)
-
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: tabItems.asMap().entries.map((entry) {
+                  int index = entry.key;
+                  String label = entry.value;
+                  return GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        _selectedTabIndex = index;
+                        print(
+                            "_selectedTabIndex:${_selectedTabIndex}"); // Update selected tab
+                      });
+                    },
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 8),
+                      height: h * 0.03, // Set height based on screen height
+                      color: _selectedTabIndex == index
+                          ? Color(0xffE7C6A0)
+                          : Colors.transparent,
+                      child: Center(
+                        child: Text(label,
+                            style: TextStyle(
+                              fontWeight: FontWeight.w400,
+                              fontFamily: 'RozhaOne',
+                              fontSize: 15,
+                              height: 1.6,
+                              color: Color(0xff110B0F),
+                              letterSpacing: 0.15,
+                            )),
+                      ),
                     ),
-                  ),
-                ),
-              );
-            }).toList(),
-            ),
-
+                  );
+                }).toList(),
+              ),
 
               Stack(
                 children: [
@@ -319,7 +461,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       decoration: BoxDecoration(color: Color(0xffEDF4FB)),
                       child: Center(
                         child: Image.network(
-                          productData?.image??"",
+                          productData?.image ?? "",
                           fit: BoxFit.contain,
                           height: h * 0.25,
                           width: w * 0.8,
@@ -388,64 +530,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
-                  children: List.generate(
-                    grid.length,
-                    (index) {
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 3),
-                        child: Column(
-                          children: [
-                            InkResponse(
-                              onTap: () {
-                                setState(() {
-                                  _selectedIndex = index;
-                                });
-                              },
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                    color: _selectedIndex == index
-                                        ? Color(0xffCAA16C)
-                                        : Colors.transparent,
-                                    width: 1,
-                                  ),
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(7)),
-                                  clipBehavior: Clip.hardEdge,
-                                  child: Image.asset(
-                                    grid[index]['image']!,
-                                    width: 45,
-                                    height: 45,
-                                    fit: BoxFit.contain,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-                            Center(
-                              child: Container(
-                                width: w * 0.18,
-                                child: Text(
-                                  grid[index]['name']!,
-                                  style: TextStyle(
-                                    color: Color(0xff4B5565),
-                                    fontFamily: 'RozhaOne',
-                                    fontSize: 14,
-                                    height: 20 / 14,
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                  ),
+                  children: _getProductWidgets(productData),
                 ),
               ),
               Padding(
@@ -508,13 +593,14 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                         crossAxisCount: 6,
                         childAspectRatio: 1,
                       ),
-                      itemCount: colors.length,
+                      itemCount: productData?.colors?.length,
                       physics: NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
                       itemBuilder: (context, index) {
-                        final color = colors[index];
+                        final colorHex = productData?.colors?[index];
+                        Color color = hexToColor(colorHex ?? "");
                         return GestureDetector(
-                          onTap: () => _toggleColorSelection(color),
+                          onTap: () => _toggleColorSelection(colorHex ?? ""),
                           child: Padding(
                             padding: EdgeInsets.all(10),
                             child: Container(
@@ -523,7 +609,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                 borderRadius: BorderRadius.circular(100),
                                 border: Border.all(
                                   color: selectedColors.contains(color)
-                                      ? Color(0xffCAA16C)
+                                      ? Color(
+                                          0xffCAA16C) // Highlight selected color
                                       : Colors.transparent,
                                   width: 1,
                                 ),
@@ -573,14 +660,14 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                         crossAxisCount: 6,
                         childAspectRatio: 1,
                       ),
-                      itemCount: size.length,
+                      itemCount: productData?.size?.length,
                       physics: NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
                       itemBuilder: (context, index) {
-                        final sizeItem = size[index];
+                        final sizeItem = productData?.size?[index];
                         return GestureDetector(
                           onTap: () {
-                            _toggleSizeSelection(sizeItem['name']!);
+                            _toggleSizeSelection(sizeItem ?? "");
                           },
                           child: Padding(
                             padding: EdgeInsets.all(6),
@@ -589,10 +676,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(100),
                                 border: Border.all(
-                                  color:
-                                      selectedSizes.contains(sizeItem['name'])
-                                          ? Color(0xffCAA16C)
-                                          : Colors.transparent,
+                                  color: selectedSizes.contains(sizeItem ?? "")
+                                      ? Color(0xffCAA16C)
+                                      : Colors.transparent,
                                   width: 1,
                                 ),
                               ),
@@ -607,7 +693,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                 ),
                                 child: Center(
                                   child: Text(
-                                    sizeItem['name'] ?? "",
+                                    sizeItem ?? "",
                                     style: TextStyle(
                                       color: Color(0xff000000),
                                       fontFamily: 'RozhaOne',
@@ -640,18 +726,18 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                         GestureDetector(
                           onTap: _toggleDescriptionVisibility,
                           child: Container(
-                            padding: EdgeInsets.all(8),
-                            decoration: BoxDecoration(
-                              color: Color(0xff9AA4B2),
-                              borderRadius: BorderRadius.circular(100),
-                            ),
-                            child: Icon(
-                              _isDescriptionVisible ? Icons.keyboard_arrow_up_sharp:Icons.keyboard_arrow_down_sharp ,
-                              color: Colors.white,
-                              size: 20,
-                            )
-
-                          ),
+                              padding: EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                color: Color(0xff9AA4B2),
+                                borderRadius: BorderRadius.circular(100),
+                              ),
+                              child: Icon(
+                                _isDescriptionVisible
+                                    ? Icons.keyboard_arrow_up_sharp
+                                    : Icons.keyboard_arrow_down_sharp,
+                                color: Colors.white,
+                                size: 20,
+                              )),
                         ),
                       ],
                     ),
@@ -694,8 +780,12 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                               color: Color(0xff9AA4B2),
                               borderRadius: BorderRadius.circular(100),
                             ),
-                            child: Icon(_isProductDetailsVisible? Icons.keyboard_arrow_up_sharp:Icons.keyboard_arrow_down_sharp ,
-                                color: Colors.white, size: 20),
+                            child: Icon(
+                                _isProductDetailsVisible
+                                    ? Icons.keyboard_arrow_up_sharp
+                                    : Icons.keyboard_arrow_down_sharp,
+                                color: Colors.white,
+                                size: 20),
                           ),
                         ),
                       ],
@@ -739,8 +829,12 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                               color: Color(0xff9AA4B2),
                               borderRadius: BorderRadius.circular(100),
                             ),
-                            child: Icon( _isShippingDetailsVisible?Icons.keyboard_arrow_up_sharp:Icons.keyboard_arrow_down_sharp ,
-                                color: Colors.white, size: 20),
+                            child: Icon(
+                                _isShippingDetailsVisible
+                                    ? Icons.keyboard_arrow_up_sharp
+                                    : Icons.keyboard_arrow_down_sharp,
+                                color: Colors.white,
+                                size: 20),
                           ),
                         ),
                       ],
@@ -792,8 +886,12 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                               color: Color(0xff9AA4B2),
                               borderRadius: BorderRadius.circular(100),
                             ),
-                            child: Icon(_isReviewsVisible?Icons.keyboard_arrow_up_sharp:Icons.keyboard_arrow_down_sharp ,
-                                color: Colors.white, size: 20),
+                            child: Icon(
+                                _isReviewsVisible
+                                    ? Icons.keyboard_arrow_up_sharp
+                                    : Icons.keyboard_arrow_down_sharp,
+                                color: Colors.white,
+                                size: 20),
                           ),
                         ),
                       ],
@@ -940,8 +1038,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                               MainAxisAlignment.start,
                                           children: colorss.map((color) {
                                             return GestureDetector(
-                                              onTap: () =>
-                                                  _toggleColorSelection(color),
+                                              onTap: () {
+                                                // _toggleColorSelection(color),
+                                              },
                                               child: Container(
                                                 padding: EdgeInsets.all(3),
                                                 decoration: BoxDecoration(
@@ -1048,69 +1147,69 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       borderRadius: BorderRadius.circular(6),
                     ),
                     child: Center(
-                      child: Text(
-                              "ADD TO CART",
-                              style: TextStyle(
-                                color: Color(0xffE7C6A0),
-                                fontFamily: 'RozhaOne',
-                                fontSize: 16,
-                                height: 21.06 / 16,
-                                fontWeight: FontWeight.w400,
-                              ),
-                              textAlign: TextAlign.center,
-                            )
-                      //     :
-                      // Row(
-                      //         mainAxisAlignment: MainAxisAlignment.center,
-                      //         children: [
-                      //           Container(width:w*0.06,height: h*0.03,
-                      //             decoration: BoxDecoration(
-                      //                 border: Border.all(
-                      //                     color: Color(0xffffffff), width: 1)),
-                      //             child: IconButton( padding: EdgeInsets.all(0),
-                      //               icon: Icon(Icons.remove,
-                      //                   size: 20,    color: Color(0xffE7C6A0),), // color11
-                      //               onPressed: () {
-                      //                 setState(() {
-                      //                   if (quantity > 0) quantity--;
-                      //                 });
-                      //                 AddToCartApi(quantity.toString());
-                      //               },
-                      //             ),
-                      //           ),
-                      //           SizedBox(
-                      //               width:
-                      //                   8), // Space between the icon and quantity
-                      //           Text(
-                      //             "$quantity", // Show the quantity next to the cart icon
-                      //             style: TextStyle(
-                      //               color: Color(0xffE7C6A0),
-                      //               fontFamily: 'RozhaOne',
-                      //               fontSize: 16,
-                      //               height: 21.06 / 16,
-                      //               fontWeight: FontWeight.w400,
-                      //             ),
-                      //             textAlign: TextAlign.center,
-                      //           ),
-                      //           SizedBox(width: 8),
-                      //           Container(width:w*0.06,height: h*0.03,
-                      //             decoration: BoxDecoration(
-                      //                 border: Border.all(
-                      //                     color: Color(0xffffffff), width: 1)),
-                      //             child: IconButton( padding: EdgeInsets.all(0),
-                      //               icon: Icon(Icons.add,
-                      //                 size: 20,    color: Color(0xffE7C6A0),), // color11
-                      //               onPressed: () {
-                      //                 setState(() {
-                      //                   if (quantity > 0) quantity++;
-                      //                 });
-                      //                 AddToCartApi(quantity.toString());
-                      //               },
-                      //             ),
-                      //           ),
-                      //         ],
-                      //       ),
-                    )))
+                        child: Text(
+                      "ADD TO CART",
+                      style: TextStyle(
+                        color: Color(0xffE7C6A0),
+                        fontFamily: 'RozhaOne',
+                        fontSize: 16,
+                        height: 21.06 / 16,
+                        fontWeight: FontWeight.w400,
+                      ),
+                      textAlign: TextAlign.center,
+                    )
+                        //     :
+                        // Row(
+                        //         mainAxisAlignment: MainAxisAlignment.center,
+                        //         children: [
+                        //           Container(width:w*0.06,height: h*0.03,
+                        //             decoration: BoxDecoration(
+                        //                 border: Border.all(
+                        //                     color: Color(0xffffffff), width: 1)),
+                        //             child: IconButton( padding: EdgeInsets.all(0),
+                        //               icon: Icon(Icons.remove,
+                        //                   size: 20,    color: Color(0xffE7C6A0),), // color11
+                        //               onPressed: () {
+                        //                 setState(() {
+                        //                   if (quantity > 0) quantity--;
+                        //                 });
+                        //                 AddToCartApi(quantity.toString());
+                        //               },
+                        //             ),
+                        //           ),
+                        //           SizedBox(
+                        //               width:
+                        //                   8), // Space between the icon and quantity
+                        //           Text(
+                        //             "$quantity", // Show the quantity next to the cart icon
+                        //             style: TextStyle(
+                        //               color: Color(0xffE7C6A0),
+                        //               fontFamily: 'RozhaOne',
+                        //               fontSize: 16,
+                        //               height: 21.06 / 16,
+                        //               fontWeight: FontWeight.w400,
+                        //             ),
+                        //             textAlign: TextAlign.center,
+                        //           ),
+                        //           SizedBox(width: 8),
+                        //           Container(width:w*0.06,height: h*0.03,
+                        //             decoration: BoxDecoration(
+                        //                 border: Border.all(
+                        //                     color: Color(0xffffffff), width: 1)),
+                        //             child: IconButton( padding: EdgeInsets.all(0),
+                        //               icon: Icon(Icons.add,
+                        //                 size: 20,    color: Color(0xffE7C6A0),), // color11
+                        //               onPressed: () {
+                        //                 setState(() {
+                        //                   if (quantity > 0) quantity++;
+                        //                 });
+                        //                 AddToCartApi(quantity.toString());
+                        //               },
+                        //             ),
+                        //           ),
+                        //         ],
+                        //       ),
+                        )))
           ],
         ),
       ),

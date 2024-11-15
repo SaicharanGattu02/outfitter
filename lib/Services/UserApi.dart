@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
+import 'package:outfitter/Model/OrderDetailsModel.dart';
 import 'package:outfitter/Model/OrdersListModel.dart';
 import 'package:outfitter/Model/ProductsListModel.dart';
 import 'package:outfitter/Services/otherservices.dart';
@@ -8,7 +9,6 @@ import '../Model/AddressListModel.dart';
 import '../Model/AdressDeatilsModel.dart';
 import '../Model/CategoriesModel.dart';
 import '../Model/GetCartListModel.dart';
-import '../Model/OrderDetailsModel.dart';
 import '../Model/ProductsDetailsModel.dart';
 import '../Model/RegisterModel.dart';
 import '../Model/UserDetailsModel.dart';
@@ -167,7 +167,6 @@ class Userapi {
 
 
   static Future<ProductsDetailsModel?> getProductDetails(String? product_id) async {
-    print("product_id>>${product_id}");
     try {
       final url = Uri.parse("$host/api/product-details/$product_id");  // Adjusted the endpoint URL
       final headers = await getheader1();  // Ensuring headers are fetched asynchronously

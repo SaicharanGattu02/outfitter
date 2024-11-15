@@ -243,6 +243,7 @@ class _HomeState extends State<Home> {
                                                           productid: productData
                                                               .id
                                                               .toString(),
+                                                          category_id: "",
                                                         )));
                                           },
                                           child: Container(

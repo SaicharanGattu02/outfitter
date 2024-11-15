@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:outfitter/Services/UserApi.dart';
-
 import '../Model/OrderDetailsModel.dart';
 import '../utils/CustomAppBar1.dart';
 
@@ -13,15 +12,11 @@ class OrderDetail extends StatefulWidget {
 }
 
 class _OrderDetailState extends State<OrderDetail> {
-
-
-  // This will help manage the loading state
   bool isLoading = true;
 
   @override
   void initState() {
     super.initState();
-
     getOrderDetails();
   }
 
