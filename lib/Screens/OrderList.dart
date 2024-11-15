@@ -11,6 +11,31 @@ class OrderList extends StatefulWidget {
 }
 
 class _OrderListState extends State<OrderList> {
+  final List<Map<String, String>> grid = [
+    {
+
+      'name': 'Regular Fit Corduroy shirt',
+      'price': '₹ 1,196',
+      'mrp': '₹ 4,999',
+      'quantity': '1',
+    },
+    {
+      "image": 'assets/jeans.png',
+      'name': 'Regular Fit Jeans',
+      'rating': '4',
+      'price': '₹ 1,196',
+      'mrp': '₹ 4,999',
+      'quantity': '1',
+    },
+    {
+      "image": 'assets/sleaves.png',
+      'name': 'Stylish Sleeves Top',
+      'rating': '4',
+      'price': '₹ 1,196',
+      'mrp': '₹ 4,999',
+      'quantity': '1',
+    },
+  ];
   @override
   Widget build(BuildContext context) {
     var w = MediaQuery.of(context).size.width;
@@ -101,18 +126,18 @@ class _OrderListState extends State<OrderList> {
                   SizedBox(
                     height: 10,
                   ),
-                  // ListView.builder(
-                  //
-                  //   physics: NeverScrollableScrollPhysics(),
-                  //   shrinkWrap: true,
-                  //   itemCount: grid.length,
-                  //   itemBuilder: (context, index) {
-                  //     final item = grid[index];
-                  //     int quantity = int.parse(item['quantity']!);
-                  //
-                  //     return
+                  ListView.builder(
+
+                    physics: NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: grid.length,
+                    itemBuilder: (context, index) {
+                      final item = grid[index];
+                      int quantity = int.parse(item['quantity']!);
+
+                      return
                   InkResponse(onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=>OrderDetails()));
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>OrderDetailsScreen()));
                   },
                     child: Container(
                       width: w,
@@ -208,7 +233,8 @@ class _OrderListState extends State<OrderList> {
                               ),
 
                               Text(
-                                "₹ 2,546",
+                                  item['price']!,
+
                                 style: TextStyle(
                                   color: Color(0xff181725),
                                   fontFamily: 'RozhaOne',
@@ -226,11 +252,12 @@ class _OrderListState extends State<OrderList> {
 
 
 
+    )
+                      );
+                      },
+    )
 
-                      // );
-                      // },
-                    ),
-                  ),
+
                 ]),
           ),
         ));

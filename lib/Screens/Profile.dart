@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:outfitter/Authentication/Login.dart';
 import 'package:outfitter/Screens/AddressList.dart';
 import 'package:outfitter/Screens/Edit%20Profile%20screeen.dart';
+import 'package:outfitter/Screens/OrderList.dart';
 import 'package:outfitter/Screens/Orders.dart';
 import 'package:outfitter/Screens/WishList.dart';
 import 'package:outfitter/utils/CustomAppBar1.dart';
@@ -180,7 +181,7 @@ class _ProfileState extends State<Profile> {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => Orders()),
+                  MaterialPageRoute(builder: (context) => OrderList()),
                 );
               },
             ),

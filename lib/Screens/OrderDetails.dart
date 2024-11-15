@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import '../utils/CustomAppBar1.dart';
 
-class OrderDetails extends StatefulWidget {
-  const OrderDetails({super.key});
+class OrderDetailsScreen extends StatefulWidget {
+  const OrderDetailsScreen({super.key});
 
   @override
-  State<OrderDetails> createState() => _OrderDetailsState();
+  State<OrderDetailsScreen> createState() => _OrderDetailsScreenState();
 }
 
-class _OrderDetailsState extends State<OrderDetails> {
+class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
   final List<Map<String, String>> grid = [
     {
       "image": 'assets/hoodie.png',

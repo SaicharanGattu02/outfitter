@@ -19,17 +19,17 @@ class CustomApp extends StatelessWidget implements PreferredSizeWidget {
         padding: const EdgeInsets.only(bottom: 10),
         child: Row(
           children: [
-            // InkResponse(
-            //   onTap: () {
-            //     Navigator.pop(context);
-            //   },
-            //   child: Row(
-            //     children: [
-            //       Icon(Icons.arrow_back, color: Color(0xffffffff)),
-            //       const SizedBox(width: 12),
-            //     ],
-            //   ),
-            // ),
+            InkResponse(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: Row(
+                children: [
+                  Icon(Icons.arrow_back, color: Color(0xffffffff)),
+                  const SizedBox(width: 12),
+                ],
+              ),
+            ),
             Text(
               title,
               style: TextStyle(

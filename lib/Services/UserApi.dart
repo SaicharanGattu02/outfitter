@@ -14,6 +14,9 @@ import '../Model/UserDetailsModel.dart';
 import '../Model/ShippingDetailsModel.dart';
 import '../Model/VerifyOtpModel.dart';
 import '../Model/WishlistModel.dart';
+import 'package:mime/mime.dart';
+import 'package:http_parser/http_parser.dart';  // Import this for MediaType
+
 
 class Userapi {
   static String host = "http://192.168.0.169:8000";
@@ -545,30 +548,60 @@ class Userapi {
       return null;
     }
   }
+
   static Future<RegisterModel?> updateProfile(
       String fullname,
       String mobile,
-      String image,  // Image parameter, can be a file path or image URL
-      String email,  // Image parameter, can be a file path or image URL
+      String email,
+      File? image,  // Accept a file for the image
+
       ) async {
+    String? mimeType;
+
+    // Check if the image is a valid image file
+    if (image != null) {
+      mimeType = lookupMimeType(image.path);  // Get MIME type for the image
+      if (mimeType == null || !mimeType.startsWith('image/')) {
+        print('Selected file is not a valid image.');
+        return null;
+      }
+    }
+
     try {
-      // Prepare form data (only fullname, mobile, and image)
-      final Map<String, String> formData = {
-        'name': fullname,
-        'mobile': mobile,
-        'image': image,  // Add the image file path or URL here
-        'email': email  // Add the image file path or URL here
-      };
+      // Prepare the URL for the update request
+      final url = Uri.parse("${host}/auth/user-detail");
 
-      // Replace with your actual URL for updating profile
-      final url = Uri.parse("${host}/auth/user-detail");  // Replace with your actual URL
-      final headers = await getheader1();  // Assuming this method provides necessary headers
+      // Create a MultipartRequest for a multipart form upload
+      final request = http.MultipartRequest('PUT', url);
 
-      final response = await http.put(url, headers: headers, body: formData);
+      // Add headers (use your token and necessary headers here)
+      final headers = await getheader1(); // Assuming you have a function to get headers
+      request.headers.addAll(headers);
 
+      // Add fields (name, mobile, email)
+      request.fields['name'] = fullname;
+      request.fields['mobile'] = mobile;
+      request.fields['email'] = email;
+
+      // If an image is provided, add it to the request as a file
+      if (image != null) {
+        request.files.add(
+          await http.MultipartFile.fromPath(
+            'image',  // The name of the file field in your API
+            image.path,
+            contentType: MediaType.parse(mimeType!),  // Ensure mime type is non-null
+          ),
+        );
+      }
+
+      // Send the request
+      final response = await request.send();
+
+      // Handle the response
       if (response.statusCode == 200) {
-        final jsonResponse = jsonDecode(response.body);
-        print("updateProfile response: ${response.body}");
+        final responseBody = await response.stream.bytesToString();
+        final jsonResponse = jsonDecode(responseBody);
+        print("updateProfile response: ${responseBody}");
         return RegisterModel.fromJson(jsonResponse);  // Assuming RegisterModel parses the response
       } else {
         print("Request failed with status: ${response.statusCode}");
