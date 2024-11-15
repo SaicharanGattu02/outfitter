@@ -34,6 +34,7 @@ class AddressList {
   String? name;
   String? address;
   String? addressType;
+  bool? default_address;
   String? pincode;
 
   AddressList(
@@ -42,6 +43,7 @@ class AddressList {
         this.name,
         this.address,
         this.addressType,
+        this.default_address,
         this.pincode});
 
   AddressList.fromJson(Map<String, dynamic> json) {
@@ -51,6 +53,7 @@ class AddressList {
     address = json['address'];
     addressType = json['address_type'];
     pincode = json['pincode'];
+    default_address = json['default'];
   }
 
   Map<String, dynamic> toJson() {
@@ -61,6 +64,7 @@ class AddressList {
     data['address'] = this.address;
     data['address_type'] = this.addressType;
     data['pincode'] = this.pincode;
+    data['default'] = this.default_address;
     return data;
   }
 }

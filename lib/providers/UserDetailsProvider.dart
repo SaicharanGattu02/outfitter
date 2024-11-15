@@ -1,40 +1,55 @@
-// import 'dart:io';
-//
-// import 'package:flutter/material.dart';
-// import 'package:flutter/foundation.dart';  // For ChangeNotifier
-// import 'package:outfitter/Model/WishlistModel.dart';
-// import '../Model/AddressListModel.dart';
-// import '../Model/CategoriesModel.dart';
-// import '../Model/ProductsListModel.dart';
-// import '../Model/UserDetailsModel.dart';
-// import '../Services/UserApi.dart';
-// import 'ProductListProvider.dart';
-//
-// class UserDetailsProvider with ChangeNotifier {
-//   UserDetail? _userdetails;
-//
-//   UserDetail get userDetails => _userdetails;
-//
-//   Future<void> fetchUserDetails() async {
-//     try {
-//       var response = await Userapi.getAdressList();
-//       _userdetails = response?.data ?? [];
-//       notifyListeners();
-//     } catch (e) {
-//       throw Exception('Failed to fetch wishlist details: $e');
-//     }
-//   }
-//
-//   Future<void> UpdateFromAddressList(String addressID,pincode,mobile,address,address_type) async {
-//     try {
-//       var res = await Userapi.updateAdress(addressID,pincode,mobile,address,address_type);
-//       if (res != null && res.settings?.success == 1) {
-//         fetchUserDetails();
-//       } else {
-//         throw Exception('Failed to remove product from wishlist');
-//       }
-//     } catch (e) {
-//       throw Exception('Failed to remove from wishlist: $e');
-//     }
-//   }
-// }
+import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';  // For ChangeNotifier
+import '../Model/UserDetailsModel.dart';
+import '../Services/UserApi.dart';
+
+class UserDetailsProvider with ChangeNotifier {
+  UserDetail? _userdetails;
+
+  // Getter for userDetails that ensures null safety
+  UserDetail? get userDetails => _userdetails;
+
+  // Method to fetch user details asynchronously
+  Future<void> fetchUserDetails() async {
+    try {
+      // Fetching user details from the API
+      var response = await Userapi.getUserdetsils();
+
+      // Check if response is not null and contains data
+      if (response?.data != null) {
+        _userdetails = response?.data;
+      } else {
+        _userdetails = null; // If no data is found, set _userdetails to null
+      }
+
+      // Notify listeners that the data has been updated
+      notifyListeners();
+    } catch (e) {
+      // If an error occurs, log or rethrow an exception
+      print('Error fetching user details: $e');
+      throw Exception('Failed to fetch user details: $e');
+    }
+  }
+
+  // Method to fetch user details asynchronously
+  Future<int?> updateUserDetails(name,mobile,email,image) async {
+    try {
+      // Fetching user details from the API
+      var response = await Userapi.updateProfile(name,mobile,email,image);
+      if (response?.data != null) {
+        fetchUserDetails();
+        return response?.settings?.success??0;
+      } else {
+        return response?.settings?.success??0;
+      }
+    } catch (e) {
+      // If an error occurs, log or rethrow an exception
+      print('Error updating user details: $e');
+      throw Exception('Failed to updating user details: $e');
+    }
+  }
+
+
+
+}
+

@@ -26,7 +26,7 @@ class AdressDeatilsModel {
 class AddressDetails {
   String? id;
   String? mobile;
-  Null? alternateMobile;
+  String? alternateMobile;
   String? fullName;
   bool? default_address;
   String? address;

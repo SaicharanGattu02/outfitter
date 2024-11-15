@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:outfitter/Authentication/Login.dart';
+import 'package:outfitter/Screens/AddressList.dart';
 import 'package:outfitter/Screens/Edit%20Profile%20screeen.dart';
 import 'package:outfitter/Screens/Orders.dart';
 import 'package:outfitter/Screens/WishList.dart';
@@ -212,6 +213,12 @@ class _ProfileState extends State<Profile> {
               context,
               iconPath: "assets/address.png",
               label: 'Address',
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => AddressListScreen()),
+                );
+              },
             ),
             _buildDivider(h),
             _buildMenuItem(
@@ -273,28 +280,30 @@ class _ProfileState extends State<Profile> {
     var w = MediaQuery.of(context).size.width;
     return InkWell(
       onTap: onTap,
-      child: Row(
-        children: [
-          Image.asset(
-            iconPath,
-            width: 24,
-            height: 24,
-            color: const Color(0xff110B0F),
-            fit: BoxFit.contain,
-          ),
-          SizedBox(width: w * 0.03),
-          Text(
-            label,
-            style: TextStyle(
+      child: Container(
+        child: Row(
+          children: [
+            Image.asset(
+              iconPath,
+              width: 24,
+              height: 24,
               color: const Color(0xff110B0F),
-              fontFamily: 'Poppins',
-              fontSize: 16,
-              height: 19 / 16,
-              fontWeight: FontWeight.w400,
+              fit: BoxFit.contain,
             ),
-            overflow: TextOverflow.ellipsis,
-          ),
-        ],
+            SizedBox(width: w * 0.03),
+            Text(
+              label,
+              style: TextStyle(
+                color: const Color(0xff110B0F),
+                fontFamily: 'Poppins',
+                fontSize: 16,
+                height: 19 / 16,
+                fontWeight: FontWeight.w400,
+              ),
+              overflow: TextOverflow.ellipsis,
+            ),
+          ],
+        ),
       ),
     );
   }

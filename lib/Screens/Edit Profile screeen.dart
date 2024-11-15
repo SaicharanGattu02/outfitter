@@ -58,7 +58,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   Future<void> _pickImage() async {
     final XFile? pickedFile = await _picker.pickImage(
       source: ImageSource.gallery, // Use ImageSource.camera for camera
-      imageQuality: 80,
+      imageQuality: 100,
     );
 
     if (pickedFile != null) {
@@ -79,12 +79,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       return;
     }
 
-    // Fetching user ID from shared preferences or other logic
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String userId = prefs.getString('userId') ?? "";  // Replace with actual user ID retrieval logic
 
-    // Prepare the image file (you can upload it to the server, or send the file path/URL)
-    String imageUrl = _image?.path ?? "";  // If no image is selected, send empty string or default image URL
+    String imageUrl = _image?.path ?? "";
 
     // Call the updateProfile API
     var updatedUser = await Userapi.updateProfile(

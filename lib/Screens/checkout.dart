@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:outfitter/Screens/AddressList.dart';
 import 'package:outfitter/utils/CustomAppBar1.dart';
 import 'package:outfitter/utils/CustomSnackBar.dart';
 import 'package:provider/provider.dart';
@@ -7,14 +8,14 @@ import '../Services/UserApi.dart';
 import '../providers/CartProvider.dart';
 import '../providers/ShippingDetailsProvider.dart';
 
-class OrderSummary extends StatefulWidget {
-  const OrderSummary({super.key});
+class CheckoutScreen extends StatefulWidget {
+  const CheckoutScreen({super.key});
 
   @override
-  State<OrderSummary> createState() => _OrderSummaryState();
+  State<CheckoutScreen> createState() => _CheckoutScreenState();
 }
 
-class _OrderSummaryState extends State<OrderSummary> {
+class _CheckoutScreenState extends State<CheckoutScreen> {
   int order_value = 0;
   String address = "";
   String product = "";
@@ -60,96 +61,106 @@ class _OrderSummaryState extends State<OrderSummary> {
                     ),
                   ),
                   Spacer(),
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(4),
-                      border: Border.all(color: Color(0xff0AA44F), width: 1),
-                    ),
-                    child: Text(
-                      "Change",
-                      style: TextStyle(
-                        color: Color(0xff0AA44F),
-                        fontFamily: 'RozhaOne',
-                        fontSize: 16,
-                        height: 28 / 16,
-                        fontWeight: FontWeight.w400,
+                  InkResponse(
+                    onTap: (){
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => AddressListScreen(),));
+                    },
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(4),
+                        border: Border.all(color: Color(0xff0AA44F), width: 1),
+                      ),
+                      child: Text(
+                        "Change",
+                        style: TextStyle(
+                          color: Color(0xff0AA44F),
+                          fontFamily: 'RozhaOne',
+                          fontSize: 16,
+                          height: 28 / 16,
+                          fontWeight: FontWeight.w400,
+                        ),
                       ),
                     ),
                   ),
                 ],
               ),
               SizedBox(height: h * 0.01),
-              Container(
-                padding: EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Color(0xffFFFDF6),
-                  border: Border.all(color: Color(0xffF3EFE1), width: 1),
-                  borderRadius: BorderRadius.circular(7),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Icon(Icons.person_outline_rounded,
-                            color: Color(0xffCAA16C), size: 18),
-                        SizedBox(width: w * 0.02),
-                        Text(
-                          "Prashanth Chary",
-                          style: TextStyle(
-                            color: Color(0xff110B0F),
-                            fontFamily: 'RozhaOne',
-                            fontSize: 18,
-                            height: 28 / 18,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                        SizedBox(width: w * 0.04),
-                        Container(
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                          decoration: BoxDecoration(
-                            color: Color(0xffE8EFFB),
-                            borderRadius: BorderRadius.circular(4),
-                          ),
-                          child: Text(
-                            "Home",
+          Consumer<ShippingDetailsProvider>(
+              builder: (context, shippingProvider, child) {
+                final shipping_data = shippingProvider.shippingData;
+                address=shipping_data?.address?.id??"";
+               return Container(
+                  padding: EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Color(0xffFFFDF6),
+                    border: Border.all(color: Color(0xffF3EFE1), width: 1),
+                    borderRadius: BorderRadius.circular(7),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Icon(Icons.person_outline_rounded,
+                              color: Color(0xffCAA16C), size: 18),
+                          SizedBox(width: w * 0.02),
+                          Text(
+                            shipping_data?.address?.fullName??"",
                             style: TextStyle(
                               color: Color(0xff110B0F),
                               fontFamily: 'RozhaOne',
-                              fontSize: 12,
-                              height: 18 / 12,
+                              fontSize: 18,
+                              height: 28 / 18,
                               fontWeight: FontWeight.w400,
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: h * 0.01),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Icon(Icons.location_on_rounded,
-                            color: Color(0xffCAA16C), size: 18),
-                        SizedBox(width: w * 0.02),
-                        Flexible(
-                          child: Text(
-                            "Address\n LVS Arcade, Plot No.71, Jubilee Enclave, HITEC City, Madhapur, Hyderabad, Telangana 500081",
-                            style: TextStyle(
-                              color: Color(0xff110B0F),
-                              fontFamily: 'RozhaOne',
-                              fontSize: 14,
-                              height: 21 / 14,
-                              fontWeight: FontWeight.w400,
+                          SizedBox(width: w * 0.04),
+                          Container(
+                            padding:
+                            EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                            decoration: BoxDecoration(
+                              color: Color(0xffE8EFFB),
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                            child: Text(
+                              shipping_data?.address?.addressType??"",
+                              style: TextStyle(
+                                color: Color(0xff110B0F),
+                                fontFamily: 'RozhaOne',
+                                fontSize: 12,
+                                height: 18 / 12,
+                                fontWeight: FontWeight.w400,
+                              ),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
+                        ],
+                      ),
+                      SizedBox(height: h * 0.01),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Icon(Icons.location_on_rounded,
+                              color: Color(0xffCAA16C), size: 18),
+                          SizedBox(width: w * 0.02),
+                          Flexible(
+                            child: Text(
+                              "Address\n ${shipping_data?.address?.address}",
+                              style: TextStyle(
+                                color: Color(0xff110B0F),
+                                fontFamily: 'RozhaOne',
+                                fontSize: 14,
+                                height: 21 / 14,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                );
+              }),
               SizedBox(height: h * 0.008),
               _buildPaymentDetails(w, h),
               SizedBox(height: h * 0.008),

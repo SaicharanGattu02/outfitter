@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:outfitter/Screens/OrderSummary.dart';
+import 'package:outfitter/Screens/checkout.dart';
 import 'package:outfitter/providers/ShippingDetailsProvider.dart';
 import 'package:outfitter/utils/CustomAppBar1.dart';
 import 'package:provider/provider.dart';
@@ -105,7 +105,7 @@ class _CartState extends State<Cart> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => OrderSummary()));
+                                builder: (context) => CheckoutScreen()));
                       },
                       child: Container(
                         width: w * 0.45,

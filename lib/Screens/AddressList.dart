@@ -29,14 +29,16 @@ class _AddressListScreenState extends State<AddressListScreen> {
   }
 
 
-  String? groupValue;
-  void onChanged(String? selectedValue) {
+  String groupValue="false";
+  String? ID;
+  void onChanged(String? id ,String? value) {
     setState(() {
-      groupValue = selectedValue;
+      ID = id;
+      groupValue = value??"false";
     });
     final address_list_provider =
     Provider.of<AddressListProvider>(context, listen: false);
-    address_list_provider.defaultFromAddressList(groupValue??"");
+    address_list_provider.defaultFromAddressList(ID??"");
   }
 
 
@@ -101,160 +103,160 @@ class _AddressListScreenState extends State<AddressListScreen> {
             ),
             SizedBox(height: 20),
             Consumer<AddressListProvider>(
-                builder: (context, addressProvider, child) {
-              final categories_list = addressProvider.addressList;
-              return Expanded(
-                child: ListView.builder(
-                  itemCount: categories_list.length,
-                  itemBuilder: (context, index) {
-                    final address = categories_list[index];
-                    return Card(
-                      color: Color(0xffffffff),
-                      child: Padding(
-                        padding:
-                            EdgeInsets.all(10.0), // Padding inside the card
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Radio<String>(
-                              activeColor: Colors.blue,
-                              value: address.id??"",
-                              groupValue: groupValue,
-                              onChanged: (value) {
-                                onChanged(value); // Handle the radio button state change
-                              },
-                            ),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
+              builder: (context, addressProvider, child) {
+                final address_list = addressProvider.addressList;
 
+                // Find the id of the address with default_address == true
+                String? defaultAddressId = address_list.firstWhere(
+                        (address) => address.default_address == true,
+                    orElse: () => AddressList() // Return a default empty AddressList if no default found
+                ).id;
 
-                                  Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        address.name ?? "",
-                                        style: TextStyle(
-                                          color: Color(0xff110B0F),
-                                          fontFamily: 'RozhaOne',
-                                          fontSize: 14,
-                                          height: 20 / 14,
-                                          fontWeight: FontWeight.w400,
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: w * 0.06,
-                                      ),
-                                      Container(
-                                        padding:
-                                            EdgeInsets.symmetric(horizontal: 4),
-                                        decoration: BoxDecoration(
-                                            color: Color(0xff000000)
-                                                .withOpacity(0.1),
-                                            borderRadius:
-                                                BorderRadius.circular(4)),
-                                        child: Text(
-                                          address.addressType ?? "",
+                return Expanded(
+                  child: ListView.builder(
+                    itemCount: address_list.length,
+                    itemBuilder: (context, index) {
+                      final address = address_list[index];
+
+                      return Card(
+                        color: Color(0xffffffff),
+                        child: Padding(
+                          padding: EdgeInsets.all(10.0), // Padding inside the card
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              // Use the address id as value and compare with default address id
+                              Radio<String>(
+                                activeColor: Colors.blue,
+                                value: address.id ?? "", // Each address's id as the value
+                                groupValue: defaultAddressId,  // Compare with the id of the default address
+                                onChanged: (value) {
+                                  if (value != null) {
+                                    addressProvider.updateSelectedAddress(value);
+                                    addressProvider.defaultFromAddressList(value);
+                                  }
+                                },
+                              ),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          address.name ?? "",
                                           style: TextStyle(
-                                            color: Color(0xff617C9D),
+                                            color: Color(0xff110B0F),
                                             fontFamily: 'RozhaOne',
-                                            fontSize: 12,
-                                            height: 20 / 12,
+                                            fontSize: 14,
+                                            height: 20 / 14,
                                             fontWeight: FontWeight.w400,
                                           ),
                                         ),
-                                      )
+                                        SizedBox(
+                                          width: w * 0.06,
+                                        ),
+                                        Container(
+                                          padding: EdgeInsets.symmetric(horizontal: 4),
+                                          decoration: BoxDecoration(
+                                              color: Color(0xff000000).withOpacity(0.1),
+                                              borderRadius: BorderRadius.circular(4)),
+                                          child: Text(
+                                            address.addressType ?? "",
+                                            style: TextStyle(
+                                              color: Color(0xff617C9D),
+                                              fontFamily: 'RozhaOne',
+                                              fontSize: 12,
+                                              height: 20 / 12,
+                                              fontWeight: FontWeight.w400,
+                                            ),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      width: w * 0.01,
+                                    ),
+                                    Text(
+                                      address.address ?? "",
+                                      style: TextStyle(
+                                        color: Color(0xff617C9D),
+                                        fontFamily: 'RozhaOne',
+                                        fontSize: 12,
+                                        height: 20 / 12,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                    Text(
+                                      address.pincode ?? "",
+                                      style: TextStyle(
+                                        color: Color(0xff617C9D),
+                                        fontFamily: 'RozhaOne',
+                                        fontSize: 12,
+                                        height: 20 / 12,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                    Text(
+                                      "Mobile No: ${address.mobile}",
+                                      style: TextStyle(
+                                        color: Color(0xff617C9D),
+                                        fontFamily: 'RozhaOne',
+                                        fontSize: 12,
+                                        height: 20 / 12,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              DropdownButtonHideUnderline(
+                                child: DropdownButton2(
+                                  customButton: const Icon(
+                                    Icons.more_vert_rounded,
+                                    size: 18,
+                                    color: Colors.black,
+                                  ),
+                                  items: [
+                                    ...MenuItems.firstItems.map(
+                                          (item) => DropdownMenuItem<MenuItem>(
+                                        value: item,
+                                        child: MenuItems.buildItem(item),
+                                      ),
+                                    ),
+                                    DropdownMenuItem<Divider>(enabled: false, child: Divider(color: Colors.white)),
+                                  ],
+                                  onChanged: (value) {
+                                    MenuItems.onChanged(context, value! as MenuItem, address.id ?? "");
+                                  },
+                                  dropdownStyleData: DropdownStyleData(
+                                    width: 120,
+                                    padding: EdgeInsets.symmetric(vertical: 6),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(4),
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  menuItemStyleData: MenuItemStyleData(
+                                    customHeights: [
+                                      ...List<double>.filled(MenuItems.firstItems.length, 48),
+                                      8,
                                     ],
+                                    padding: const EdgeInsets.only(left: 16, right: 16),
                                   ),
-                                  SizedBox(
-                                    width: w * 0.01,
-                                  ),
-                                  Text(
-                                    address.address ?? "",
-                                    style: TextStyle(
-                                      color: Color(0xff617C9D),
-                                      fontFamily: 'RozhaOne',
-                                      fontSize: 12,
-                                      height: 20 / 12,
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ),
-                                  Text(
-                                    address.pincode ?? "",
-                                    style: TextStyle(
-                                      color: Color(0xff617C9D),
-                                      fontFamily: 'RozhaOne',
-                                      fontSize: 12,
-                                      height: 20 / 12,
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ),
-                                  Text(
-                                    "Mobile No: ${address.mobile}",
-                                    style: TextStyle(
-                                      color: Color(0xff617C9D),
-                                      fontFamily: 'RozhaOne',
-                                      fontSize: 12,
-                                      height: 20 / 12,
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ),
-                                ],
+                                ),
                               ),
-                            ),
-                      DropdownButtonHideUnderline(
-                        child: DropdownButton2(
-                          customButton: const Icon(
-                            Icons.more_vert_rounded,
-                            size: 18,
-                            color: Colors.black,
-                          ),
-                          items: [
-                            ...MenuItems.firstItems.map(
-                                  (item) => DropdownMenuItem<MenuItem>(
-                                value: item,
-                                child: MenuItems.buildItem(item),
-                              ),
-                            ),
-                             DropdownMenuItem<Divider>(enabled: false, child: Divider(color: Colors.white)),
-
-                          ],
-                          onChanged: (value) {
-                            MenuItems.onChanged(context, value! as MenuItem,address.id??"");
-                          },
-                          dropdownStyleData: DropdownStyleData(
-                            width: 120,
-
-                            padding:  EdgeInsets.symmetric(vertical: 6),
-                            decoration: BoxDecoration(
-
-                              borderRadius: BorderRadius.circular(4),
-                              color: Colors.white,
-                            ),
-
-                          ),
-                          menuItemStyleData: MenuItemStyleData(
-                            customHeights: [
-                              ...List<double>.filled(MenuItems.firstItems.length, 48),
-                              8,
-
                             ],
-                            padding: const EdgeInsets.only(left: 16, right: 16),
                           ),
                         ),
-                      ),
-
-                          ],
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              );
-            }),
+                      );
+                    },
+                  ),
+                );
+              },
+            )
           ],
         ),
       ),

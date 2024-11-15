@@ -437,7 +437,7 @@ class Userapi {
     try {
       final url = Uri.parse("${host}/api/default-address/$id");
       final headers = await getheader1();
-      final response = await http.delete(url, headers: headers);
+      final response = await http.put(url, headers: headers);
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
         print("defaultAdress response: ${response.body}");
@@ -619,7 +619,7 @@ class Userapi {
       ..headers.addAll(headers)
       ..fields['order_value'] = order_value.toString()
       ..fields['payment_method'] = 'Case on delivery'
-      ..fields['address'] = "58aea724-442e-4455-93eb-4ab7a85b5561";
+      ..fields['address'] = address;
 
     // Use this approach to handle multiple collaborators
     request.fields.addAll({
@@ -662,6 +662,27 @@ class Userapi {
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
         print("getOrdersList response: ${response.body}");
+        return OrdersListModel.fromJson(jsonResponse);
+      } else {
+        print("Request failed with status: ${response.statusCode}");
+        return null;
+      }
+    } catch (e) {
+      // Catch any exceptions (e.g., network failure, JSON parsing error)
+      print("Error occurred: $e");
+      return null;
+    }
+  }
+
+
+  static Future<OrdersListModel?> getOrderDetails(String id) async {
+    try {
+      final url = Uri.parse("${host}/api/order-details/$id");
+      final headers = await getheader1();
+      final response = await http.get(url, headers: headers);
+      if (response.statusCode == 200) {
+        final jsonResponse = jsonDecode(response.body);
+        print("getOrderDetails response: ${response.body}");
         return OrdersListModel.fromJson(jsonResponse);
       } else {
         print("Request failed with status: ${response.statusCode}");
