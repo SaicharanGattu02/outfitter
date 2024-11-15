@@ -38,7 +38,7 @@ class _AddAddressState extends State<AddAddress> {
   @override
   void initState() {
     if(widget.type=='Edit'){
-      GetAddressListid(widget.productid);
+      GetAddressDetails(widget.productid);
     }
     super.initState();
   }
@@ -83,8 +83,8 @@ class _AddAddressState extends State<AddAddress> {
   }
 
 
-  Future<void> GetAddressListid(id) async{
-    final fetch_address_details =   Provider.of<AddressListProvider>(context, listen: false);
+  Future<void> GetAddressDetails(id) async{
+    final fetch_address_details = Provider.of<AddressListProvider>(context, listen: false);
     fetch_address_details.getaddressDetails(id);
     setState(() {
       var address_details= fetch_address_details.addressDetails;
@@ -94,7 +94,7 @@ class _AddAddressState extends State<AddAddress> {
       _AlternatePhoneController.text=address_details?.alternateMobile??"";
       _selectedOption=address_details?.addressType??"";
       String address = address_details?.address??"";
-      List<String> parts = address.split(",");
+      List<String> parts = address.split(" ");
       String housenumber = parts[0];
       String city = parts[1];
       String roadname = parts[2];
