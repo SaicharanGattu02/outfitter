@@ -14,39 +14,14 @@ class OrderListScreen extends StatefulWidget {
 }
 
 class _OrderListScreenState extends State<OrderListScreen> {
-  final List<Map<String, String>> grid = [
-    {
-
-      'name': 'Regular Fit Corduroy shirt',
-      'price': '₹ 1,196',
-      'mrp': '₹ 4,999',
-      'quantity': '1',
-    },
-    {
-      "image": 'assets/jeans.png',
-      'name': 'Regular Fit Jeans',
-      'rating': '4',
-      'price': '₹ 1,196',
-      'mrp': '₹ 4,999',
-      'quantity': '1',
-    },
-    {
-      "image": 'assets/sleaves.png',
-      'name': 'Stylish Sleeves Top',
-      'rating': '4',
-      'price': '₹ 1,196',
-      'mrp': '₹ 4,999',
-      'quantity': '1',
-    },
-  ];
-
-  bool isLoading=false;
+  bool isLoading = false;
   List<OrdersList> orders_list = [];
   @override
   void initState() {
     OrdersListApi();
     super.initState();
   }
+
   Future<void> OrdersListApi() async {
     try {
       final res = await Userapi.getOrdersList();
@@ -64,17 +39,12 @@ class _OrderListScreenState extends State<OrderListScreen> {
         isLoading = false; // Hide loader if error occurs
       });
       CustomSnackBar.show(context, "Failed to load orders.");
-
     } finally {
       setState(() {
         isLoading = false; // Hide loader after completion
       });
     }
   }
-
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -93,8 +63,8 @@ class _OrderListScreenState extends State<OrderListScreen> {
                     children: [
                       Container(
                         width: w * 0.7,
-                        padding:
-                        const EdgeInsets.symmetric(horizontal: 14, vertical: 5),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 14, vertical: 5),
                         decoration: BoxDecoration(
                           color: const Color(0xffF1F2F7),
                           borderRadius: BorderRadius.circular(8),
@@ -139,14 +109,12 @@ class _OrderListScreenState extends State<OrderListScreen> {
                       ),
                       Spacer(),
                       InkWell(
-                        onTap: () {
-
-                        },
+                        onTap: () {},
                         child: Image.asset(
                           "assets/filter.png",
                           width: 22,
                           height: 22,
-                          color:Color(0xffCAA16C),
+                          color: Color(0xffCAA16C),
                           fit: BoxFit.contain,
                         ),
                       ),
@@ -167,137 +135,139 @@ class _OrderListScreenState extends State<OrderListScreen> {
                     height: 10,
                   ),
                   ListView.builder(
-
                     physics: NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
                     itemCount: orders_list.length,
                     itemBuilder: (context, index) {
                       final item = orders_list[index];
 
-
-                      return
-                  InkResponse(onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=>OrderDetailsScreen()));
-                  },
-                    child: Container(
-                      width: w,
-                      padding: EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: Color(0xffFFFDF6),
-                        border: Border.all(color: Color(0xffF3EFE1), width: 1),
-                        borderRadius: BorderRadius.circular(7),
-                      ),
-                      margin: EdgeInsets.only(bottom: 16),
-                      child:
-                      Column( mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Column(      mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "Order ID",
-                                    style: TextStyle(
-                                      color: Color(0xff617C9D),
-                                      fontFamily: 'RozhaOne',
-                                      fontSize: 14,
-                                      height: 19 / 14,
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ),
-                                  Text(
-                                      item.orderid??"",
-                                    style: TextStyle(
-                                      color: Color(0xff181725),
-                                      fontFamily: 'RozhaOne',
-                                      fontSize: 16,
-                                      height: 19 / 16,
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Column( mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "Date",
-                                    style: TextStyle(
-                                      color: Color(0xff617C9D),
-                                      fontFamily: 'RozhaOne',
-                                      fontSize: 14,
-                                      height: 19 / 14,
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ),
-                                  Text(
-                                   item.createdAt??"",
-                                    style: TextStyle(
-                                      color: Color(0xff181725),
-                                      fontFamily: 'RozhaOne',
-                                      fontSize: 16,
-                                      height: 19 / 16,
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 10,),
-
-                          Text(
-                            "Payment Status",
-                            style: TextStyle(
-                              color: Color(0xff617C9D),
-                              fontFamily: 'RozhaOne',
-                              fontSize: 14,
-                              height: 19 / 14,
-                              fontWeight: FontWeight.w400,
+                      return InkResponse(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => OrderDetail(id: item.id.toString(),)));
+                          },
+                          child: Container(
+                            width: w,
+                            padding: EdgeInsets.all(16),
+                            decoration: BoxDecoration(
+                              color: Color(0xffFFFDF6),
+                              border: Border.all(
+                                  color: Color(0xffF3EFE1), width: 1),
+                              borderRadius: BorderRadius.circular(7),
                             ),
-                          ),
-                          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                item.paymentMethod??"",
-                                style: TextStyle(
-                                  color: Color(0xff181725),
-                                  fontFamily: 'RozhaOne',
-                                  fontSize: 16,
-                                  height: 19 / 16,
-                                  fontWeight: FontWeight.w400,
+                            margin: EdgeInsets.only(bottom: 16),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "Order ID",
+                                          style: TextStyle(
+                                            color: Color(0xff617C9D),
+                                            fontFamily: 'RozhaOne',
+                                            fontSize: 14,
+                                            height: 19 / 14,
+                                            fontWeight: FontWeight.w400,
+                                          ),
+                                        ),
+                                        Text(
+                                          item.orderid ?? "",
+                                          style: TextStyle(
+                                            color: Color(0xff181725),
+                                            fontFamily: 'RozhaOne',
+                                            fontSize: 16,
+                                            height: 19 / 16,
+                                            fontWeight: FontWeight.w400,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "Date",
+                                          style: TextStyle(
+                                            color: Color(0xff617C9D),
+                                            fontFamily: 'RozhaOne',
+                                            fontSize: 14,
+                                            height: 19 / 14,
+                                            fontWeight: FontWeight.w400,
+                                          ),
+                                        ),
+                                        Text(
+                                          item.createdAt ?? "",
+                                          style: TextStyle(
+                                            color: Color(0xff181725),
+                                            fontFamily: 'RozhaOne',
+                                            fontSize: 16,
+                                            height: 19 / 16,
+                                            fontWeight: FontWeight.w400,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
                                 ),
-                              ),
-
-                              Text(
-                                item.orderValue.toString(),
-
-                                style: TextStyle(
-                                  color: Color(0xff181725),
-                                  fontFamily: 'RozhaOne',
-                                  fontSize: 16,
-                                  height: 19 / 16,
-                                  fontWeight: FontWeight.w400,
+                                SizedBox(
+                                  height: 10,
                                 ),
-                              ),
-
-
-                            ],
-                          ),
-                        ],
-                      ),
-
-
-
-    )
-                      );
-                      },
-    )
-
-
+                                Text(
+                                  "Payment Status",
+                                  style: TextStyle(
+                                    color: Color(0xff617C9D),
+                                    fontFamily: 'RozhaOne',
+                                    fontSize: 14,
+                                    height: 19 / 14,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      item.paymentMethod ?? "",
+                                      style: TextStyle(
+                                        color: Color(0xff181725),
+                                        fontFamily: 'RozhaOne',
+                                        fontSize: 16,
+                                        height: 19 / 16,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                    Text(
+                                      item.orderValue.toString(),
+                                      style: TextStyle(
+                                        color: Color(0xff181725),
+                                        fontFamily: 'RozhaOne',
+                                        fontSize: 16,
+                                        height: 19 / 16,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ));
+                    },
+                  )
                 ]),
           ),
         ));

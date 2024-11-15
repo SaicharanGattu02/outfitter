@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:outfitter/Screens/ProductDetailsScreen.dart';
 import 'package:outfitter/Screens/CustomizeBar.dart';
 import 'package:outfitter/Screens/Filters.dart';
 import 'package:outfitter/Screens/UploderProfile.dart';
@@ -248,7 +249,11 @@ class _HomeState extends State<Home> {
                                                 context,
                                                 MaterialPageRoute(
                                                     builder: (context) =>
-                                                        CustomizeProductBar(productid: productData.id.toString(),)));
+                                                        ProductDetailsScreen(
+                                                          productid: productData
+                                                              .id
+                                                              .toString(),
+                                                        )));
                                           },
                                           child: Container(
                                             child: Image.network(
@@ -309,9 +314,7 @@ class _HomeState extends State<Home> {
                                       Row(
                                         children: [
                                           Text(
-                                            productData.mrp
-                                                    .toString() ??
-                                                "",
+                                            productData.mrp.toString() ?? "",
                                             style: TextStyle(
                                               color: Color(0xff121926),
                                               fontFamily: 'RozhaOne',
@@ -322,8 +325,7 @@ class _HomeState extends State<Home> {
                                           ),
                                           SizedBox(width: w * 0.03),
                                           Text(
-                                            productData.salePrice
-                                                    .toString() ??
+                                            productData.salePrice.toString() ??
                                                 "",
                                             style: TextStyle(
                                               color: Color(0xff617C9D),
@@ -379,12 +381,17 @@ class _HomeState extends State<Home> {
                                 right: 8,
                                 child: InkResponse(
                                   onTap: () {
-                                    if (productData.isInWishlist??false) {
+                                    if (productData.isInWishlist ?? false) {
                                       // Remove from wishlist
-                                      context.read<WishlistProvider>().removeFromWishlist(productData.id??"");
+                                      context
+                                          .read<WishlistProvider>()
+                                          .removeFromWishlist(
+                                              productData.id ?? "");
                                     } else {
                                       // Add to wishlist
-                                      context.read<WishlistProvider>().addToWishlist(productData.id??"");
+                                      context
+                                          .read<WishlistProvider>()
+                                          .addToWishlist(productData.id ?? "");
                                     }
                                   },
                                   child: Container(
@@ -395,15 +402,19 @@ class _HomeState extends State<Home> {
                                     ),
                                     child: productData.isInWishlist ?? false
                                         ? Icon(
-                                      Icons.favorite, // Filled heart icon when item is in wishlist
-                                      size: 18,
-                                      color: Colors.red, // Red color for filled icon
-                                    )
+                                            Icons
+                                                .favorite, // Filled heart icon when item is in wishlist
+                                            size: 18,
+                                            color: Colors
+                                                .red, // Red color for filled icon
+                                          )
                                         : Icon(
-                                      Icons.favorite_border, // Outline heart icon when item is NOT in wishlist
-                                      size: 18,
-                                      color: Colors.black, // Black color for outline icon
-                                    ),
+                                            Icons
+                                                .favorite_border, // Outline heart icon when item is NOT in wishlist
+                                            size: 18,
+                                            color: Colors
+                                                .black, // Black color for outline icon
+                                          ),
                                   ),
                                 ),
                               ),

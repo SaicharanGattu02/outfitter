@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:outfitter/Screens/BackBodyCustomize.dart';
-import 'package:outfitter/Screens/CollerTypeCustomize.dart';
+import 'package:outfitter/Screens/ProductDetailsScreen.dart';
 import 'package:outfitter/Screens/CuffTypeCustomize.dart';
 import 'package:outfitter/Screens/PocketTypeCustomize.dart';
 import 'package:outfitter/utils/CustomAppBar.dart';
@@ -175,7 +175,8 @@ class _CustomizeProductBarState extends State<CustomizeProductBar>
                         ? Color(0xffE7C6A0)
                         : Colors.transparent,
                     child: Tab(
-                      child: Center(
+                      child:
+                      Center(
                         child: Text(
                           index == 0
                               ? 'Collar'
@@ -203,7 +204,7 @@ class _CustomizeProductBarState extends State<CustomizeProductBar>
                 controller: _pageController,
                 physics: NeverScrollableScrollPhysics(),
                 children: [
-                  CollerTypeCustomize(productid: widget.productid,),
+                  // CollerTypeCustomize(productid: widget.productid,),
                   CuffTypeCustomize(),
                   PocketTypeCustomize(),
                   BackBodyCustomize(),

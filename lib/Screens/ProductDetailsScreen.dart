@@ -7,16 +7,18 @@ import 'package:provider/provider.dart';
 
 import '../Model/ProductsDetailsModel.dart';
 import '../Services/UserApi.dart';
+import '../utils/CustomAppBar.dart';
+import '../utils/CustomAppBar1.dart';
 
-class CollerTypeCustomize extends StatefulWidget {
+class ProductDetailsScreen extends StatefulWidget {
   String productid;
-   CollerTypeCustomize({super.key,required this.productid});
+  ProductDetailsScreen({super.key,required this.productid});
 
   @override
-  State<CollerTypeCustomize> createState() => _CollerTypeCustomizeState();
+  State<ProductDetailsScreen> createState() => _ProductDetailsScreenState();
 }
 
-class _CollerTypeCustomizeState extends State<CollerTypeCustomize> {
+class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   int quantity = 0;
   final List<Map<String, String>> grid = [
     {"image": 'assets/c1.png', 'name': 'Peaked Collar'},
@@ -24,6 +26,24 @@ class _CollerTypeCustomizeState extends State<CollerTypeCustomize> {
     {"image": 'assets/c3.png', 'name': 'Small Peaked'},
     {"image": 'assets/c4.png', 'name': 'Button Down'},
     {"image": 'assets/c4.png', 'name': 'Pin Collar'},
+  ];
+  final List<Map<String, String>> grid1 = [
+    {"image": 'assets/cuff1.png', 'name': 'Large Round '},
+    {"image": 'assets/cuff2.png', 'name': 'Are-Shape'},
+    {"image": 'assets/cuff3.png', 'name': 'Double Button '},
+    {"image": 'assets/cuff4.png', 'name': 'Cham Fering '},
+
+  ];
+  final List<Map<String, String>> grid2 = [
+    {"image": 'assets/planket1.png', 'name': 'Bow Pleat'},
+    {"image": 'assets/planket2.png', 'name': 'Hidden Placket'},
+
+  ];
+  final List<Map<String, String>> grid3 = [
+    {"image": 'assets/backbody1.png', 'name': 'Bow Pleat'},
+    {"image": 'assets/backbody2.png', 'name': 'Both Sides'},
+    {"image": 'assets/backbody3.png', 'name': 'Waist Pleat'},
+
   ];
   bool _isDescriptionVisible = false;
   final List<Map<String, String>> size = [
@@ -123,11 +143,27 @@ class _CollerTypeCustomizeState extends State<CollerTypeCustomize> {
       CustomSnackBar.show(context, msg??"");
     }
   }
+  final List<String> tabItems = ['Collar', 'CuffType', 'PlacketType', 'BackBody'];
+  int _selectedTabIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    GetProductDetails();
+
+  }
+  Future<void> GetProductDetails() async {
+    final ProductdetailsProvider = Provider.of<ProductDetailsProvider>(context, listen: false);
+    ProductdetailsProvider.fetchProductDetails(widget.productid);
+  }
+
+
   @override
   Widget build(BuildContext context) {
     var w = MediaQuery.of(context).size.width;
     var h = MediaQuery.of(context).size.height;
     return Scaffold(
+      appBar: CustomApp(title: 'Product Details', w: w),
       body: Consumer<ProductDetailsProvider>(
           builder: (context, profileProvider, child) {
         final productData = profileProvider.productData;
@@ -135,6 +171,141 @@ class _CollerTypeCustomizeState extends State<CollerTypeCustomize> {
         return SingleChildScrollView(
           child: Column(
             children: [
+              
+              // Row(children: [
+              //   Container(
+              //       padding: EdgeInsets.only(left: 8, right: 8),
+              //       height: h * 0.03,
+              //       color: _selectedTabIndex == index
+              //           ? Color(0xffE7C6A0)
+              //           : Colors.transparent,
+              //       child: Text("Coller", fontFamily: 'RozhaOne',
+              //         fontWeight: FontWeight.w400,
+              //         fontSize: 15,
+              //         height: 1.6,
+              //         color: Color(0xff110B0F),
+              //         letterSpacing: 0.15,
+              //       ),))
+              //
+              // ],),
+              Container(
+                padding: EdgeInsets.only(top: 8, bottom: 8),
+                height: h * 0.04,
+                decoration: BoxDecoration(color: Color(0xffE7C6A0)),
+                child: Center(
+                  child: Text(
+                    "Available until 10hrs 30mins 20secs",
+                    style: TextStyle(
+                      color: Color(0xff110B0F),
+                      fontFamily: 'RozhaOne',
+                      fontSize: 16,
+                      height: 20 / 16,
+                      fontWeight: FontWeight.w400,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+              Container(
+                padding: EdgeInsets.all(16),
+                height: h * 0.14,
+                decoration: BoxDecoration(color: Color(0xffFCFCFD)),
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        SizedBox(width: w * 0.02),
+                        Text(
+                          productData?.title??"",
+                          style: TextStyle(
+                            color: Color(0xff110B0F),
+                            fontFamily: 'RozhaOne',
+                            fontSize: 24,
+                            height: 32 / 24,
+                            fontWeight: FontWeight.w400,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: h * 0.02),
+                    Row(
+                      children: [
+                        Text(
+                          productData?.mrp.toString()??"",
+                          style: TextStyle(
+                            color: Color(0xffF04438),
+                            fontFamily: 'RozhaOne',
+                            fontSize: 16,
+                            height: 24 / 16,
+                            decoration: TextDecoration.lineThrough,
+                            decorationColor: Color(0xffF04438),
+                            fontWeight: FontWeight.w400,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        SizedBox(width: w * 0.01),
+                        Text(
+                          productData?.salePrice.toString()??"",
+                          style: TextStyle(
+                            color: Color(0xff4B5565),
+                            fontFamily: 'RozhaOne',
+                            fontSize: 16,
+                            height: 28 / 16,
+                            letterSpacing: 1,
+                            fontWeight: FontWeight.w400,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        Spacer(),
+                        Row(
+                          children: List.generate(5, (index) {
+                            return Icon(
+                                index < 4 ? Icons.star : Icons.star_border,
+                                color: Color(0xffF79009),
+                                size: 20);
+                          }),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: tabItems.asMap().entries.map((entry) {
+              int index = entry.key;
+              String label = entry.value;
+
+              return GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _selectedTabIndex = index; // Update selected tab
+                  });
+                },
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 8),
+                  height: h * 0.03, // Set height based on screen height
+                  color: _selectedTabIndex == index
+                      ? Color(0xffE7C6A0) // Selected color
+                      : Colors.transparent,
+                  child: Center(
+                    child: Text(
+                      label,
+                     style: TextStyle( fontWeight: FontWeight.w400,fontFamily: 'RozhaOne',
+                       fontSize: 15,
+                       height: 1.6,
+                       color: Color(0xff110B0F),
+                       letterSpacing: 0.15,)
+
+                    ),
+                  ),
+                ),
+              );
+            }).toList(),
+            ),
+
+
               Stack(
                 children: [
                   InkResponse(
@@ -474,8 +645,12 @@ class _CollerTypeCustomizeState extends State<CollerTypeCustomize> {
                               color: Color(0xff9AA4B2),
                               borderRadius: BorderRadius.circular(100),
                             ),
-                            child: Icon(Icons.keyboard_arrow_down_sharp,
-                                color: Colors.white, size: 20),
+                            child: Icon(
+                              _isDescriptionVisible ? Icons.keyboard_arrow_up_sharp:Icons.keyboard_arrow_down_sharp ,
+                              color: Colors.white,
+                              size: 20,
+                            )
+
                           ),
                         ),
                       ],
@@ -519,7 +694,7 @@ class _CollerTypeCustomizeState extends State<CollerTypeCustomize> {
                               color: Color(0xff9AA4B2),
                               borderRadius: BorderRadius.circular(100),
                             ),
-                            child: Icon(Icons.keyboard_arrow_down_sharp,
+                            child: Icon(_isProductDetailsVisible? Icons.keyboard_arrow_up_sharp:Icons.keyboard_arrow_down_sharp ,
                                 color: Colors.white, size: 20),
                           ),
                         ),
@@ -564,7 +739,7 @@ class _CollerTypeCustomizeState extends State<CollerTypeCustomize> {
                               color: Color(0xff9AA4B2),
                               borderRadius: BorderRadius.circular(100),
                             ),
-                            child: Icon(Icons.keyboard_arrow_down_sharp,
+                            child: Icon( _isShippingDetailsVisible?Icons.keyboard_arrow_up_sharp:Icons.keyboard_arrow_down_sharp ,
                                 color: Colors.white, size: 20),
                           ),
                         ),
@@ -617,7 +792,7 @@ class _CollerTypeCustomizeState extends State<CollerTypeCustomize> {
                               color: Color(0xff9AA4B2),
                               borderRadius: BorderRadius.circular(100),
                             ),
-                            child: Icon(Icons.keyboard_arrow_down_sharp,
+                            child: Icon(_isReviewsVisible?Icons.keyboard_arrow_up_sharp:Icons.keyboard_arrow_down_sharp ,
                                 color: Colors.white, size: 20),
                           ),
                         ),

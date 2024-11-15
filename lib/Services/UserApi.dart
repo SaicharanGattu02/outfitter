@@ -8,6 +8,7 @@ import '../Model/AddressListModel.dart';
 import '../Model/AdressDeatilsModel.dart';
 import '../Model/CategoriesModel.dart';
 import '../Model/GetCartListModel.dart';
+import '../Model/OrderDetailsModel.dart';
 import '../Model/ProductsDetailsModel.dart';
 import '../Model/RegisterModel.dart';
 import '../Model/UserDetailsModel.dart';
@@ -166,6 +167,7 @@ class Userapi {
 
 
   static Future<ProductsDetailsModel?> getProductDetails(String? product_id) async {
+    print("product_id>>${product_id}");
     try {
       final url = Uri.parse("$host/api/product-details/$product_id");  // Adjusted the endpoint URL
       final headers = await getheader1();  // Ensuring headers are fetched asynchronously
@@ -710,7 +712,7 @@ class Userapi {
   }
 
 
-  static Future<OrdersListModel?> getOrderDetails(String id) async {
+  static Future<OrderDetailsModel?> getOrderDetails(String id) async {
     try {
       final url = Uri.parse("${host}/api/order-details/$id");
       final headers = await getheader1();
@@ -718,7 +720,7 @@ class Userapi {
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
         print("getOrderDetails response: ${response.body}");
-        return OrdersListModel.fromJson(jsonResponse);
+        return OrderDetailsModel.fromJson(jsonResponse);
       } else {
         print("Request failed with status: ${response.statusCode}");
         return null;
