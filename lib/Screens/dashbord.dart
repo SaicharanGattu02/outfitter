@@ -2,13 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:outfitter/Screens/Cart.dart';
 import 'package:outfitter/Screens/Category.dart';
 import 'package:outfitter/Screens/DashHome.dart';
-import 'package:outfitter/Screens/Orders.dart';
 import 'package:outfitter/Screens/Profile.dart';
 import 'package:outfitter/Screens/WishList.dart';
 
+
 import 'Home.dart';
 
-import '../utils/NoInternet.dart';
 
 class Dashbord extends StatefulWidget {
   const Dashbord({super.key});
@@ -23,7 +22,7 @@ class _DashbordState extends State<Dashbord> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   int _selectedIndex = 0;
 
-  final List<Widget> _screens = [DashHome(), Cart(),Home(), Category()];
+  final List<Widget> _screens = [DashHome(), WishlistScreen(),Category(), Profile()];
   final PageController _pageController = PageController();
 
   void onTabTapped(int index) {
@@ -100,36 +99,34 @@ class _DashbordState extends State<Dashbord> {
             ),
             BottomNavigationBarItem(
               icon: Image.asset(
-                'assets/cart.png',
+                'assets/fav.png',
                 width: 25,
                 height: 25,
                 color: _selectedIndex == 1
                     ? const Color(0xFFE7C6A0)
                     : const Color(0xFF617C9D),
               ),
-              label: 'CART',
-            ),
-            BottomNavigationBarItem(
-              icon: Image.asset(
-                'assets/shop.png',
-                width: 25,
-                height: 25,
-                color: _selectedIndex == 2
-                    ? const Color(0xFFE7C6A0)
-                    : const Color(0xFF617C9D),
-              ),
-              label: 'SHOP',
+              label: 'WISH LIST',
             ),
             BottomNavigationBarItem(
               icon: Image.asset(
                 'assets/category.png',
                 width: 25,
                 height: 25,
-                color: _selectedIndex == 3
+                color: _selectedIndex == 2
                     ? const Color(0xFFE7C6A0)
                     : const Color(0xFF617C9D),
               ),
               label: 'CATEGORY',
+            ),
+            BottomNavigationBarItem(
+              icon:Icon(Icons.person_outline_rounded,
+                size: 25,
+                  color: _selectedIndex == 3
+                      ? const Color(0xFFE7C6A0)
+                      : const Color(0xFF617C9D),),
+
+              label: 'PROFILE',
             ),
           ],
           currentIndex: _selectedIndex,

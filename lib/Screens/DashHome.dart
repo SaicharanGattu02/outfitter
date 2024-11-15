@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:outfitter/Screens/Cart.dart';
 import 'package:outfitter/Screens/CustomizeBar.dart';
 import 'package:outfitter/Screens/UploderProfile.dart';
 import 'package:outfitter/providers/CategoriesProvider.dart';
@@ -17,6 +18,7 @@ class DashHome extends StatefulWidget {
 }
 
 class _DashHomeState extends State<DashHome> {
+  ScrollController _scrollController = ScrollController();
   final List<Map<String, String>> grid = [
     {"image": 'assets/hoodie.png', 'name': 'HOODIE'},
     {"image": 'assets/jeans.png', 'name': 'JEANS'},
@@ -176,18 +178,16 @@ class _DashHomeState extends State<DashHome> {
                   SizedBox(width: w * 0.025),
                   InkWell(
                     onTap: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=>Profile()));
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=>Cart()));
                     },
                     child: Container(
                       alignment: Alignment.center,
-                      child: ClipOval(
-                        child: CircleAvatar(
-                          radius: w * 0.038,
-                          child: Image.asset(
-                            "assets/Passphoto.png",
-                            fit: BoxFit.contain,
-                          ),
-                        ),
+                      child: Image.asset(
+                        "assets/cart.png",
+                        width: 28,
+                        height: 28,
+                        fit: BoxFit.contain,
+                        color: Color(0xffffffff),
                       ),
                     ),
                   ),
@@ -197,7 +197,8 @@ class _DashHomeState extends State<DashHome> {
           ),
         ),
       ),
-      body: SingleChildScrollView(
+      body: SingleChildScrollView(   controller: _scrollController,
+
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -228,7 +229,8 @@ class _DashHomeState extends State<DashHome> {
           final categories_list = profileProvider.categoriesList;
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: GridView.builder(
+            child:
+            GridView.builder(
               shrinkWrap: true,
               physics: NeverScrollableScrollPhysics(),
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -245,7 +247,7 @@ class _DashHomeState extends State<DashHome> {
                     InkWell(
                       onTap: () {
                         Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => Home()));
+                            MaterialPageRoute(builder: (context) => Home(selectid: categorielist.id??"")));
                       },
                       child: Container(
                         decoration: BoxDecoration(
@@ -705,19 +707,27 @@ class _DashHomeState extends State<DashHome> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Container(
-                        padding: EdgeInsets.all(8),
-                        margin: EdgeInsets.only(right: 8),
-                        decoration: BoxDecoration(
-                          color: Color(0xffFFE5E6),
-                          borderRadius: BorderRadius.circular(100),
-                        ),
-                        child: Image.asset(
-                          "assets/arrow-sm-up.png",
-                          width: 18,
-                          height: 18,
-                          fit: BoxFit.contain,
-                          color: Color(0xff000000),
+                      InkResponse(onTap: (){
+                        _scrollController.animateTo(
+                          0.0, // Scroll to the top
+                          duration: Duration(milliseconds: 300), // Duration for the scroll animation
+                          curve: Curves.easeInOut, // Animation curve
+                        );
+                      },
+                        child: Container(
+                          padding: EdgeInsets.all(8),
+                          margin: EdgeInsets.only(right: 8),
+                          decoration: BoxDecoration(
+                            color: Color(0xffFFE5E6),
+                            borderRadius: BorderRadius.circular(100),
+                          ),
+                          child: Image.asset(
+                            "assets/arrow-sm-up.png",
+                            width: 18,
+                            height: 18,
+                            fit: BoxFit.contain,
+                            color: Color(0xff000000),
+                          ),
                         ),
                       ),
                     ],

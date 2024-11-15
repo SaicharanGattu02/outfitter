@@ -13,13 +13,15 @@ import '../Model/CategoriesModel.dart';
 import '../Services/UserApi.dart';
 
 class Home extends StatefulWidget {
-  const Home({super.key});
+  final String selectid;
+   Home({super.key, required this.selectid});
 
   @override
   State<Home> createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> {
+  ScrollController _scrollController = ScrollController();
   final List<Map<String, String>> grid = [
     {"image": 'assets/hoodie.png', 'name': 'HOODIE'},
     {"image": 'assets/jeans.png', 'name': 'JEANS'},
@@ -37,6 +39,7 @@ class _HomeState extends State<Home> {
   ];
 
   List<Color> selectedColors = [];
+  String _selectedIndex="";
 
   void _toggleColorSelection(Color color) {
     setState(() {
@@ -47,9 +50,24 @@ class _HomeState extends State<Home> {
 
   @override
   void initState() {
-    // GetCategoriesList();
+    _selectedIndex = widget.selectid;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _scrollToSelectedIndex();
+    });
     super.initState();
   }
+  void _scrollToSelectedIndex() {
+    final categoriesList = context.read<CategoriesProvider>().categoriesList;
+    final selectedIndex = categoriesList.indexWhere((category) => category.id == _selectedIndex);
+
+    if (selectedIndex != -1) {
+      // Assuming each item has a width of 96.0 (adjust as needed based on actual layout)
+      double position = selectedIndex * (96.0 + 16.0);  // 96.0 for item width + 16.0 for horizontal padding
+      _scrollController.animateTo(position,
+          duration: Duration(milliseconds: 300), curve: Curves.easeInOut);
+    }
+  }
+
 
   Future<void> GetProductcategoryList(String id) async {
     final products_list_provider =
@@ -57,35 +75,7 @@ class _HomeState extends State<Home> {
     products_list_provider.fetchProductsList(id);
   }
 
-  // List<Categories> categories=[];
-  // Future<void> GetCategoriesList() async{
-  //   var res = await Userapi.getCategories();
-  //   if (res!=null){
-  //     setState(() {
-  //       if(res.settings?.success==1){
-  //         categories=res.data??[];
-  //         GetProductcategoryList(categories[0].id??"");
-  //         print("GetCategoriesList${categories}");
-  //       }else{
-  //
-  //       }
-  //     });
-  //   }
-  // }
 
-  // List<ProductsList> productlist = [];
-  //
-  // Future<void> GetProductcategoryList(String id) async {
-  //   var res = await Userapi.getProductsList(id);
-  //   if (res != null) {
-  //     setState(() {
-  //       if (res.settings?.success == 1) {
-  //         productlist = res.data ?? [];
-  //         print("GetProductcategoryList${productlist}");
-  //       } else {}
-  //     });
-  //   }
-  // }
 
   Future<void> Addwish(String product) async {
     var res = await Userapi.AddWishList(product);
@@ -97,7 +87,6 @@ class _HomeState extends State<Home> {
     }
   }
 
-  int _selectedIndex = 0;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -106,7 +95,7 @@ class _HomeState extends State<Home> {
     var h = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      appBar: CustomApp(title: 'SHOP', w: w),
+      appBar: CustomApp(title: 'ProductList', w: w),
       key: _scaffoldKey,
       body: SingleChildScrollView(
         child: Padding(
@@ -114,6 +103,7 @@ class _HomeState extends State<Home> {
           child: Column(
             children: [
               SingleChildScrollView(
+                controller: _scrollController,
                 scrollDirection: Axis.horizontal,
                 child: Consumer<CategoriesProvider>(
                     builder: (context, profileProvider, child) {
@@ -130,7 +120,7 @@ class _HomeState extends State<Home> {
                               InkResponse(
                                 onTap: () {
                                   setState(() {
-                                    _selectedIndex = index;
+                                    _selectedIndex = data.id??"";
                                     GetProductcategoryList(data.id ?? "");
                                   });
                                 },
@@ -139,7 +129,7 @@ class _HomeState extends State<Home> {
                                   height: 80,
                                   decoration: BoxDecoration(
                                       border: Border.all(
-                                        color: _selectedIndex == index
+                                        color: _selectedIndex ==  data.id
                                             ? Color(0xffCAA16C)
                                             : Colors.transparent,
                                         width: 3,
