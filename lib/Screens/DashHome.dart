@@ -5,6 +5,9 @@ import 'package:outfitter/Screens/UploderProfile.dart';
 import 'package:outfitter/providers/CategoriesProvider.dart';
 import 'package:provider/provider.dart';
 
+import '../Model/ProductsListModel.dart';
+import '../Services/UserApi.dart';
+import '../utils/CustomSnackBar.dart';
 import 'ProdcutListScreen.dart';
 import 'Orders.dart';
 import 'Profile.dart';
@@ -38,7 +41,9 @@ class _DashHomeState extends State<DashHome> {
   ];
 
   final List<Map<String, String>> gridList = [
-    {"image":  'assets/shirt.png',},
+    {
+      "image": 'assets/shirt.png',
+    },
     {"image": 'assets/hoodie.png'},
     {"image": 'assets/cargo.png'},
     {"image": 'assets/formals.png'},
@@ -72,15 +77,33 @@ class _DashHomeState extends State<DashHome> {
   @override
   void initState() {
     GetCategoriesList();
+    BestSellersListApi();
     super.initState();
   }
 
   Future<void> GetCategoriesList() async {
-    final categories_list_provider = Provider.of<CategoriesProvider>(context, listen: false);
+    final categories_list_provider =
+        Provider.of<CategoriesProvider>(context, listen: false);
     categories_list_provider.fetchCategoriesList();
   }
 
-
+  List<ProductsList> productlist = [];
+  Future<void> BestSellersListApi() async {
+    try {
+      final res = await Userapi.getBestSellersList();
+      if (res != null) {
+        setState(() {
+          if (res.settings?.success == 1) {
+            productlist = res.data ?? [];
+          } else {
+            CustomSnackBar.show(context, res.settings?.message ?? "");
+          }
+        });
+      }
+    } catch (e) {
+      CustomSnackBar.show(context, "Failed to load best sellers.");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -106,17 +129,15 @@ class _DashHomeState extends State<DashHome> {
               Spacer(),
               Row(
                 children: [
-
-                  if (_selectedIndex == 1)
-                    ...[InkWell(
+                  if (_selectedIndex == 1) ...[
+                    InkWell(
                       onTap: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=>Orders()));
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => Orders()));
                       },
                       child: Container(
                         alignment: Alignment.center,
-                        child:
-
-                        Image.asset(
+                        child: Image.asset(
                           "assets/orders.png",
                           width: 28,
                           height: 28,
@@ -124,8 +145,8 @@ class _DashHomeState extends State<DashHome> {
                           fit: BoxFit.contain,
                         ),
                       ),
-                    ),]
-                  else ...[
+                    ),
+                  ] else ...[
                     InkWell(
                       onTap: () {
                         // Handle search icon tap
@@ -141,12 +162,14 @@ class _DashHomeState extends State<DashHome> {
                       ),
                     ),
                   ],
-
                   SizedBox(width: w * 0.025),
-                  if (_selectedIndex == 1)
-                    ...[InkWell(
+                  if (_selectedIndex == 1) ...[
+                    InkWell(
                       onTap: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=>WishlistScreen()));
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => WishlistScreen()));
                       },
                       child: Container(
                         alignment: Alignment.center,
@@ -158,8 +181,8 @@ class _DashHomeState extends State<DashHome> {
                           fit: BoxFit.contain,
                         ),
                       ),
-                    ),]
-                  else ...[
+                    ),
+                  ] else ...[
                     InkWell(
                       onTap: () {
                         // Handle notifications icon tap
@@ -178,7 +201,8 @@ class _DashHomeState extends State<DashHome> {
                   SizedBox(width: w * 0.025),
                   InkWell(
                     onTap: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=>Cart()));
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => Cart()));
                     },
                     child: Container(
                       alignment: Alignment.center,
@@ -197,8 +221,8 @@ class _DashHomeState extends State<DashHome> {
           ),
         ),
       ),
-      body: SingleChildScrollView(   controller: _scrollController,
-
+      body: SingleChildScrollView(
+        controller: _scrollController,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -224,258 +248,268 @@ class _DashHomeState extends State<DashHome> {
               ),
             ),
             SizedBox(height: h * 0.03),
-        Consumer<CategoriesProvider>(
-        builder: (context, profileProvider, child) {
-          final categories_list = profileProvider.categoriesList;
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child:
-            GridView.builder(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 4,
-                crossAxisSpacing: 8.0,
-                mainAxisSpacing: 8.0,
-                childAspectRatio: 0.55,
-              ),
-              itemCount: categories_list.length,
-              itemBuilder: (context, index) {
-                final categorielist= categories_list[index];
-                return Column(
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => ProdcutListScreen(selectid: categorielist.id??"")));
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Color(0xff110B0F),
-                          borderRadius: BorderRadius.circular(7),
-                        ),
-                        padding: const EdgeInsets.all(8.0),
-                        child: Center(
-                          child: Image.network(
-                            categorielist?.image ?? '',
-                            width: 80,
-                            height: 80,
-                            fit: BoxFit.contain,
+            Consumer<CategoriesProvider>(
+                builder: (context, profileProvider, child) {
+              final categories_list = profileProvider.categoriesList;
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: GridView.builder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 4,
+                    crossAxisSpacing: 8.0,
+                    mainAxisSpacing: 8.0,
+                    childAspectRatio: 0.55,
+                  ),
+                  itemCount: categories_list.length,
+                  itemBuilder: (context, index) {
+                    final categorielist = categories_list[index];
+                    return Column(
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => ProdcutListScreen(
+                                        selectid: categorielist.id ?? "")));
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Color(0xff110B0F),
+                              borderRadius: BorderRadius.circular(7),
+                            ),
+                            padding: const EdgeInsets.all(8.0),
+                            child: Center(
+                              child: Image.network(
+                                categorielist?.image ?? '',
+                                width: 80,
+                                height: 80,
+                                fit: BoxFit.contain,
+                              ),
+                            ),
                           ),
                         ),
-                      ),
-                    ),
-                    SizedBox(height: 8),
-                    Center(
-                      child: Text(
-                        categorielist?.categoryName ?? '',
-                        style: TextStyle(
-                          color: Color(0xff110B0F),
-                          fontFamily: 'RozhaOne',
-                          fontSize: 14,
-                          height: 20 / 14,
-                          fontWeight: FontWeight.w400,
+                        SizedBox(height: 8),
+                        Center(
+                          child: Text(
+                            categorielist?.categoryName ?? '',
+                            style: TextStyle(
+                              color: Color(0xff110B0F),
+                              fontFamily: 'RozhaOne',
+                              fontSize: 14,
+                              height: 20 / 14,
+                              fontWeight: FontWeight.w400,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
                         ),
-                        textAlign: TextAlign.center,
-                      ),
+                      ],
+                    );
+                  },
+                ),
+              );
+            }),
+            SizedBox(height: h * 0.02),
+            Center(
+              child: Text(
+                "Best Sellers",
+                style: TextStyle(
+                  color: Color(0xff110B0F),
+                  fontFamily: 'RozhaOne',
+                  fontSize: 24,
+                  height: 32 / 24,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+            ),
+            SizedBox(height: h * 0.02),
+            GridView.builder(
+              physics: NeverScrollableScrollPhysics(),
+              scrollDirection: Axis.horizontal,
+              shrinkWrap: true,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                mainAxisSpacing: 2,
+                childAspectRatio: 0.51,
+              ),
+              itemCount: productlist.length,
+              itemBuilder: (context, index) {
+                return Column(
+                  children: [
+                    Stack(
+                      children: [
+                        Container(
+                          padding: EdgeInsets.all(8.0),
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: Color(0xffEEF2F6),
+                              width: 1,
+                            ),
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Center(
+                                child: InkWell(
+                                  onTap: () {
+
+                                  },
+                                  child: Image.asset(
+                                    gridList[index]['image']!,
+                                    height: h * 0.2,
+                                    width: w * 0.45,
+                                    fit: BoxFit.contain,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 15,
+                              ),
+                              Row(
+                                children: [
+                                  InkWell(
+                                    onTap: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  UploaderProfile()));
+                                    },
+                                    child: CircleAvatar(
+                                      radius: 12,
+                                      child: ClipOval(
+                                        child: Image.asset(
+                                          "assets/postedBY.png",
+                                          fit: BoxFit.contain,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: w * 0.03,
+                                  ),
+                                  Text(
+                                    "POSTED BY",
+                                    style: TextStyle(
+                                      color: Color(0xff617C9D),
+                                      fontFamily: 'RozhaOne',
+                                      fontSize: 14,
+                                      height: 19.36 / 14,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  )
+                                ],
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Text(
+                                "Straight Regular Jeans",
+                                style: TextStyle(
+                                  color: Color(0xff121926),
+                                  fontFamily: 'RozhaOne',
+                                  fontSize: 16,
+                                  height: 24 / 16,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "₹2340.00",
+                                    style: TextStyle(
+                                      color: Color(0xff121926),
+                                      fontFamily: 'RozhaOne',
+                                      fontSize: 16,
+                                      height: 24 / 16,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: w * 0.03,
+                                  ),
+                                  Text(
+                                    "₹2340.00",
+                                    style: TextStyle(
+                                      color: Color(0xff617C9D),
+                                      fontFamily: 'RozhaOne',
+                                      fontSize: 16,
+                                      height: 24 / 16,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: h * 0.01),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: colors.map((color) {
+                                  return GestureDetector(
+                                    onTap: () => _toggleColorSelection(color),
+                                    child: Container(
+                                      padding: EdgeInsets.all(3),
+                                      decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(100),
+                                        border: Border.all(
+                                          color: selectedColors.contains(color)
+                                              ? Colors.black
+                                              : Colors.transparent,
+                                          width: 0.5,
+                                        ),
+                                      ),
+                                      child: Container(
+                                        width: 20,
+                                        height: 20,
+                                        decoration: BoxDecoration(
+                                          color:
+                                              // selectedColors.contains(color)
+                                              //     ?
+                                              color,
+                                          // : Colors.grey[300],
+                                          borderRadius:
+                                              BorderRadius.circular(100),
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                }).toList(),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Positioned(
+                          top: 8,
+                          right: 8,
+                          child: Container(
+                            padding: EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: Color(0xffFFE5E6),
+                              borderRadius: BorderRadius.circular(100),
+                            ),
+                            child: Image.asset(
+                              "assets/fav.png",
+                              width: 18,
+                              height: 18,
+                              fit: BoxFit.contain,
+                              color: Color(0xff000000),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 );
               },
             ),
-          );
-        }),
-            SizedBox(height: h * 0.02),
-            // Center(
-            //   child: Text(
-            //     "Best Sellers",
-            //     style: TextStyle(
-            //       color: Color(0xff110B0F),
-            //       fontFamily: 'RozhaOne',
-            //       fontSize: 24,
-            //       height: 32 / 24,
-            //       fontWeight: FontWeight.w400,
-            //     ),
-            //   ),
-            // ),
-            // SizedBox(height: h * 0.02),
-            // GridView.builder(
-            //   physics: NeverScrollableScrollPhysics(),
-            //   shrinkWrap: true,
-            //   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            //     crossAxisCount: 2,
-            //     mainAxisSpacing: 2,
-            //     childAspectRatio: 0.51,
-            //   ),
-            //   itemCount: gridList.length,
-            //   itemBuilder: (context, index) {
-            //     return Column(
-            //       children: [
-            //         Stack(
-            //           children: [
-            //             Container(
-            //               padding: EdgeInsets.all(8.0),
-            //               decoration: BoxDecoration(
-            //                 border: Border.all(
-            //                   color: Color(0xffEEF2F6),
-            //                   width: 1,
-            //                 ),
-            //               ),
-            //               child: Column(
-            //                 mainAxisAlignment: MainAxisAlignment.start,
-            //                 crossAxisAlignment: CrossAxisAlignment.start,
-            //                 children: [
-            //                   Center(
-            //                     child: InkWell(onTap:(){
-            //                      // Navigator.push(context, MaterialPageRoute(builder: (context)=>CustomizeProductBar())) ;
-            //     },
-            //                         child: Image.asset(gridList[index]['image']!,height: h*0.2,width: w*0.45,fit: BoxFit.contain,),),
-            //                   ),
-            //                   SizedBox(
-            //                     height: 15,
-            //                   ),
-            //                   Row(
-            //                     children: [
-            //                       InkWell(
-            //                         onTap: () {
-            //                           Navigator.push(
-            //                               context,
-            //                               MaterialPageRoute(
-            //                                   builder: (context) =>
-            //                                       UploaderProfile()));
-            //                         },
-            //                         child: CircleAvatar(
-            //                           radius: 12,
-            //                           child: ClipOval(
-            //                             child: Image.asset(
-            //                               "assets/postedBY.png",
-            //                               fit: BoxFit.contain,
-            //                             ),
-            //                           ),
-            //                         ),
-            //                       ),
-            //                       SizedBox(
-            //                         width: w * 0.03,
-            //                       ),
-            //                       Text(
-            //                         "POSTED BY",
-            //                         style: TextStyle(
-            //                           color: Color(0xff617C9D),
-            //                           fontFamily: 'RozhaOne',
-            //                           fontSize: 14,
-            //                           height: 19.36 / 14,
-            //                           fontWeight: FontWeight.w400,
-            //                         ),
-            //                       )
-            //                     ],
-            //                   ),
-            //                   SizedBox(
-            //                     height: 10,
-            //                   ),
-            //                   Text(
-            //                     "Straight Regular Jeans",
-            //                     style: TextStyle(
-            //                       color: Color(0xff121926),
-            //                       fontFamily: 'RozhaOne',
-            //                       fontSize: 16,
-            //                       height: 24 / 16,
-            //                       fontWeight: FontWeight.w400,
-            //                     ),
-            //                   ),
-            //                   SizedBox(
-            //                     height: 10,
-            //                   ),
-            //                   Row(
-            //                     mainAxisAlignment: MainAxisAlignment.start,
-            //                     children: [
-            //                       Text(
-            //                         "₹2340.00",
-            //                         style: TextStyle(
-            //                           color: Color(0xff121926),
-            //                           fontFamily: 'RozhaOne',
-            //                           fontSize: 16,
-            //                           height: 24 / 16,
-            //                           fontWeight: FontWeight.w400,
-            //                         ),
-            //                       ),
-            //                       SizedBox(
-            //                         width: w * 0.03,
-            //                       ),
-            //                       Text(
-            //                         "₹2340.00",
-            //                         style: TextStyle(
-            //                           color: Color(0xff617C9D),
-            //                           fontFamily: 'RozhaOne',
-            //                           fontSize: 16,
-            //                           height: 24 / 16,
-            //                           fontWeight: FontWeight.w400,
-            //                         ),
-            //                       ),
-            //                     ],
-            //                   ),
-            //                   SizedBox(height: h * 0.01),
-            //                   Row(
-            //                     mainAxisAlignment: MainAxisAlignment.start,
-            //                     children: colors.map((color) {
-            //                       return GestureDetector(
-            //                         onTap: () => _toggleColorSelection(color),
-            //                         child: Container(
-            //                           padding: EdgeInsets.all(3),
-            //                           decoration: BoxDecoration(
-            //                             borderRadius:
-            //                                 BorderRadius.circular(100),
-            //                             border: Border.all(
-            //                               color: selectedColors.contains(color)
-            //                                   ? Colors.black
-            //                                   : Colors.transparent,
-            //                               width: 0.5,
-            //                             ),
-            //                           ),
-            //                           child: Container(
-            //                             width: 20,
-            //                             height: 20,
-            //                             decoration: BoxDecoration(
-            //                               color:
-            //                                   // selectedColors.contains(color)
-            //                                   //     ?
-            //                                   color,
-            //                               // : Colors.grey[300],
-            //                               borderRadius:
-            //                                   BorderRadius.circular(100),
-            //                             ),
-            //                           ),
-            //                         ),
-            //                       );
-            //                     }).toList(),
-            //                   ),
-            //                 ],
-            //               ),
-            //             ),
-            //             Positioned(
-            //               top: 8,
-            //               right: 8,
-            //               child: Container(
-            //                 padding: EdgeInsets.all(8),
-            //                 decoration: BoxDecoration(
-            //                   color: Color(0xffFFE5E6),
-            //                   borderRadius: BorderRadius.circular(100),
-            //                 ),
-            //                 child: Image.asset(
-            //                   "assets/fav.png",
-            //                   width: 18,
-            //                   height: 18,
-            //                   fit: BoxFit.contain,
-            //                   color: Color(0xff000000),
-            //                 ),
-            //               ),
-            //             ),
-            //           ],
-            //         ),
-            //       ],
-            //     );
-            //   },
-            // ),
-            SizedBox(height: h * 0.01),
+            // SizedBox(height: h * 0.01),
             // Center(
             //   child: Container(
             //     width: w * 0.35,
@@ -707,13 +741,16 @@ class _DashHomeState extends State<DashHome> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      InkResponse(onTap: (){
-                        _scrollController.animateTo(
-                          0.0, // Scroll to the top
-                          duration: Duration(milliseconds: 300), // Duration for the scroll animation
-                          curve: Curves.easeInOut, // Animation curve
-                        );
-                      },
+                      InkResponse(
+                        onTap: () {
+                          _scrollController.animateTo(
+                            0.0, // Scroll to the top
+                            duration: Duration(
+                                milliseconds:
+                                    300), // Duration for the scroll animation
+                            curve: Curves.easeInOut, // Animation curve
+                          );
+                        },
                         child: Container(
                           padding: EdgeInsets.all(8),
                           margin: EdgeInsets.only(right: 8),

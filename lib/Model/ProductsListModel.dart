@@ -39,7 +39,7 @@ class ProductsList {
   int? salePrice;
   bool? isInWishlist;
   String? image;
-  int? rating;
+  dynamic? rating;
 
   ProductsList(
       {this.id,

@@ -166,6 +166,33 @@ class Userapi {
   }
 
 
+  static Future<ProductsListModel?> getBestSellersList() async {
+    try {
+      final url = Uri.parse("${host}/api/best-seller-products}");
+      final headers = await getheader1();
+      final response = await http.get(
+        url,
+        headers: headers,
+      );
+      // Check the response status code
+      if (response.statusCode == 200) {
+        final jsonResponse = jsonDecode(response.body);
+        print("getBestSellersList response: ${response.body}");
+        // Parse the JSON response into a model
+        return ProductsListModel.fromJson(jsonResponse);
+      } else {
+        // Handle non-200 responses (e.g., 401, 404, etc.)
+        print("Request failed with status: ${response.statusCode}");
+        return null;
+      }
+    } catch (e) {
+      // Catch any exceptions (e.g., network failure, JSON parsing error)
+      print("Error occurred: $e");
+      return null;
+    }
+  }
+
+
   static Future<ProductsDetailsModel?> getProductDetails(String? product_id) async {
     try {
       final url = Uri.parse("$host/api/product-details/$product_id");  // Adjusted the endpoint URL
