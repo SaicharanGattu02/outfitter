@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../Model/UserDetailsModel.dart';
 import '../Services/UserApi.dart';
 import '../utils/CustomAppBar1.dart';
+import '../utils/CustomSnackBar.dart';
 
 
 
@@ -98,15 +99,22 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       email,
       _image
     );
+    setState(() {
+      isLoading = false;
 
-    // Handle the API response
-    if (updatedUser != null) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Profile updated successfully")));
-      // Optionally, you can navigate back or update the UI to reflect changes
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Failed to update profile")));
-    }
+      if (updatedUser?.settings?.success==1) {
+
+        Navigator.pop(context);
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Profile updated successfully")));
+        // Optionally, you can navigate back or update the UI to reflect changes
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Failed to update profile")));
+      }
+    });
+
+
   }
+  final spinkits = Spinkits();
 
   @override
   Widget build(BuildContext context) {
@@ -386,7 +394,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     borderRadius: BorderRadius.circular(7),
                   ),
                   child: Center(
-                    child: Text(
+                    child: isLoading ? spinkits.getFadingCircleSpinner(color: Color(0xffE7C6A0)):
+                    Text(
                       "SAVE",
                       style: TextStyle(
                         color: Color(0xffCAA16C),

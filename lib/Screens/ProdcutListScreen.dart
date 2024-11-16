@@ -91,7 +91,7 @@ int rating=0;
     var h = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      appBar: CustomApp(title: 'ProductList', w: w),
+      appBar: CustomApp(title: 'Product List', w: w),
       key: _scaffoldKey,
       body: SingleChildScrollView(
         child: Padding(
@@ -196,7 +196,7 @@ int rating=0;
                       crossAxisCount: 2,
                       crossAxisSpacing: 8.0,
                       mainAxisSpacing: 8.0,
-                      childAspectRatio: 0.66,
+                      childAspectRatio: 0.6,
                     ),
                     itemCount: product_list.length,
                     itemBuilder: (context, index) {
@@ -319,6 +319,8 @@ int rating=0;
                                               fontFamily: 'RozhaOne',
                                               fontSize: 14,
                                               height: 21 / 14,
+                                              decoration: TextDecoration.lineThrough,
+                                              decorationColor: Color(0xff617C9D),
                                               fontWeight: FontWeight.w400,
                                             ),
                                           ),

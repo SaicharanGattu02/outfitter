@@ -205,7 +205,8 @@ class _DashHomeState extends State<DashHome> {
           ),
         ),
       ),
-      body: SingleChildScrollView(
+      body:
+      SingleChildScrollView(
         controller: _scrollController,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,

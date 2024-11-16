@@ -54,7 +54,7 @@ class _ProfileState extends State<Profile> {
       body: Padding(
         padding: const EdgeInsets.all(24),
         child: isLoading
-            ? Center(child: CircularProgressIndicator())
+            ? Center(child: CircularProgressIndicator(color: Color(0xffE7C6A0),))
             : userDetails == null
             ? Center(child: Text('Failed to load profile'))
             : Column(
@@ -154,16 +154,18 @@ class _ProfileState extends State<Profile> {
                             fit: BoxFit.contain,
                           ),
                           const SizedBox(width: 4),
-                          Text(
-                            userDetails!.data?.email ?? 'example@mail.com',
-                            style: TextStyle(
-                              color: const Color(0xff617C9D),
-                              fontFamily: 'RozhaOne',
-                              fontSize: 16,
-                              height: 21 / 16,
-                              fontWeight: FontWeight.w400,
+                          Expanded(
+                            child: Text(
+                              userDetails!.data?.email ?? 'example@mail.com',
+                              style: TextStyle(
+                                color: const Color(0xff617C9D),
+                                fontFamily: 'RozhaOne',
+                                fontSize: 16,
+                                height: 21 / 16,
+                                fontWeight: FontWeight.w400,
+                              ),
+                              overflow: TextOverflow.ellipsis,
                             ),
-                            overflow: TextOverflow.ellipsis,
                           ),
                         ],
                       ),
@@ -197,18 +199,18 @@ class _ProfileState extends State<Profile> {
                 );
               },
             ),
-            _buildDivider(h),
-            _buildMenuItem(
-              context,
-              iconPath: "assets/notification.png",
-              label: 'Notifications',
-            ),
-            _buildDivider(h),
-            _buildMenuItem(
-              context,
-              iconPath: "assets/history.png",
-              label: 'Payment Methods',
-            ),
+            // _buildDivider(h),
+            // _buildMenuItem(
+            //   context,
+            //   iconPath: "assets/notification.png",
+            //   label: 'Notifications',
+            // ),
+            // _buildDivider(h),
+            // _buildMenuItem(
+            //   context,
+            //   iconPath: "assets/history.png",
+            //   label: 'Payment Methods',
+            // ),
             _buildDivider(h),
             _buildMenuItem(
               context,
@@ -221,18 +223,18 @@ class _ProfileState extends State<Profile> {
                 );
               },
             ),
-            _buildDivider(h),
-            _buildMenuItem(
-              context,
-              iconPath: "assets/helpsupport.png",
-              label: 'Help & Support',
-            ),
-            _buildDivider(h),
-            _buildMenuItem(
-              context,
-              iconPath: "assets/Settings.png",
-              label: 'Settings',
-            ),
+            // _buildDivider(h),
+            // _buildMenuItem(
+            //   context,
+            //   iconPath: "assets/helpsupport.png",
+            //   label: 'Help & Support',
+            // ),
+            // _buildDivider(h),
+            // _buildMenuItem(
+            //   context,
+            //   iconPath: "assets/Settings.png",
+            //   label: 'Settings',
+            // ),
             _buildDivider(h),
             const Spacer(),
             InkResponse(

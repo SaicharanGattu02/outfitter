@@ -109,7 +109,7 @@ class _AddressListScreenState extends State<AddressListScreen> {
                 // Find the id of the address with default_address == true
                 String? defaultAddressId = address_list.firstWhere(
                         (address) => address.default_address == true,
-                    orElse: () => AddressList() // Return a default empty AddressList if no default found
+                    orElse: () => AddressList()
                 ).id;
 
                 return Expanded(
@@ -119,7 +119,7 @@ class _AddressListScreenState extends State<AddressListScreen> {
                       final address = address_list[index];
 
                       return Card(
-                        color: Color(0xffffffff),
+                        color: Color(0xffF3EFE1),
                         child: Padding(
                           padding: EdgeInsets.all(10.0), // Padding inside the card
                           child: Row(
@@ -128,7 +128,7 @@ class _AddressListScreenState extends State<AddressListScreen> {
                             children: [
                               // Use the address id as value and compare with default address id
                               Radio<String>(
-                                activeColor: Colors.blue,
+                                activeColor: Color(0xffCAA16C),
                                 value: address.id ?? "", // Each address's id as the value
                                 groupValue: defaultAddressId,  // Compare with the id of the default address
                                 onChanged: (value) {

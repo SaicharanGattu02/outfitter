@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:outfitter/Authentication/Otp.dart';
 import 'package:outfitter/Authentication/Register.dart';
 import 'package:outfitter/Services/UserApi.dart';
+import 'package:outfitter/utils/CustomSnackBar.dart';
 
 import '../utils/Mywidgets.dart';
 import '../utils/ShakeWidget.dart';
@@ -18,6 +20,7 @@ class _LoginState extends State<Login> {
   final FocusNode _focusNodePhone = FocusNode();
   String _validatePhone = "";
   bool _loading = false;
+  final spinkits=Spinkits();
 
   void _validateFields() {
     setState(() {
@@ -129,6 +132,12 @@ class _LoginState extends State<Login> {
                                 controller: _phoneController,
                                 focusNode: _focusNodePhone,
                                 keyboardType: TextInputType.phone,
+                                inputFormatters: [
+                                  FilteringTextInputFormatter
+                                      .digitsOnly, // Only allow digits
+                                  LengthLimitingTextInputFormatter(
+                                      10), // Limit input to 10 digits
+                                ],
                                 cursorColor: Color(0xffCAA16C),
                                 onTap: () {
                                   setState(() {
@@ -179,6 +188,7 @@ class _LoginState extends State<Login> {
                                 style: TextStyle(
                                   fontSize: 14,
                                   overflow: TextOverflow.ellipsis,
+                                  fontFamily: 'RozhaOne',
                                 ),
                                 textAlignVertical: TextAlignVertical.center,
                               ),
@@ -219,7 +229,8 @@ class _LoginState extends State<Login> {
                               borderRadius: BorderRadius.circular(7),
                             ),
                             child: Center(
-                              child: Text(
+                              child:_loading?spinkits.getFadingCircleSpinner(color: Color(0xffE7C6A0)):
+                              Text(
                                 "LOGIN",
                                 style: TextStyle(
                                   color: Color(0xffCAA16C),

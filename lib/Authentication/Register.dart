@@ -33,6 +33,7 @@ class _RegisterState extends State<Register> {
   String _validatePwd = "";
 
   bool _loading = false;
+  final spinkits=Spinkits();
 
   void _validateFields() {
     setState(() {
@@ -192,7 +193,8 @@ class _RegisterState extends State<Register> {
                         style: TextStyle(
                           fontSize: 14, // Ensure font size fits within height
                           overflow: TextOverflow
-                              .ellipsis, // Add ellipsis for long text
+                              .ellipsis,
+                          fontFamily: 'RozhaOne',
                         ),
                         textAlignVertical: TextAlignVertical.center,
                       ),
@@ -225,9 +227,12 @@ class _RegisterState extends State<Register> {
                       child: TextFormField(
                         controller: _phoneController,
                         focusNode: _focusNodePhone,
+                        keyboardType: TextInputType.phone,
                         inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly,
-                          LengthLimitingTextInputFormatter(10)
+                          FilteringTextInputFormatter
+                              .digitsOnly, // Only allow digits
+                          LengthLimitingTextInputFormatter(
+                              10), // Limit input to 10 digits
                         ],
                         cursorColor: Color(0xffCAA16C),
                         onTap: () {
@@ -289,7 +294,8 @@ class _RegisterState extends State<Register> {
                         style: TextStyle(
                           fontSize: 14, // Ensure font size fits within height
                           overflow: TextOverflow
-                              .ellipsis, // Add ellipsis for long text
+                              .ellipsis,
+                          fontFamily: 'RozhaOne',
                         ),
                         textAlignVertical: TextAlignVertical.center,
                       ),
@@ -385,9 +391,10 @@ class _RegisterState extends State<Register> {
                           ),
                         ),
                         style: TextStyle(
-                          fontSize: 14, // Ensure font size fits within height
+                          fontSize: 14,
                           overflow: TextOverflow
-                              .ellipsis, // Add ellipsis for long text
+                              .ellipsis,
+                          fontFamily: 'RozhaOne',
                         ),
                         textAlignVertical: TextAlignVertical
                             .center, // Vertically center the text
@@ -496,7 +503,8 @@ class _RegisterState extends State<Register> {
                           ),
                         ),
                         style: TextStyle(
-                          fontSize: 14, // Ensure font size fits within height
+                          fontSize: 14,
+                          fontFamily: 'RozhaOne',
                           overflow: TextOverflow
                               .ellipsis, // Add ellipsis for long text
                         ),
@@ -653,7 +661,7 @@ class _RegisterState extends State<Register> {
                     borderRadius: BorderRadius.circular(7),
                   ),
                   child: Center(
-                    child: Text(
+                    child: _loading?spinkits.getFadingCircleSpinner(color: Color(0xffE7C6A0)):Text(
                       "REGISTER",
                       style: TextStyle(
                         color: Color(0xffCAA16C),
