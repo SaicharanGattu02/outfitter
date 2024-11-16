@@ -63,6 +63,14 @@ int rating=0;
     products_list_provider.fetchProductsList(id);
   }
 
+  Future<void> fetchProductDetails(String productId) async {
+    try {
+      var response = await Userapi.getProductDetails(productId);  // Use the passed productId here
+    } catch (e) {
+      throw Exception('Failed to fetch product details: $e');
+    }
+  }
+
 
 
   Future<void> Addwish(String product) async {
@@ -200,6 +208,7 @@ int rating=0;
                             children: [
                               InkResponse(
                                 onTap: () {
+                                  fetchProductDetails(productData.id??"");
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(

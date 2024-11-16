@@ -168,7 +168,7 @@ class Userapi {
 
   static Future<ProductsListModel?> getBestSellersList() async {
     try {
-      final url = Uri.parse("${host}/api/best-seller-products}");
+      final url = Uri.parse("${host}/api/best-seller-products");
       final headers = await getheader1();
       final response = await http.get(
         url,
