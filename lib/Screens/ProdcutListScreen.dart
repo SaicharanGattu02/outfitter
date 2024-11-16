@@ -19,14 +19,10 @@ class ProdcutListScreen extends StatefulWidget {
 
 class _ProdcutListScreenState extends State<ProdcutListScreen> {
   ScrollController _scrollController = ScrollController();
-  // List<Color> colors = [
-  //   Colors.red,
-  //   Colors.blue,
-  //   Colors.green,
-  // ];
 int rating=0;
   List<Color> selectedColors = [];
   String _selectedIndex="";
+  String category_id="";
 
   void _toggleColorSelection(Color color) {
     setState(() {
@@ -117,6 +113,7 @@ int rating=0;
                                 onTap: () {
                                   setState(() {
                                     _selectedIndex = data.id??"";
+                                    category_id = data.id??"";
                                     GetProductcategoryList(data.id ?? "");
                                   });
                                 },
@@ -196,7 +193,7 @@ int rating=0;
                       crossAxisCount: 2,
                       crossAxisSpacing: 8.0,
                       mainAxisSpacing: 8.0,
-                      childAspectRatio: 0.6,
+                      childAspectRatio: 0.575,
                     ),
                     itemCount: product_list.length,
                     itemBuilder: (context, index) {
@@ -212,8 +209,7 @@ int rating=0;
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) =>
-                                              ProductDetailsScreen(productid: productData.id.toString())));
+                                          builder: (context) => ProductDetailsScreen(productid: productData.id??"",category_id: category_id,)));
                                 },
                                 child: Container(
                                   padding: const EdgeInsets.all(8.0),
@@ -283,20 +279,19 @@ int rating=0;
                                           fontWeight: FontWeight.w400,
                                         ),
                                       ),
-                                      const SizedBox(height: 10),
-                                      rating > 0
-                                          ? Row(
-                                        children: List.generate(5, (starIndex) {
-                                          int ratingValue = int.tryParse(productData.rating.toString()) ?? 0;
-
-                                          return Icon(
-                                            starIndex < ratingValue ? Icons.star : Icons.star_border,
-                                            color: Color(0xffF79009),
-                                            size: 14,
-                                          );
-                                        }),
-                                      )
-                                          : SizedBox.shrink(),  // If rating is 0 or less, no space will be taken
+                                     if( rating > 0)...[
+                                       const SizedBox(height: 10),
+                                       Row(
+                                         children: List.generate(5, (starIndex) {
+                                           int ratingValue = int.tryParse(productData.rating.toString()) ?? 0;
+                                           return Icon(
+                                             starIndex < ratingValue ? Icons.star : Icons.star_border,
+                                             color: Color(0xffF79009),
+                                             size: 14,
+                                           );
+                                         }),
+                                       ),
+                                     ],
 
                                       const SizedBox(height: 10),
                                       Row(

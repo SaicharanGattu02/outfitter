@@ -40,9 +40,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   Widget build(BuildContext context) {
     var w = MediaQuery.of(context).size.width;
     var h = MediaQuery.of(context).size.height;
-
     return Scaffold(
-      appBar: CustomApp(title: "Cart", w: w),
+      appBar: CustomApp(title: "Checkout", w: w),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16),

@@ -28,7 +28,6 @@ class ProductListProvider with ChangeNotifier {
           (p) => p.id == productId,
       orElse: () => ProductsList(id: "-1", title: "", image: "", mrp: 0, salePrice: 0, isInWishlist: false),
     );
-
     // Check if a valid product was found by confirming the id is not the fallback -1
     if (product != null && product.id != -1) {
       product.isInWishlist = isInWishlist; // Update the wishlist status

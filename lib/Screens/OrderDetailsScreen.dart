@@ -155,11 +155,6 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                 itemCount: orderDetail?.items?.length ?? 0,  // Handle null safely
                 itemBuilder: (context, index) {
                   final item = orderDetail?.items?[index];
-                  print("orderDetail>>>{$item}");
-                  if (item == null) {
-                    return SizedBox.shrink();
-                  }
-
                   return Container(
                     width: w,
                     padding: EdgeInsets.all(16),
@@ -181,7 +176,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                               ),
                               child: Center(
                                 child: Image.asset(
-                                  item.product?.image ?? "",  // Use default if null
+                                  item?.product?.image ?? "",
                                   width: w * 0.2,
                                   height: h * 0.1,
                                 ),
@@ -205,7 +200,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                item.product?.title ?? "",  // Use default if null
+                                item?.product?.title ?? "",  // Use default if null
                                 style: TextStyle(
                                   color: Color(0xff181725),
                                   fontFamily: 'RozhaOne',
@@ -218,10 +213,9 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                               Row(
                                 children: List.generate(5, (starIndex) {
                                   int rating = 0;
-                                  if (item.product?.rating != null) {
-                                    rating = int.tryParse(item.product!.rating.toString()) ?? 0;
+                                  if (item?.product?.rating != null) {
+                                    rating = int.tryParse(item?.product?.rating??0.toString()) ?? 0;
                                   }
-
                                   return Icon(
                                     starIndex < rating
                                         ? Icons.star
@@ -235,7 +229,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                               Row(
                                 children: [
                                   Text(
-                                    item.product?.salePrice.toString() ?? "",  // Use default if null
+                                    item?.product?.salePrice.toString() ?? "",  // Use default if null
                                     style: TextStyle(
                                       color: Color(0xff181725),
                                       fontFamily: 'RozhaOne',
@@ -259,7 +253,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                                   ),
                                   SizedBox(width: w * 0.004),
                                   Text(
-                                    item.product?.mrp.toString() ?? "",  // Use default if null
+                                    item?.product?.mrp.toString() ?? "",  // Use default if null
                                     style: TextStyle(
                                       color: Color(0xffED1C24),
                                       fontFamily: 'RozhaOne',

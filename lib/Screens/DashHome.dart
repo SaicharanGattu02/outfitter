@@ -11,6 +11,7 @@ import '../utils/CustomSnackBar.dart';
 import 'ProdcutListScreen.dart';
 import 'Orders.dart';
 import 'Profile.dart';
+import 'SearchScreen.dart';
 import 'WishList.dart';
 
 class DashHome extends StatefulWidget {
@@ -133,7 +134,7 @@ class _DashHomeState extends State<DashHome> {
                   ] else ...[
                     InkWell(
                       onTap: () {
-                        // Handle search icon tap
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => Searchscreen(),));
                       },
                       child: Container(
                         alignment: Alignment.center,

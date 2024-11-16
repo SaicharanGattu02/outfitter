@@ -760,5 +760,25 @@ class Userapi {
     }
   }
 
+ static Future<ProductsListModel?> fetchProducts(String query) async {
+   try {
+    final url = Uri.parse('${host}/api/search-products?q=$query');
+    final headers = await getheader1();
+    final response = await http.get(url, headers:headers);
+    if (response.statusCode == 200) {
+      final jsonResponse = jsonDecode(response.body);
+      print("getOrdersList response: ${response.body}");
+      return ProductsListModel.fromJson(jsonResponse);
+    } else {
+      print("Request failed with status: ${response.statusCode}");
+      return null;
+    }
+   } catch (e) {
+     // Catch any exceptions (e.g., network failure, JSON parsing error)
+     print("Error occurred: $e");
+     return null;
+   }
+  }
+
 
 }
