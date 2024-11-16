@@ -25,128 +25,133 @@ class ProductsDetailsModel {
 
 class ProductDetails {
   String? id;
-  bool? isInWishlist;
-  int? rating;
-  String? title;
-  String? category;
-  List<String>? colors;
-  String? brand;
-  int? mrp;
-  int? salePrice;
-  String? postedBy;
-  String? description;
-  String? productDetails;
-  String? shippingDetails;
-  List<Review>? reviews;
-  List<Sleeve>? sleeve;
-  List<Neck>? neck;
-  List<Placket>? placket;
-  List<Pleat>? pleat;
-  String? image;
-  List<String>? size;
+  bool isInWishlist; // Default to false if null
+  int rating; // Default to 0 if null
+  String title;
+  String category;
+  List<String> colors; // Default to an empty list if null
+  String brand;
+  int mrp; // Default to 0 if null
+  int salePrice; // Default to 0 if null
+  String postedBy;
+  String description;
+  String productDetails;
+  String shippingDetails;
+  List<Review> reviews; // Default to an empty list if null
+  List<Sleeve> sleeve; // Default to an empty list if null
+  List<Neck> neck; // Default to an empty list if null
+  List<Placket> placket; // Default to an empty list if null
+  List<Pleat> pleat; // Default to an empty list if null
+  String image;
+  List<String> size; // Default to an empty list if null
 
-  ProductDetails(
-      {this.id,
-        this.isInWishlist,
-        this.rating,
-        this.title,
-        this.category,
-        this.colors,
-        this.brand,
-        this.mrp,
-        this.salePrice,
-        this.postedBy,
-        this.description,
-        this.productDetails,
-        this.shippingDetails,
-        this.reviews,
-        this.sleeve,
-        this.neck,
-        this.placket,
-        this.pleat,
-        this.image,
-        this.size});
+  ProductDetails({
+    this.id,
+    bool? isInWishlist,
+    int? rating,
+    String? title,
+    String? category,
+    List<String>? colors,
+    String? brand,
+    int? mrp,
+    int? salePrice,
+    String? postedBy,
+    String? description,
+    String? productDetails,
+    String? shippingDetails,
+    List<Review>? reviews,
+    List<Sleeve>? sleeve,
+    List<Neck>? neck,
+    List<Placket>? placket,
+    List<Pleat>? pleat,
+    String? image,
+    List<String>? size,
+  })  : isInWishlist = isInWishlist ?? false, // Default to false
+        rating = rating ?? 0, // Default to 0
+        title = title ?? '', // Default to empty string
+        category = category ?? '', // Default to empty string
+        colors = colors ?? [], // Default to empty list
+        brand = brand ?? '', // Default to empty string
+        mrp = mrp ?? 0, // Default to 0
+        salePrice = salePrice ?? 0, // Default to 0
+        postedBy = postedBy ?? '', // Default to empty string
+        description = description ?? '', // Default to empty string
+        productDetails = productDetails ?? '', // Default to empty string
+        shippingDetails = shippingDetails ?? '', // Default to empty string
+        reviews = reviews ?? [], // Default to empty list
+        sleeve = sleeve ?? [], // Default to empty list
+        neck = neck ?? [], // Default to empty list
+        placket = placket ?? [], // Default to empty list
+        pleat = pleat ?? [], // Default to empty list
+        image = image ?? '', // Default to empty string
+        size = size ?? []; // Default to empty list
 
-  ProductDetails.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    isInWishlist = json['is_in_wishlist'];
-    rating = json['rating'];
-    title = json['title'];
-    category = json['category'];
-    colors = json['colors'].cast<String>();
-    brand = json['brand'];
-    mrp = json['mrp'];
-    salePrice = json['sale_price'];
-    postedBy = json['posted_by'];
-    description = json['description'];
-    productDetails = json['product_details'];
-    shippingDetails = json['shipping_details'];
-    if (json['reviews'] != null) {
-      reviews = <Review>[];
-      json['reviews'].forEach((v) {
-        reviews!.add(new Review.fromJson(v));
-      });
-    }
-    if (json['sleeve'] != null) {
-      sleeve = <Sleeve>[];
-      json['sleeve'].forEach((v) {
-        sleeve!.add(new Sleeve.fromJson(v));
-      });
-    }
-    if (json['neck'] != null) {
-      neck = <Neck>[];
-      json['neck'].forEach((v) {
-        neck!.add(new Neck.fromJson(v));
-      });
-    }
-    if (json['placket'] != null) {
-      placket = <Placket>[];
-      json['placket'].forEach((v) {
-        placket!.add(new Placket.fromJson(v));
-      });
-    }
-    if (json['pleat'] != null) {
-      pleat = <Pleat>[];
-      json['pleat'].forEach((v) {
-        pleat!.add(new Pleat.fromJson(v));
-      });
-    }
-    image = json['image'];
-    size = json['size'].cast<String>();
-  }
+  // Handling JSON conversion: fromJson
+  ProductDetails.fromJson(Map<String, dynamic> json)
+      : id = json['id'] ?? '',
+        isInWishlist = json['is_in_wishlist'] ?? false,
+        rating = json['rating'] ?? 0,
+        title = json['title'] ?? '',
+        category = json['category'] ?? '',
+        colors = json['colors'] != null ? List<String>.from(json['colors']) : [],
+        brand = json['brand'] ?? '',
+        mrp = json['mrp'] ?? 0,
+        salePrice = json['sale_price'] ?? 0,
+        postedBy = json['posted_by'] ?? '',
+        description = json['description'] ?? '',
+        productDetails = json['product_details'] ?? '',
+        shippingDetails = json['shipping_details'] ?? '',
+        reviews = json['reviews'] != null
+            ? (json['reviews'] as List).map((v) => Review.fromJson(v)).toList()
+            : [],
+        sleeve = json['sleeve'] != null
+            ? (json['sleeve'] as List).map((v) => Sleeve.fromJson(v)).toList()
+            : [],
+        neck = json['neck'] != null
+            ? (json['neck'] as List).map((v) => Neck.fromJson(v)).toList()
+            : [],
+        placket = json['placket'] != null
+            ? (json['placket'] as List).map((v) => Placket.fromJson(v)).toList()
+            : [],
+        pleat = json['pleat'] != null
+            ? (json['pleat'] as List).map((v) => Pleat.fromJson(v)).toList()
+            : [],
+        image = json['image'] ?? '',
+        size = json['size'] != null ? List<String>.from(json['size']) : [];
 
+  // Handling JSON conversion: toJson
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['is_in_wishlist'] = this.isInWishlist;
-    data['rating'] = this.rating;
-    data['title'] = this.title;
-    data['category'] = this.category;
-    data['colors'] = this.colors;
-    data['brand'] = this.brand;
-    data['mrp'] = this.mrp;
-    data['sale_price'] = this.salePrice;
-    data['posted_by'] = this.postedBy;
-    data['description'] = this.description;
-    data['product_details'] = this.productDetails;
-    data['shipping_details'] = this.shippingDetails;
-    if (this.reviews != null) {
-      data['reviews'] = this.reviews!.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['is_in_wishlist'] = isInWishlist;
+    data['rating'] = rating;
+    data['title'] = title;
+    data['category'] = category;
+    data['colors'] = colors;
+    data['brand'] = brand;
+    data['mrp'] = mrp;
+    data['sale_price'] = salePrice;
+    data['posted_by'] = postedBy;
+    data['description'] = description;
+    data['product_details'] = productDetails;
+    data['shipping_details'] = shippingDetails;
+    if (reviews.isNotEmpty) {
+      data['reviews'] = reviews.map((v) => v.toJson()).toList();
     }
-    if (this.sleeve != null) {
-      data['sleeve'] = this.sleeve!.map((v) => v.toJson()).toList();
+    if (sleeve.isNotEmpty) {
+      data['sleeve'] = sleeve.map((v) => v.toJson()).toList();
     }
-    if (this.neck != null) {
-      data['neck'] = this.neck!.map((v) => v.toJson()).toList();
+    if (neck.isNotEmpty) {
+      data['neck'] = neck.map((v) => v.toJson()).toList();
     }
-    if (this.placket != null) {
-      data['placket'] = this.placket!.map((v) => v.toJson()).toList();
+    if (placket.isNotEmpty) {
+      data['placket'] = placket.map((v) => v.toJson()).toList();
     }
-    if (this.pleat != null) {
-      data['pleat'] = this.pleat!.map((v) => v.toJson()).toList();
+    if (pleat.isNotEmpty) {
+      data['pleat'] = pleat.map((v) => v.toJson()).toList();
     }
-    data['image'] = this.image;
-    data['size'] = this.size;
+    data['image'] = image;
+    data['size'] = size;
     return data;
   }
 }

@@ -1,37 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:outfitter/Screens/ProductDetailsScreen.dart';
-import 'package:outfitter/Screens/CustomizeBar.dart';
 import 'package:outfitter/Screens/Filters.dart';
 import 'package:outfitter/Screens/UploderProfile.dart';
 import 'package:outfitter/providers/ProductListProvider.dart';
 import 'package:provider/provider.dart';
-import '../Model/ProductsListModel.dart';
 import '../providers/CategoriesProvider.dart';
 import '../providers/WishlistProvider.dart';
 import '../utils/CustomAppBar1.dart';
-import '../Model/CategoriesModel.dart';
 import '../Services/UserApi.dart';
 
-class Home extends StatefulWidget {
+class ProdcutListScreen extends StatefulWidget {
   final String selectid;
-   Home({super.key, required this.selectid});
+  ProdcutListScreen({super.key, required this.selectid});
 
   @override
-  State<Home> createState() => _HomeState();
+  State<ProdcutListScreen> createState() => _ProdcutListScreenState();
 }
 
-class _HomeState extends State<Home> {
+class _ProdcutListScreenState extends State<ProdcutListScreen> {
   ScrollController _scrollController = ScrollController();
-  final List<Map<String, String>> grid = [
-    {"image": 'assets/hoodie.png', 'name': 'HOODIE'},
-    {"image": 'assets/jeans.png', 'name': 'JEANS'},
-    {"image": 'assets/sleaves.png', 'name': 'HALF SLEEVES'},
-    {"image": 'assets/cargo.png', 'name': 'CARGO'},
-    {"image": 'assets/shirt.png', 'name': 'SHIRT'},
-    {"image": 'assets/formals.png', 'name': 'FORMALS'},
-    {"image": 'assets/polo.png', 'name': 'POLO'},
-    {"image": 'assets/trousar.png', 'name': 'TROUSERS'},
-  ];
   List<Color> colors = [
     Colors.red,
     Colors.blue,
@@ -51,6 +38,7 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     _selectedIndex = widget.selectid;
+    GetProductcategoryList(widget.selectid);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _scrollToSelectedIndex();
     });
@@ -143,7 +131,7 @@ class _HomeState extends State<Home> {
                                     padding: const EdgeInsets.all(8.0),
                                     child: Center(
                                       child: Image.network(
-                                        data?.image ?? '',
+                                        data.image ?? '',
                                         // Default to an empty string if image is null
                                         width: 64,
                                         height: 64,
@@ -212,12 +200,11 @@ class _HomeState extends State<Home> {
                             children: [
                               InkResponse(
                                 onTap: () {
-                                  // Navigator.push(
-                                  //   context,
-                                  //   MaterialPageRoute(
-                                  //     builder: (context) => Home(),
-                                  //   ),
-                                  // );
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              ProductDetailsScreen(productid: productData.id.toString())));
                                 },
                                 child: Container(
                                   padding: const EdgeInsets.all(8.0),
@@ -233,26 +220,12 @@ class _HomeState extends State<Home> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Center(
-                                        child: InkWell(
-                                          onTap: () {
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        ProductDetailsScreen(
-                                                          productid: productData
-                                                              .id
-                                                              .toString(),
-                                                          category_id: "",
-                                                        )));
-                                          },
-                                          child: Container(
-                                            child: Image.network(
-                                              productData.image ?? "",
-                                              fit: BoxFit.contain,
-                                              width: w * 0.3,
-                                              height: h * 0.2,
-                                            ),
+                                        child: Container(
+                                          child: Image.network(
+                                            productData.image ?? "",
+                                            fit: BoxFit.contain,
+                                            width: w * 0.3,
+                                            height: h * 0.2,
                                           ),
                                         ),
                                       ),

@@ -5,7 +5,7 @@ import 'package:outfitter/Screens/UploderProfile.dart';
 import 'package:outfitter/providers/CategoriesProvider.dart';
 import 'package:provider/provider.dart';
 
-import 'Home.dart';
+import 'ProdcutListScreen.dart';
 import 'Orders.dart';
 import 'Profile.dart';
 import 'WishList.dart';
@@ -247,7 +247,7 @@ class _DashHomeState extends State<DashHome> {
                     InkWell(
                       onTap: () {
                         Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => Home(selectid: categorielist.id??"")));
+                            MaterialPageRoute(builder: (context) => ProdcutListScreen(selectid: categorielist.id??"")));
                       },
                       child: Container(
                         decoration: BoxDecoration(

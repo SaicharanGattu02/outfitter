@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:outfitter/Screens/OrderDetails.dart';
+import 'package:outfitter/Screens/OrderDetailsScreen.dart';
 
 import '../Model/OrdersListModel.dart';
 import '../Services/UserApi.dart';
@@ -146,7 +146,7 @@ class _OrderListScreenState extends State<OrderListScreen> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => OrderDetail(id: item.id.toString(),)));
+                                    builder: (context) => OrderDetailScreen(id: item.id.toString(),)));
                           },
                           child: Container(
                             width: w,

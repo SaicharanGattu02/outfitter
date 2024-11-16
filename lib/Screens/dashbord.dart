@@ -6,7 +6,7 @@ import 'package:outfitter/Screens/Profile.dart';
 import 'package:outfitter/Screens/WishList.dart';
 
 
-import 'Home.dart';
+import 'ProdcutListScreen.dart';
 
 
 class Dashbord extends StatefulWidget {

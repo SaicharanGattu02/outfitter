@@ -3,15 +3,15 @@ import 'package:outfitter/Services/UserApi.dart';
 import '../Model/OrderDetailsModel.dart';
 import '../utils/CustomAppBar1.dart';
 
-class OrderDetail extends StatefulWidget {
+class OrderDetailScreen extends StatefulWidget {
   String id;
-  OrderDetail({super.key, required this.id});
+  OrderDetailScreen({super.key, required this.id});
 
   @override
-  State<OrderDetail> createState() => _OrderDetailState();
+  State<OrderDetailScreen> createState() => _OrderDetailScreenState();
 }
 
-class _OrderDetailState extends State<OrderDetail> {
+class _OrderDetailScreenState extends State<OrderDetailScreen> {
   bool isLoading = true;
 
   @override
