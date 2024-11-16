@@ -19,18 +19,29 @@ class ProdcutListScreen extends StatefulWidget {
 
 class _ProdcutListScreenState extends State<ProdcutListScreen> {
   ScrollController _scrollController = ScrollController();
-  String selectedSort = 'Price (Low to High)';
-
+  String selectedSort = '';
 
   final List<String> sortOptions = [
     'Price (Low to High)',
     'Price (High to Low)',
     'Popularity',
   ];
-int rating=0;
+
+  final Map<String, String> sortOptionToValue = {
+    'Price (Low to High)': 'min-max',
+    'Price (High to Low)': 'max-min',
+    'Popularity': 'best-seller',
+  };
+  // Initial range values
+  double minPrice = 500;
+  double maxPrice = 10000;
+  double selectedMinPrice = 500;
+  double selectedMaxPrice = 2000;
+
+  int rating = 0;
   List<Color> selectedColors = [];
-  String _selectedIndex="";
-  String category_id="";
+  String _selectedIndex = "";
+  String category_id = "";
 
   void _toggleColorSelection(Color color) {
     setState(() {
@@ -42,40 +53,41 @@ int rating=0;
   @override
   void initState() {
     _selectedIndex = widget.selectid;
-    GetProductcategoryList(widget.selectid);
+    GetProductcategoryList(widget.selectid, "","","");
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _scrollToSelectedIndex();
     });
     super.initState();
   }
+
   void _scrollToSelectedIndex() {
     final categoriesList = context.read<CategoriesProvider>().categoriesList;
-    final selectedIndex = categoriesList.indexWhere((category) => category.id == _selectedIndex);
+    final selectedIndex =
+        categoriesList.indexWhere((category) => category.id == _selectedIndex);
 
     if (selectedIndex != -1) {
       // Assuming each item has a width of 96.0 (adjust as needed based on actual layout)
-      double position = selectedIndex * (96.0 + 16.0);  // 96.0 for item width + 16.0 for horizontal padding
+      double position = selectedIndex *
+          (96.0 + 16.0); // 96.0 for item width + 16.0 for horizontal padding
       _scrollController.animateTo(position,
           duration: Duration(milliseconds: 300), curve: Curves.easeInOut);
     }
   }
 
-
-  Future<void> GetProductcategoryList(String id) async {
+  Future<void> GetProductcategoryList(String id, selectedSort,filterminprice,filtermaxprice) async {
     final products_list_provider =
         Provider.of<ProductListProvider>(context, listen: false);
-    products_list_provider.fetchProductsList(id);
+    products_list_provider.fetchProductsList(id, selectedSort,filterminprice,filtermaxprice);
   }
 
   Future<void> fetchProductDetails(String productId) async {
     try {
-      var response = await Userapi.getProductDetails(productId);  // Use the passed productId here
+      var response = await Userapi.getProductDetails(
+          productId); // Use the passed productId here
     } catch (e) {
       throw Exception('Failed to fetch product details: $e');
     }
   }
-
-
 
   Future<void> Addwish(String product) async {
     var res = await Userapi.AddWishList(product);
@@ -120,9 +132,9 @@ int rating=0;
                               InkResponse(
                                 onTap: () {
                                   setState(() {
-                                    _selectedIndex = data.id??"";
-                                    category_id = data.id??"";
-                                    GetProductcategoryList(data.id ?? "");
+                                    _selectedIndex = data.id ?? "";
+                                    category_id = data.id ?? "";
+                                    GetProductcategoryList(data.id ?? "", "","","");
                                   });
                                 },
                                 child: Container(
@@ -130,7 +142,7 @@ int rating=0;
                                   height: 80,
                                   decoration: BoxDecoration(
                                       border: Border.all(
-                                        color: _selectedIndex ==  data.id
+                                        color: _selectedIndex == data.id
                                             ? Color(0xffCAA16C)
                                             : Colors.transparent,
                                         width: 3,
@@ -206,6 +218,7 @@ int rating=0;
                     itemCount: product_list.length,
                     itemBuilder: (context, index) {
                       final productData = product_list[index];
+
                       print("Consumer product name:${productData.title}");
                       return Column(
                         children: [
@@ -213,11 +226,15 @@ int rating=0;
                             children: [
                               InkResponse(
                                 onTap: () {
-                                  fetchProductDetails(productData.id??"");
+                                  fetchProductDetails(productData.id ?? "");
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => ProductDetailsScreen(productid: productData.id??"",category_id: category_id,)));
+                                          builder: (context) =>
+                                              ProductDetailsScreen(
+                                                productid: productData.id ?? "",
+                                                category_id: category_id,
+                                              )));
                                 },
                                 child: Container(
                                   padding: const EdgeInsets.all(8.0),
@@ -289,19 +306,25 @@ int rating=0;
                                         ),
                                         maxLines: 2,
                                       ),
-                                     if( rating > 0)...[
-                                       const SizedBox(height: 10),
-                                       Row(
-                                         children: List.generate(5, (starIndex) {
-                                           int ratingValue = int.tryParse(productData.rating.toString()) ?? 0;
-                                           return Icon(
-                                             starIndex < ratingValue ? Icons.star : Icons.star_border,
-                                             color: Color(0xffF79009),
-                                             size: 14,
-                                           );
-                                         }),
-                                       ),
-                                     ],
+                                      if (rating > 0) ...[
+                                        const SizedBox(height: 10),
+                                        Row(
+                                          children:
+                                              List.generate(5, (starIndex) {
+                                            int ratingValue = int.tryParse(
+                                                    productData.rating
+                                                        .toString()) ??
+                                                0;
+                                            return Icon(
+                                              starIndex < ratingValue
+                                                  ? Icons.star
+                                                  : Icons.star_border,
+                                              color: Color(0xffF79009),
+                                              size: 14,
+                                            );
+                                          }),
+                                        ),
+                                      ],
 
                                       const SizedBox(height: 10),
                                       Row(
@@ -324,8 +347,10 @@ int rating=0;
                                               fontFamily: 'RozhaOne',
                                               fontSize: 14,
                                               height: 21 / 14,
-                                              decoration: TextDecoration.lineThrough,
-                                              decorationColor: Color(0xff617C9D),
+                                              decoration:
+                                                  TextDecoration.lineThrough,
+                                              decorationColor:
+                                                  Color(0xff617C9D),
                                               fontWeight: FontWeight.w400,
                                             ),
                                           ),
@@ -420,367 +445,6 @@ int rating=0;
                   );
                 },
               ),
-              // SizedBox(height: h * 0.01),
-              // Center(
-              //   child:
-              //   Container(
-              //     width: w * 0.35,
-              //     padding: EdgeInsets.all(12),
-              //     decoration: BoxDecoration(
-              //         color: Color(0xff110B0F),
-              //         borderRadius: BorderRadius.circular(6)),
-              //     child: Center(
-              //       child: Text(
-              //         "SHOW MORE",
-              //         style: TextStyle(
-              //           color: Color(0xffE7C6A0),
-              //           fontFamily: 'RozhaOne',
-              //           fontSize: 16,
-              //           height: 21.06 / 16,
-              //           fontWeight: FontWeight.w400,
-              //         ),
-              //         textAlign: TextAlign.center,
-              //       ),
-              //     ),
-              //   ),
-              // ),
-              // SizedBox(height: h * 0.04),
-              // Center(
-              //   child: Text(
-              //     "Recently Viewed",
-              //     style: TextStyle(
-              //       color: Color(0xff110B0F),
-              //       fontFamily: 'RozhaOne',
-              //       fontSize: 24,
-              //       height: 32 / 24,
-              //       fontWeight: FontWeight.w400,
-              //     ),
-              //   ),
-              // ),
-              // SizedBox(height: h * 0.02),
-              // SizedBox(height: h * 0.02),
-              // GridView.builder(
-              //   physics: NeverScrollableScrollPhysics(),
-              //   shrinkWrap: true,
-              //   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              //     crossAxisCount: 2,
-              //     crossAxisSpacing: 8.0,
-              //     mainAxisSpacing: 8.0,
-              //     childAspectRatio: 0.46,
-              //   ),
-              //   itemCount: grid.length,
-              //   itemBuilder: (context, index) {
-              //     return Column(
-              //       children: [
-              //         Stack(
-              //           children: [
-              //             InkResponse(
-              //               onTap: () {
-              //                 // Navigator.push(
-              //                 //   context,
-              //                 //   MaterialPageRoute(
-              //                 //     builder: (context) => Home(),
-              //                 //   ),
-              //                 // );
-              //               },
-              //               child: Container(
-              //                 padding: const EdgeInsets.all(8.0),
-              //                 decoration: BoxDecoration(
-              //                   border: Border.all(
-              //                     color: Color(0xffEEF2F6),
-              //                     width: 1,
-              //                   ),
-              //                 ),
-              //                 child: Column(
-              //                   mainAxisAlignment: MainAxisAlignment.start,
-              //                   crossAxisAlignment: CrossAxisAlignment.start,
-              //                   children: [
-              //                     Center(
-              //                       child: Container(
-              //                           child: Image.asset(
-              //                         grid[index]['image']!,
-              //                         fit: BoxFit.contain,
-              //                         width: w * 0.3,
-              //                         height: h * 0.2,
-              //                       )),
-              //                     ),
-              //                     const SizedBox(height: 15),
-              //                     Row(
-              //                       children: [
-              //                         CircleAvatar(
-              //                           radius: 12,
-              //                           child: ClipOval(
-              //                             child: Image.asset(
-              //                               "assets/postedBY.png",
-              //                               fit: BoxFit.contain,
-              //                             ),
-              //                           ),
-              //                         ),
-              //                         SizedBox(width: w * 0.03),
-              //                         Text(
-              //                           "POSTED BY",
-              //                           style: TextStyle(
-              //                             color: Color(0xff617C9D),
-              //                             fontFamily: 'RozhaOne',
-              //                             fontSize: 14,
-              //                             height: 19.36 / 14,
-              //                             fontWeight: FontWeight.w400,
-              //                           ),
-              //                         ),
-              //                       ],
-              //                     ),
-              //                     const SizedBox(height: 10),
-              //                     Text(
-              //                       "Straight Regular Jeans",
-              //                       style: TextStyle(
-              //                         color: Color(0xff121926),
-              //                         fontFamily: 'RozhaOne',
-              //                         fontSize: 16,
-              //                         height: 24 / 16,
-              //                         fontWeight: FontWeight.w400,
-              //                       ),
-              //                     ),
-              //                     const SizedBox(height: 10),
-              //                     Row(
-              //                       children: [
-              //                         Text(
-              //                           "₹2340.00",
-              //                           style: TextStyle(
-              //                             color: Color(0xff121926),
-              //                             fontFamily: 'RozhaOne',
-              //                             fontSize: 14,
-              //                             height: 21 / 14,
-              //                             fontWeight: FontWeight.w400,
-              //                           ),
-              //                         ),
-              //                         SizedBox(width: w * 0.03),
-              //                         Text(
-              //                           "₹2340.00",
-              //                           style: TextStyle(
-              //                             color: Color(0xff617C9D),
-              //                             fontFamily: 'RozhaOne',
-              //                             fontSize: 14,
-              //                             height: 21 / 14,
-              //                             fontWeight: FontWeight.w400,
-              //                           ),
-              //                         ),
-              //                       ],
-              //                     ),
-              //                     const SizedBox(height: 10),
-              //                     Row(
-              //                       mainAxisAlignment: MainAxisAlignment.start,
-              //                       children: colors.map((color) {
-              //                         return GestureDetector(
-              //                           onTap: () =>
-              //                               _toggleColorSelection(color),
-              //                           child: Container(
-              //                             padding: EdgeInsets.all(3),
-              //                             decoration: BoxDecoration(
-              //                               borderRadius:
-              //                                   BorderRadius.circular(100),
-              //                               border: Border.all(
-              //                                 color:
-              //                                     selectedColors.contains(color)
-              //                                         ? Colors.black
-              //                                         : Colors.transparent,
-              //                                 width: 0.5,
-              //                               ),
-              //                             ),
-              //                             child: Container(
-              //                               width: 20,
-              //                               height: 20,
-              //                               decoration: BoxDecoration(
-              //                                 color:
-              //                                     // selectedColors.contains(color)
-              //                                     //     ?
-              //                                     color,
-              //                                 // : Colors.grey[300],
-              //                                 borderRadius:
-              //                                     BorderRadius.circular(100),
-              //                               ),
-              //                             ),
-              //                           ),
-              //                         );
-              //                       }).toList(),
-              //                     ),
-              //                   ],
-              //                 ),
-              //               ),
-              //             ),
-              //             Positioned(
-              //               top: 8,
-              //               right: 8,
-              //               child: Container(
-              //                 padding: const EdgeInsets.all(8),
-              //                 decoration: BoxDecoration(
-              //                   color: Color(0xffFFE5E6),
-              //                   borderRadius: BorderRadius.circular(100),
-              //                 ),
-              //                 child: Image.asset(
-              //                   "assets/fav.png",
-              //                   width: 18,
-              //                   height: 18,
-              //                   fit: BoxFit.contain,
-              //                   color: Color(0xff000000),
-              //                 ),
-              //               ),
-              //             ),
-              //           ],
-              //         ),
-              //       ],
-              //     );
-              //   },
-              // ),
-              // SizedBox(height: h * 0.04),
-              // Container(
-              //   margin: EdgeInsets.only(left: 10, right: 10),
-              //   padding: EdgeInsets.only(top: 24, bottom: 24),
-              //   decoration: BoxDecoration(
-              //       color: Color(0xffF6F6F6),
-              //       borderRadius: BorderRadius.circular(6)),
-              //   child: Column(
-              //     mainAxisAlignment: MainAxisAlignment.center,
-              //     crossAxisAlignment: CrossAxisAlignment.center,
-              //     children: [
-              //       Image.asset(
-              //         "assets/shipping.png",
-              //         width: w * 0.1,
-              //         height: h * 0.1,
-              //       ),
-              //       Text(
-              //         "Fast Shipping",
-              //         style: TextStyle(
-              //           color: Color(0xff110B0F),
-              //           fontFamily: 'RozhaOne',
-              //           fontSize: 18,
-              //           height: 28 / 18,
-              //           fontWeight: FontWeight.w400,
-              //         ),
-              //       ),
-              //       SizedBox(
-              //         height: w * 0.002,
-              //       ),
-              //       Text(
-              //         "We offer Rush and Expedited options if you need it fast",
-              //         style: TextStyle(
-              //           color: Color(0xff697586),
-              //           fontFamily: 'RozhaOne',
-              //           fontSize: 15,
-              //           height: 24 / 15,
-              //           fontWeight: FontWeight.w400,
-              //         ),
-              //         textAlign: TextAlign.center,
-              //       ),
-              //       Image.asset(
-              //         "assets/support.png",
-              //         width: w * 0.1,
-              //         height: h * 0.1,
-              //       ),
-              //       Text(
-              //         "24x7 SUPPORT",
-              //         style: TextStyle(
-              //           color: Color(0xff110B0F),
-              //           fontFamily: 'RozhaOne',
-              //           fontSize: 18,
-              //           height: 28 / 18,
-              //           fontWeight: FontWeight.w400,
-              //         ),
-              //       ),
-              //       SizedBox(
-              //         height: w * 0.002,
-              //       ),
-              //       Text(
-              //         "24 hours a day, 7 days a week",
-              //         style: TextStyle(
-              //           color: Color(0xff697586),
-              //           fontFamily: 'RozhaOne',
-              //           fontSize: 15,
-              //           height: 24 / 15,
-              //           fontWeight: FontWeight.w400,
-              //         ),
-              //         textAlign: TextAlign.center,
-              //       ),
-              //       Image.asset(
-              //         "assets/card.png",
-              //         width: w * 0.1,
-              //         height: h * 0.1,
-              //       ),
-              //       Text(
-              //         "Flexible Payments",
-              //         style: TextStyle(
-              //           color: Color(0xff110B0F),
-              //           fontFamily: 'RozhaOne',
-              //           fontSize: 18,
-              //           height: 28 / 18,
-              //           fontWeight: FontWeight.w400,
-              //         ),
-              //       ),
-              //       SizedBox(
-              //         height: w * 0.002,
-              //       ),
-              //       Text(
-              //         "Pay in a variety of ways",
-              //         style: TextStyle(
-              //           color: Color(0xff697586),
-              //           fontFamily: 'RozhaOne',
-              //           fontSize: 15,
-              //           height: 24 / 15,
-              //           fontWeight: FontWeight.w400,
-              //         ),
-              //         textAlign: TextAlign.center,
-              //       ),
-              //       Image.asset(
-              //         "assets/doller.png",
-              //         width: w * 0.1,
-              //         height: h * 0.1,
-              //       ),
-              //       Text(
-              //         "Flexible Returns & Replacements",
-              //         style: TextStyle(
-              //           color: Color(0xff110B0F),
-              //           fontFamily: 'RozhaOne',
-              //           fontSize: 18,
-              //           height: 28 / 18,
-              //           fontWeight: FontWeight.w400,
-              //         ),
-              //       ),
-              //       SizedBox(
-              //         height: w * 0.002,
-              //       ),
-              //       Text(
-              //         "Your satisfaction is important to us",
-              //         style: TextStyle(
-              //           color: Color(0xff697586),
-              //           fontFamily: 'RozhaOne',
-              //           fontSize: 15,
-              //           height: 24 / 15,
-              //           fontWeight: FontWeight.w400,
-              //         ),
-              //         textAlign: TextAlign.center,
-              //       ),
-              //       Row(
-              //         mainAxisAlignment: MainAxisAlignment.end,
-              //         children: [
-              //           Container(
-              //             padding: EdgeInsets.all(8),
-              //             margin: EdgeInsets.only(right: 8),
-              //             decoration: BoxDecoration(
-              //               color: Color(0xffFFE5E6),
-              //               borderRadius: BorderRadius.circular(100),
-              //             ),
-              //             child: Image.asset(
-              //               "assets/arrow-sm-up.png",
-              //               width: 18,
-              //               height: 18,
-              //               fit: BoxFit.contain,
-              //               color: Color(0xff000000),
-              //             ),
-              //           ),
-              //         ],
-              //       ),
-              //     ],
-              //   ),
-              // ),
             ],
           ),
         ),
@@ -799,9 +463,10 @@ int rating=0;
           mainAxisAlignment: MainAxisAlignment
               .spaceAround, // Space between SORT and FILTER evenly
           children: [
-            InkResponse(onTap: (){
-              _bottomSheet(context);
-            },
+            InkResponse(
+              onTap: () {
+                _bottomSheet(context);
+              },
               child: Row(
                 children: [
                   Image.asset(
@@ -832,13 +497,15 @@ int rating=0;
             // FILTER button
             InkWell(
               onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => Filters()));
+                _bottomSheet1(context);
               },
               child: Row(
                 children: [
                   Image.asset(
                     "assets/filter.png",
+                    color: Color(0xff110B0F),
+                    width: w*0.05,
+                    height: h*0.04,
                   ),
                   SizedBox(
                     width: w * 0.02, // Increased width for spacing
@@ -863,8 +530,8 @@ int rating=0;
   }
 
   void _bottomSheet(
-      BuildContext context,
-      ) {
+    BuildContext context,
+  ) {
     double h = MediaQuery.of(context).size.height * 0.35;
     double w = MediaQuery.of(context).size.width;
     showModalBottomSheet(
@@ -873,107 +540,273 @@ int rating=0;
         builder: (BuildContext context) {
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter setState) {
-                return Padding(
+            return Padding(
+                padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewInsets.bottom),
+                child: Container(
+                    height: h,
                     padding: EdgeInsets.only(
-                        bottom: MediaQuery
-                            .of(context)
-                            .viewInsets
-                            .bottom),
-                    child: Container(
-                        height: h,
-                        padding: EdgeInsets.only(
-                            left: 20, right: 20, top: 10, bottom: 20),
-                        decoration: BoxDecoration(
-                          color: Color(0xffffffff),
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(20),
-                            topRight: Radius.circular(20),
+                        left: 20, right: 20, top: 10, bottom: 20),
+                    decoration: BoxDecoration(
+                      color: Color(0xffffffff),
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        topRight: Radius.circular(20),
+                      ),
+                    ),
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Center(
+                            child: Container(
+                              width: w * 0.1,
+                              height: 5,
+                              decoration: BoxDecoration(
+                                color: Colors.grey[300],
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
                           ),
-                        ),
-                        child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                          SizedBox(height: 20),
+                          Row(
                             children: [
-                              Center(
+                              Text(
+                                'Sort By',
+                                style: TextStyle(
+                                  color: Color(0xff1C1D22),
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 16,
+                                  fontFamily: 'RozhaOne',
+                                  height: 18 / 16,
+                                ),
+                              ),
+                              Spacer(),
+                              InkWell(
+                                onTap: () {
+                                  Navigator.of(context)
+                                      .pop(); // Close the BottomSheet when tapped
+                                },
                                 child: Container(
-                                  width: w * 0.1,
-                                  height: 5,
+                                  width: w * 0.05,
+                                  height: w * 0.05,
                                   decoration: BoxDecoration(
-                                    color: Colors.grey[300],
-                                    borderRadius: BorderRadius.circular(10),
+                                    color: Color(0xffE5E5E5),
+                                    borderRadius: BorderRadius.circular(100),
+                                  ),
+                                  child: Center(
+                                    child: Image.asset(
+                                      "assets/crossblue.png",
+                                      fit: BoxFit.contain,
+                                      width: w * 0.023,
+                                      height: w * 0.023,
+                                      color: Color(0xffCAA16C),
+                                    ),
                                   ),
                                 ),
                               ),
-                              SizedBox(height: 20),
-                              Row(
-                                children: [
-                                  Text(
-                                    'Sort By',
-                                    style: TextStyle(
-                                      color: Color(0xff1C1D22),
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 16,
-                                      fontFamily: 'RozhaOne',
-                                      height: 18 / 16,
-                                    ),
-                                  ),
-                                  Spacer(),
-                                  InkWell(
-                                    onTap: () {
-                                      Navigator.of(context)
-                                          .pop(); // Close the BottomSheet when tapped
-                                    },
-                                    child: Container(
-                                      width: w * 0.05,
-                                      height: w * 0.05,
-                                      decoration: BoxDecoration(
-                                        color: Color(0xffE5E5E5),
-                                        borderRadius: BorderRadius.circular(100),
-                                      ),
-                                      child: Center(
-                                        child: Image.asset(
-                                          "assets/crossblue.png",
-                                          fit: BoxFit.contain,
-                                          width: w * 0.023,
-                                          height: w * 0.023,
-                                          color: Color(0xffCAA16C),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 24,
+                          ),
+                          ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: sortOptions.length,
+                            itemBuilder: (context, index) {
+                              return RadioListTile<String>(
+                                activeColor: Color(0xffCAA16C),
+                                value: sortOptions[index],
+                                groupValue: selectedSort,
+                                onChanged: (value) {
+                                  setState(() {
+                                    selectedSort = value!;
+                                    String sortValue =
+                                        sortOptionToValue[selectedSort]!;
 
-
-                                ],
-                              ),
-                              SizedBox(
-                                height: 24,
-                              ),
-
-                              ListView.builder(
-                                shrinkWrap: true,
-                                itemCount: sortOptions.length,
-                                itemBuilder: (context, index) {
-                                  return RadioListTile<String>(
-                                    activeColor: Color(0xffCAA16C),
-                                    value: sortOptions[index],
-                                    groupValue: selectedSort,
-                                    onChanged: (value) {
-                                      setState(() {
-                                        GetProductcategoryList(widget.selectid);
-                                        selectedSort = value!;
-                                      });
-                                      Navigator.pop(context);
-                                    },
-                                    title: Text(sortOptions[index]),
-                                  );
+                                    GetProductcategoryList(
+                                        widget.selectid, sortValue,"","");
+                                  });
+                                  Navigator.pop(
+                                      context); // Close the dialog after selection
                                 },
+                                title: Text(sortOptions[index]),
+                              );
+                            },
+                          ),
+                        ])));
+          });
+        });
+  }
+
+  void _bottomSheet1(BuildContext context) {
+    double h = MediaQuery.of(context).size.height * 0.35;
+    double w = MediaQuery.of(context).size.width;
+
+
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+            return Padding(
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom,
+              ),
+              child: Container(
+                height: h,
+                padding:
+                    EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 20),
+                decoration: BoxDecoration(
+                  color: Color(0xffffffff),
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20),
+                  ),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Center(
+                      child: Container(
+                        width: w * 0.1,
+                        height: 5,
+                        decoration: BoxDecoration(
+                          color: Colors.grey[300],
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                    Row(
+                      children: [
+                        Text(
+                          'Filter',
+                          style: TextStyle(
+                            color: Color(0xff1C1D22),
+                            fontWeight: FontWeight.w500,
+                            fontSize: 16,
+                            fontFamily: 'RozhaOne',
+                            height: 18 / 16,
+                          ),
+                        ),
+                        Spacer(),
+                        InkWell(
+                          onTap: () {
+                            Navigator.of(context)
+                                .pop(); // Close the BottomSheet when tapped
+                          },
+                          child: Container(
+                            width: w * 0.05,
+                            height: w * 0.05,
+                            decoration: BoxDecoration(
+                              color: Color(0xffE5E5E5),
+                              borderRadius: BorderRadius.circular(100),
+                            ),
+                            child: Center(
+                              child: Image.asset(
+                                "assets/crossblue.png",
+                                fit: BoxFit.contain,
+                                width: w * 0.023,
+                                height: w * 0.023,
+                                color: Color(0xffCAA16C),
                               ),
-                            ]
-                        )
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 24),
+                    // Price Range Slider
+                    Text(
+                      'Selected  Price Range',
+                      style: TextStyle(
+                        color: Color(0xff1C1D22),
+                        fontWeight: FontWeight.w500,
+                        fontSize: 16,
+                        fontFamily: 'RozhaOne',
+                        height: 18 / 16,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Min: \₹ ${selectedMinPrice.toStringAsFixed(0)}',
+                          style: TextStyle(fontSize: 14),
+                        ),
+                        Text(
+                          'Max: \₹ ${selectedMaxPrice.toStringAsFixed(0)}',
+                          style: TextStyle(fontSize: 14),
+                        ),
+                      ],
+                    ),
+                    RangeSlider(
+                      inactiveColor: Color(0xffE3E8EF),
+                      activeColor: Color(0xffCAA16C),
+                      min: minPrice,
+                      max: maxPrice,
+                      divisions: 100,
+                      labels: RangeLabels(
+                        '\₹ ${selectedMinPrice.toStringAsFixed(0)}',
+                        '\₹${selectedMaxPrice.toStringAsFixed(0)}',
+                      ),
+                      values: RangeValues(selectedMinPrice, selectedMaxPrice),
+                      onChanged: (RangeValues values) {
+                        setState(() {
+                          selectedMinPrice = values.start;
+                          selectedMaxPrice = values.end;
+                        });
+                      },
+                    ),
+                    Spacer(),
+                    Center(
+                      child: InkResponse(onTap: (){
+
+                        GetProductcategoryList(
+                            widget.selectid,"",selectedMinPrice.toInt(),selectedMaxPrice.toInt());
+                        Navigator.pop(context);
+                        print("selectedMaxPrice>>>${selectedMaxPrice}");
+
+                      },
+                        child: Container(
+                          width: w * 0.45,
+                          padding: EdgeInsets.all(12),
+                            decoration: BoxDecoration(
+                              color: Color(0xff110B0F),
+                              borderRadius: BorderRadius.circular(6),
+                            ),
+
+                          child: Center(
+                            child: Text(
+                              "Apply",
+                              style: TextStyle(
+                                color: Color(0xffE7C6A0),
+                                fontFamily: 'RozhaOne',
+                                fontSize: 16,
+                                height: 21.06 / 16,
+                                fontWeight: FontWeight.w400,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10,
                     )
-                );
-              }
-          );
-        }
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
     );
-        }
+  }
 }

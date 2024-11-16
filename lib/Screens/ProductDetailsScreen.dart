@@ -180,7 +180,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     final ProductlistProvider =
         Provider.of<ProductListProvider>(context, listen: false);
     ProductdetailsProvider.fetchProductDetails(widget.productid);
-    ProductlistProvider.fetchProductsList(widget.category_id);
+    ProductlistProvider.fetchProductsList(widget.category_id,"","","");
   }
 
   List<Widget> _getProductWidgets(ProductDetails? productData) {

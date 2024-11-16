@@ -11,9 +11,9 @@ class ProductListProvider with ChangeNotifier {
 
   List<ProductsList> get productList => _productlist ?? [];
 
-  Future<void> fetchProductsList(id) async {
+  Future<void> fetchProductsList(id,selectedSort,filterminprice,filtermaxprice) async {
     try {
-      var response = await Userapi.getProductsList(id);
+      var response = await Userapi.getProductsList(id,selectedSort,filterminprice,filtermaxprice);
       _productlist = response?.data ?? [];
       notifyListeners();
     } catch (e) {

@@ -9,6 +9,7 @@ import '../Model/AddressListModel.dart';
 import '../Model/AdressDeatilsModel.dart';
 import '../Model/CategoriesModel.dart';
 import '../Model/GetCartListModel.dart';
+import '../Model/ProductListSortBy.dart';
 import '../Model/ProductsDetailsModel.dart';
 import '../Model/RegisterModel.dart';
 import '../Model/UserDetailsModel.dart';
@@ -139,9 +140,9 @@ class Userapi {
   }
 
 
-  static Future<ProductsListModel?> getProductsList(String category_id) async {
+  static Future<ProductsListModel?> getProductsList(String category_id,selectedSort,filterminprice,filtermaxprice) async {
     try {
-      final url = Uri.parse("${host}/api/products?category=${category_id}");
+      final url = Uri.parse("${host}/api/products?category=${category_id}&sort_by=${selectedSort}&min_price=${filterminprice}&max_price=${filtermaxprice}");
       final headers = await getheader1();
       final response = await http.get(
         url,
@@ -779,6 +780,8 @@ class Userapi {
      return null;
    }
   }
+
+
 
 
 }
