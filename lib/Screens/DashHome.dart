@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:outfitter/Screens/Cart.dart';
 import 'package:outfitter/Screens/CustomizeBar.dart';
+import 'package:outfitter/Screens/ProductDetailsScreen.dart';
 import 'package:outfitter/Screens/UploderProfile.dart';
 import 'package:outfitter/providers/CategoriesProvider.dart';
 import 'package:provider/provider.dart';
@@ -319,104 +320,108 @@ class _DashHomeState extends State<DashHome> {
                 return Row(
                   children: List.generate(products_list.length, (index) {
                     var data = products_list[index];
-                    return Container(
-                      width: w * 0.45,
-                      // Control the width of each item
-                      padding: EdgeInsets.all(8.0),
-                      margin: EdgeInsets.only(left:10,right: 8.0),
-                      // Space between items
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Color(0xffEEF2F6),
-                          width: 1,
+                    return InkResponse(onTap: (){
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=>ProductDetailsScreen(productid: data.id.toString(), category_id: "")));
+                    },
+                      child: Container(
+                        width: w * 0.45,
+                        // Control the width of each item
+                        padding: EdgeInsets.all(8.0),
+                        margin: EdgeInsets.only(left:10,right: 8.0),
+                        // Space between items
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Color(0xffEEF2F6),
+                            width: 1,
+                          ),
                         ),
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Center(
-                            child: Image.network(
-                              data.image ?? "",
-                              height: h * 0.2,
-                              width: w * 0.45,
-                              fit: BoxFit.contain,
-                            ),
-                          ),
-                          SizedBox(height: 15),
-                          // Row(
-                          //   children: [
-                          //     InkWell(
-                          //       onTap: () {
-                          //         Navigator.push(
-                          //           context,
-                          //           MaterialPageRoute(
-                          //             builder: (context) => UploaderProfile(),
-                          //           ),
-                          //         );
-                          //       },
-                          //       child: CircleAvatar(
-                          //         radius: 12,
-                          //         child: ClipOval(
-                          //           child: Image.asset(
-                          //             "assets/postedBY.png",
-                          //             fit: BoxFit.contain,
-                          //           ),
-                          //         ),
-                          //       ),
-                          //     ),
-                          //     SizedBox(width: w * 0.03),
-                          //     Text(
-                          //       "POSTED BY",
-                          //       style: TextStyle(
-                          //         color: Color(0xff617C9D),
-                          //         fontFamily: 'RozhaOne',
-                          //         fontSize: 14,
-                          //         height: 19.36 / 14,
-                          //         fontWeight: FontWeight.w400,
-                          //       ),
-                          //     )
-                          //   ],
-                          // ),
-                          SizedBox(height: 10),
-                          Text(
-                            data.title ?? "",
-                            style: TextStyle(
-                              color: Color(0xff121926),
-                              fontFamily: 'RozhaOne',
-                              fontSize: 16,
-                              height: 24 / 16,
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                          SizedBox(height: 10),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Text(
-                                "₹${data.salePrice ?? ""}",
-                                style: TextStyle(
-                                  color: Color(0xff121926),
-                                  fontFamily: 'RozhaOne',
-                                  fontSize: 16,
-                                  height: 24 / 16,
-                                  fontWeight: FontWeight.w400,
-                                ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Center(
+                              child: Image.network(
+                                data.image ?? "",
+                                height: h * 0.2,
+                                width: w * 0.45,
+                                fit: BoxFit.contain,
                               ),
-                              SizedBox(width: w * 0.03),
-                              Text(
-                                "₹${data.mrp ?? ""}",
-                                style: TextStyle(
-                                  color: Color(0xff617C9D),
-                                  fontFamily: 'RozhaOne',
-                                  fontSize: 16,
-                                  height: 24 / 16,
-                                  fontWeight: FontWeight.w400,
-                                ),
+                            ),
+                            SizedBox(height: 15),
+                            // Row(
+                            //   children: [
+                            //     InkWell(
+                            //       onTap: () {
+                            //         Navigator.push(
+                            //           context,
+                            //           MaterialPageRoute(
+                            //             builder: (context) => UploaderProfile(),
+                            //           ),
+                            //         );
+                            //       },
+                            //       child: CircleAvatar(
+                            //         radius: 12,
+                            //         child: ClipOval(
+                            //           child: Image.asset(
+                            //             "assets/postedBY.png",
+                            //             fit: BoxFit.contain,
+                            //           ),
+                            //         ),
+                            //       ),
+                            //     ),
+                            //     SizedBox(width: w * 0.03),
+                            //     Text(
+                            //       "POSTED BY",
+                            //       style: TextStyle(
+                            //         color: Color(0xff617C9D),
+                            //         fontFamily: 'RozhaOne',
+                            //         fontSize: 14,
+                            //         height: 19.36 / 14,
+                            //         fontWeight: FontWeight.w400,
+                            //       ),
+                            //     )
+                            //   ],
+                            // ),
+                            SizedBox(height: 10),
+                            Text(
+                              data.title ?? "",
+                              style: TextStyle(
+                                color: Color(0xff121926),
+                                fontFamily: 'RozhaOne',
+                                fontSize: 16,
+                                height: 24 / 16,
+                                fontWeight: FontWeight.w400,
                               ),
-                            ],
-                          ),
-                        ],
+                            ),
+                            SizedBox(height: 10),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "₹${data.salePrice ?? ""}",
+                                  style: TextStyle(
+                                    color: Color(0xff121926),
+                                    fontFamily: 'RozhaOne',
+                                    fontSize: 16,
+                                    height: 24 / 16,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ),
+                                SizedBox(width: w * 0.03),
+                                Text(
+                                  "₹${data.mrp ?? ""}",
+                                  style: TextStyle(
+                                    color: Color(0xff617C9D),
+                                    fontFamily: 'RozhaOne',
+                                    fontSize: 16,
+                                    height: 24 / 16,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     );
                   }),
