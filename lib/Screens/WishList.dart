@@ -11,32 +11,6 @@ class WishlistScreen extends StatefulWidget {
 }
 
 class _WishlistScreenState extends State<WishlistScreen> {
-  // final List<Map<String, String>> grid = [
-  //   {
-  //     "image": 'assets/hoodie.png',
-  //     'name': 'Regular Fit Corduroy shirt',
-  //     'rating': '4',
-  //     'price': '₹ 1,196',
-  //     'mrp': '₹ 4,999',
-  //     'quantity': '1',
-  //   },
-  //   {
-  //     "image": 'assets/jeans.png',
-  //     'name': 'Regular Fit Jeans',
-  //     'rating': '4',
-  //     'price': '₹ 1,196',
-  //     'mrp': '₹ 4,999',
-  //     'quantity': '1',
-  //   },
-  //   {
-  //     "image": 'assets/sleaves.png',
-  //     'name': 'Stylish Sleeves Top',
-  //     'rating': '4',
-  //     'price': '₹ 1,196',
-  //     'mrp': '₹ 4,999',
-  //     'quantity': '1',
-  //   },
-  // ];
 
   @override
   void initState() {
@@ -185,29 +159,29 @@ class _WishlistScreenState extends State<WishlistScreen> {
                                     ),
                                   ],
                                 ),
-                                SizedBox(height: h * 0.006),
-                                Container(
-                                  width: w * 0.43,
-                                  height: h * 0.04,
-                                  decoration: BoxDecoration(
-                                    color: Color(0xff110B0F),
-                                    border: Border.all(color: Color(0xffCAA16C), width: 1),
-                                    borderRadius: BorderRadius.circular(6),
-                                  ),
-                                  child: Center(
-                                    child: Text(
-                                      "MOVE TO CART",
-                                      style: TextStyle(
-                                        color: Color(0xffCAA16C),
-                                        fontFamily: 'RozhaOne',
-                                        fontSize: 16,
-                                        height: 21.06 / 16,
-                                        fontWeight: FontWeight.w400,
-                                      ),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ),
-                                ),
+                                // SizedBox(height: h * 0.006),
+                                // Container(
+                                //   width: w * 0.43,
+                                //   height: h * 0.04,
+                                //   decoration: BoxDecoration(
+                                //     color: Color(0xff110B0F),
+                                //     border: Border.all(color: Color(0xffCAA16C), width: 1),
+                                //     borderRadius: BorderRadius.circular(6),
+                                //   ),
+                                //   child: Center(
+                                //     child: Text(
+                                //       "MOVE TO CART",
+                                //       style: TextStyle(
+                                //         color: Color(0xffCAA16C),
+                                //         fontFamily: 'RozhaOne',
+                                //         fontSize: 16,
+                                //         height: 21.06 / 16,
+                                //         fontWeight: FontWeight.w400,
+                                //       ),
+                                //       textAlign: TextAlign.center,
+                                //     ),
+                                //   ),
+                                // ),
                               ],
                             ),
                           ),

@@ -26,9 +26,10 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
     if (res != null) {
       setState(() {
         if (res.settings?.status == 1) {
-          orderDetail = res.orderDetail;  // Handle null here, no need to force unwrap
+          orderDetail = res.orderDetail;
+          print("orderDetail>>${orderDetail}");
         }
-        isLoading = false;  // Data has been fetched
+        isLoading = false;
       });
     } else {
       setState(() {

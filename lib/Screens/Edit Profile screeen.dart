@@ -237,7 +237,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     ),
                   ),
                   style: TextStyle(
-                    fontSize: 14, // Ensure font size fits within height
+                    fontSize: 14,
+                    fontFamily: 'RozhaOne',
                     overflow: TextOverflow
                         .ellipsis, // Add ellipsis for long text
                   ),
@@ -304,7 +305,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     ),
                   ),
                   style: TextStyle(
-                    fontSize: 14, // Ensure font size fits within height
+                    fontSize: 14,
+                    fontFamily: 'RozhaOne',
                     overflow: TextOverflow
                         .ellipsis, // Add ellipsis for long text
                   ),
@@ -372,7 +374,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     ),
                   ),
                   style: TextStyle(
-                    fontSize: 14, // Ensure font size fits within height
+                    fontSize: 14,
+                    fontFamily: 'RozhaOne',
                     overflow: TextOverflow
                         .ellipsis, // Add ellipsis for long text
                   ),

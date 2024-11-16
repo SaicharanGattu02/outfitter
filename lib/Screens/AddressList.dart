@@ -166,7 +166,7 @@ class _AddressListScreenState extends State<AddressListScreen> {
                                           child: Text(
                                             address.addressType ?? "",
                                             style: TextStyle(
-                                              color: Color(0xff617C9D),
+                                              color: Color(0xffCAA16C),
                                               fontFamily: 'RozhaOne',
                                               fontSize: 12,
                                               height: 20 / 12,

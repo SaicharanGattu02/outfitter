@@ -33,7 +33,7 @@ class _AddAddressState extends State<AddAddress> {
   String _validatecity = "";
   String _validatearea = "";
   String? _selectedOption = 'Home';
-
+  bool isLoading =true;
 
   @override
   void initState() {
@@ -127,6 +127,7 @@ class _AddAddressState extends State<AddAddress> {
         address,
         _selectedOption,_nameController.text,_AlternatePhoneController.text);
     if (status == 1) {
+      isLoading=false;
       Navigator.pop(context);
       CustomSnackBar.show(context, " Address  Updated Successfully");
     } else {}
@@ -219,7 +220,14 @@ class _AddAddressState extends State<AddAddress> {
                                 width: 1, color: Color(0xffd0cbdb)),
                           ),
                         ),
-                        textAlignVertical: TextAlignVertical.center,
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontFamily: 'RozhaOne',
+                          overflow: TextOverflow
+                              .ellipsis, // Add ellipsis for long text
+                        ),
+                        textAlignVertical: TextAlignVertical
+                            .center, // Vertically center the t
                       ),
                     ),
                     if (_validatename.isNotEmpty) ...[
@@ -259,6 +267,7 @@ class _AddAddressState extends State<AddAddress> {
                       child: TextFormField(
                         controller: _PhoneController,
                         keyboardType: TextInputType.phone,
+
                         inputFormatters: [
                           FilteringTextInputFormatter
                               .digitsOnly, // Only allow digits
@@ -312,7 +321,14 @@ class _AddAddressState extends State<AddAddress> {
                                 width: 1, color: Color(0xffd0cbdb)),
                           ),
                         ),
-                        textAlignVertical: TextAlignVertical.center,
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontFamily: 'RozhaOne',
+                          overflow: TextOverflow
+                              .ellipsis, // Add ellipsis for long text
+                        ),
+                        textAlignVertical: TextAlignVertical
+                            .center,
                       ),
                     ),
                     if (_validatephone.isNotEmpty) ...[
@@ -404,8 +420,14 @@ class _AddAddressState extends State<AddAddress> {
                             borderSide: const BorderSide(
                                 width: 1, color: Color(0xffd0cbdb)),
                           ),
-                        ),
-                        textAlignVertical: TextAlignVertical.center,
+                        ),style: TextStyle(
+                        fontSize: 14,
+                        fontFamily: 'RozhaOne',
+                        overflow: TextOverflow
+                            .ellipsis, // Add ellipsis for long text
+                      ),
+                        textAlignVertical: TextAlignVertical
+                            .center, // Vertically center the t
                       ),
                     ),
                     SizedBox(
@@ -489,7 +511,14 @@ class _AddAddressState extends State<AddAddress> {
                                         width: 1, color: Color(0xffd0cbdb)),
                                   ),
                                 ),
-                                textAlignVertical: TextAlignVertical.center,
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontFamily: 'RozhaOne',
+                                  overflow: TextOverflow
+                                      .ellipsis, // Add ellipsis for long text
+                                ),
+                                textAlignVertical: TextAlignVertical
+                                    .center,
                               ),
                             ),
                             if (_validatePincode.isNotEmpty) ...[
@@ -616,7 +645,14 @@ class _AddAddressState extends State<AddAddress> {
                                 width: 1, color: Color(0xffd0cbdb)),
                           ),
                         ),
-                        textAlignVertical: TextAlignVertical.center,
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontFamily: 'RozhaOne',
+                          overflow: TextOverflow
+                              .ellipsis, // Add ellipsis for long text
+                        ),
+                        textAlignVertical: TextAlignVertical
+                            .center,
                       ),
                     ),
                     if (_validatehouse.isNotEmpty) ...[
@@ -706,7 +742,14 @@ class _AddAddressState extends State<AddAddress> {
                                 width: 1, color: Color(0xffd0cbdb)),
                           ),
                         ),
-                        textAlignVertical: TextAlignVertical.center,
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontFamily: 'RozhaOne',
+                          overflow: TextOverflow
+                              .ellipsis, // Add ellipsis for long text
+                        ),
+                        textAlignVertical: TextAlignVertical
+                            .center,
                       ),
                     ),
                     if (_validatecity.isNotEmpty) ...[
@@ -796,7 +839,14 @@ class _AddAddressState extends State<AddAddress> {
                                 width: 1, color: Color(0xffd0cbdb)),
                           ),
                         ),
-                        textAlignVertical: TextAlignVertical.center,
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontFamily: 'RozhaOne',
+                          overflow: TextOverflow
+                              .ellipsis, // Add ellipsis for long text
+                        ),
+                        textAlignVertical: TextAlignVertical
+                            .center,
                       ),
                     ),
                     if (_validatearea.isNotEmpty) ...[
@@ -905,7 +955,8 @@ class _AddAddressState extends State<AddAddress> {
             borderRadius: BorderRadius.circular(7),
           ),
           child: Center(
-            child: Text(
+            child:
+            Text(
               "SAVE ADDRESS",
               style: TextStyle(
                 color: Color(0xffCAA16C),
