@@ -20,6 +20,7 @@ class ProductDetailsProvider with ChangeNotifier {
     try {
       var response = await Userapi.getProductDetails(productId);  // Use the passed productId here
       _productData = response?.data;
+      _isInWishlist=_productData?.isInWishlist??false;
       notifyListeners();
     } catch (e) {
       throw Exception('Failed to fetch product details: $e');
@@ -31,7 +32,6 @@ class ProductDetailsProvider with ChangeNotifier {
     if (_productData == null) return;
     bool newStatus = !(isInWishlist ?? false); // Toggle wishlist status
     productListProvider.updateProductWishlistStatus(_productData?.id??"", newStatus);
-
     // Update local state to reflect the change
     _isInWishlist = newStatus;
     notifyListeners();

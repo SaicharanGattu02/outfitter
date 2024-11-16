@@ -285,7 +285,9 @@ int rating=0;
                                           fontSize: 16,
                                           height: 24 / 16,
                                           fontWeight: FontWeight.w400,
+                                          overflow: TextOverflow.ellipsis
                                         ),
+                                        maxLines: 2,
                                       ),
                                      if( rating > 0)...[
                                        const SizedBox(height: 10),

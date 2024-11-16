@@ -15,7 +15,8 @@ import '../utils/CustomAppBar1.dart';
 class ProductDetailsScreen extends StatefulWidget {
   String productid;
   String category_id;
-  ProductDetailsScreen({super.key, required this.productid,required this.category_id});
+  ProductDetailsScreen(
+      {super.key, required this.productid, required this.category_id});
 
   @override
   State<ProductDetailsScreen> createState() => _ProductDetailsScreenState();
@@ -77,6 +78,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   ];
 
   int? selectedIndex;
+  int? selectedSizeIndex;
   String? selectedSizeItem;
   String? selectedColor;
 
@@ -90,26 +92,33 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     }
   }
 
+// Function to toggle the color selection
   void _toggleColorSelection(int index, String hexColor) {
     setState(() {
-      // If the tapped color is already selected, deselect it (set it to null)
+      // If the tapped color is already selected, deselect it (set to null)
       if (selectedIndex == index) {
         selectedIndex = null;
+        selectedColor = null;
       } else {
         selectedIndex = index; // Select new color based on index
-        selectedColor = hexColor; // Select new color based on index
+        selectedColor = hexColor; // Set the selected color based on the hex value
       }
     });
   }
 
-  void _toggleSizeSelection(String sizeItem) {
+
+// Toggling the selection
+  void _toggleSizeSelection(int index, String sizeItem) {
     setState(() {
-      // If the tapped size is already selected, deselect it (set to null)
-      if (selectedSizeItem == sizeItem) {
+      // If the tapped size is already selected, deselect it (set selectedIndex to null)
+      if (selectedSizeIndex == index) {
+        selectedSizeIndex = null;
         selectedSizeItem = null;
       } else {
-        selectedSizeItem = sizeItem; // Select new size based on sizeItem
+        selectedSizeIndex = index; // Select the new index
+        selectedSizeItem = sizeItem; // Select the new size based on index
       }
+      print("Selected Size: $selectedSizeItem, Index: $selectedSizeIndex");
     });
   }
 
@@ -166,8 +175,10 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   }
 
   Future<void> GetProductDetails() async {
-    final ProductdetailsProvider = Provider.of<ProductDetailsProvider>(context, listen: false);
-    final ProductlistProvider = Provider.of<ProductListProvider>(context, listen: false);
+    final ProductdetailsProvider =
+        Provider.of<ProductDetailsProvider>(context, listen: false);
+    final ProductlistProvider =
+        Provider.of<ProductListProvider>(context, listen: false);
     ProductdetailsProvider.fetchProductDetails(widget.productid);
     ProductlistProvider.fetchProductsList(widget.category_id);
   }
@@ -359,7 +370,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 child: Column(
                   children: [
                     Container(
-                      width:w,
+                      width: w,
                       child: Text(
                         productData?.title ?? "",
                         style: TextStyle(
@@ -374,7 +385,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     ),
                     Row(
                       children: [
-                        Text("₹${productData?.salePrice}",
+                        Text(
+                          "₹${productData?.salePrice}",
                           style: TextStyle(
                             color: Color(0xff4B5565),
                             fontFamily: 'RozhaOne',
@@ -386,7 +398,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                           textAlign: TextAlign.center,
                         ),
                         SizedBox(width: w * 0.01),
-                        Text("₹${productData?.mrp}",
+                        Text(
+                          "₹${productData?.mrp}",
                           style: TextStyle(
                             color: Color(0xffF04438),
                             fontFamily: 'RozhaOne',
@@ -399,12 +412,18 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                           textAlign: TextAlign.center,
                         ),
                         Spacer(),
-                        if(productData?.ratingStats.averageRating!=0.0)...[
+                        if (productData?.ratingStats.averageRating != 0.0) ...[
                           Row(
                             children: List.generate(5, (starIndex) {
-                              int ratingValue = int.tryParse(productData?.ratingStats.averageRating.toString()??"") ?? 0;
+                              int ratingValue = int.tryParse(productData
+                                          ?.ratingStats.averageRating
+                                          .toString() ??
+                                      "") ??
+                                  0;
                               return Icon(
-                                starIndex < ratingValue ? Icons.star : Icons.star_border,
+                                starIndex < ratingValue
+                                    ? Icons.star
+                                    : Icons.star_border,
                                 color: Color(0xffF79009),
                                 size: 14,
                               );
@@ -499,7 +518,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                           onTap: () {
                             if (productData?.isInWishlist ?? false) {
                               // Remove from wishlist
-                              context.read<WishlistProvider>().removeFromWishlist(widget.productid);
+                              context
+                                  .read<WishlistProvider>()
+                                  .removeFromWishlist(widget.productid);
                               productDetailsProvider.toggleWishlistStatus(
                                   context.read<ProductListProvider>());
                             } else {
@@ -518,21 +539,21 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                               color: Colors.grey[200],
                               borderRadius: BorderRadius.circular(100),
                             ),
-                            child:productDetailsProvider.isInWishlist == true
+                            child: productDetailsProvider.isInWishlist == true
                                 ? Icon(
-                              Icons
-                                  .favorite, // Filled heart icon when item is in wishlist
-                              size: 18,
-                              color: Colors
-                                  .red, // Red color for filled icon
-                            )
+                                    Icons
+                                        .favorite, // Filled heart icon when item is in wishlist
+                                    size: 18,
+                                    color:
+                                        Colors.red, // Red color for filled icon
+                                  )
                                 : Icon(
-                              Icons
-                                  .favorite_border, // Outline heart icon when item is NOT in wishlist
-                              size: 18,
-                              color: Colors
-                                  .black, // Black color for outline icon
-                            ),
+                                    Icons
+                                        .favorite_border, // Outline heart icon when item is NOT in wishlist
+                                    size: 18,
+                                    color: Colors
+                                        .black, // Black color for outline icon
+                                  ),
                           ),
                         ),
                         // SizedBox(height: h * 0.01),
@@ -628,13 +649,15 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                         itemBuilder: (context, index) {
                           final colorHex = productData?.colors[index];
                           Color color = hexToColor(colorHex ?? "");
+                          // Set default selection if the list is not empty
                           if (productData?.colors.isNotEmpty ?? false) {
-                            selectedIndex = 0;
-                            selectedColor = colorHex;
+                            if (selectedIndex == null) {
+                              selectedIndex = 0; // Default to the first color if no selection
+                              selectedColor = productData?.colors[selectedIndex??0]; // Set the default color
+                            }
                           }
                           return GestureDetector(
-                            onTap: () =>
-                                _toggleColorSelection(index, colorHex ?? ""),
+                            onTap: () => _toggleColorSelection(index, colorHex ?? ""),
                             child: Padding(
                               padding: EdgeInsets.all(10),
                               child: Container(
@@ -643,8 +666,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                   borderRadius: BorderRadius.circular(100),
                                   border: Border.all(
                                     color: selectedIndex == index
-                                        ? Color(
-                                            0xffCAA16C) // Highlight selected color
+                                        ? Color(0xffCAA16C) // Highlight selected color with a border
                                         : Colors.transparent,
                                     width: 1,
                                   ),
@@ -653,7 +675,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                   width: 24,
                                   height: 24,
                                   decoration: BoxDecoration(
-                                    color: color,
+                                    color: color, // Set the color of the container
                                     borderRadius: BorderRadius.circular(100),
                                   ),
                                 ),
@@ -692,13 +714,18 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                         shrinkWrap: true,
                         itemBuilder: (context, index) {
                           final sizeItem = productData?.size[index];
+
+                          // Default selection to the first index if no size is selected
                           if (productData?.size.isNotEmpty ?? false) {
-                            selectedSizeItem = productData
-                                ?.size.first; // Default selection (first size)
+                            if (selectedSizeIndex == null) {
+                              selectedSizeIndex = 0; // Default to the first index
+                              selectedSizeItem = productData?.size[selectedSizeIndex??0]; // Select default size
+                            }
                           }
+
                           return GestureDetector(
                             onTap: () {
-                              _toggleSizeSelection(sizeItem ?? "");
+                              _toggleSizeSelection(index, sizeItem ?? ""); // Pass index and size value
                             },
                             child: Padding(
                               padding: EdgeInsets.all(6),
@@ -707,8 +734,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(100),
                                   border: Border.all(
-                                    color: selectedSizeItem == sizeItem
-                                        ? Color(0xffCAA16C)
+                                    color: selectedSizeIndex == index
+                                        ? Color(0xffCAA16C) // Selected item color
                                         : Colors.transparent,
                                     width: 1,
                                   ),
@@ -837,8 +864,6 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     SizedBox(height: h * 0.01),
                     Divider(thickness: 1, height: 1, color: Color(0xffEEF2F6)),
                     SizedBox(height: h * 0.01),
-
-// Shipping Details
                     Row(
                       children: [
                         Text(
@@ -934,16 +959,16 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
-                            Text(
-                              "Write review",
-                              style: TextStyle(
-                                color: Color(0xff088AB2),
-                                fontFamily: 'Inter',
-                                fontSize: 14,
-                                height: 19.36 / 14,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
+                            // Text(
+                            //   "Write review",
+                            //   style: TextStyle(
+                            //     color: Color(0xff088AB2),
+                            //     fontFamily: 'Inter',
+                            //     fontSize: 14,
+                            //     height: 19.36 / 14,
+                            //     fontWeight: FontWeight.w500,
+                            //   ),
+                            // ),
                           ],
                         ),
                         SizedBox(
@@ -1051,204 +1076,202 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                         SizedBox(
                           height: 10,
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "Varun",
-                              style: TextStyle(
-                                color: Color(0xff121926),
-                                fontFamily: 'Inter',
-                                fontSize: 14,
-                                height: 19.36 / 14,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                            Text(
-                              "Posted on 30 jun 2022",
-                              style: TextStyle(
-                                color: Color(0xff617C9D),
-                                fontFamily: 'Inter',
-                                fontSize: 12,
-                                height: 19.36 / 12,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
-                        ),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            rating > 0
-                                ? Row(
-                                    children: List.generate(5, (starIndex) {
-                                      int ratingValue = int.tryParse(productData
-                                                  ?.ratingStats.averageRating
-                                                  .toString() ??
-                                              "") ??
-                                          0;
-                                      return Icon(
-                                        starIndex < ratingValue
-                                            ? Icons.star
-                                            : Icons.star_border,
-                                        color: Color(0xffF79009),
-                                        size: 14,
-                                      );
-                                    }),
-                                  )
-                                : SizedBox
-                                    .shrink(), // If rating is 0 or less, no space will be taken
-                            Text(
-                              productData?.productDetails ?? "",
-                              style: TextStyle(
-                                color: Color(0xff4B5565),
-                                fontFamily: 'Inter',
-                                fontSize: 10,
-                                height: 19.36 / 10,
-                                fontWeight: FontWeight.w400,
-                              ),
-                              textAlign: TextAlign.left,
-                            ),
-                          ],
-                        ),
+                        // ListView.builder(
+                        //   itemCount: productData?.recentReviews.length,
+                        //   physics: NeverScrollableScrollPhysics(),
+                        //   itemBuilder: (context, index) {
+                        //     var data= productData?.recentReviews[index];
+                        //     return Padding(
+                        //       padding: const EdgeInsets.all(8.0),
+                        //       child: Row(
+                        //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        //         children: [
+                        //           Text(
+                        //             data?.customer ?? '',
+                        //             style: TextStyle(
+                        //               color: Color(0xff121926),
+                        //               fontFamily: 'Inter',
+                        //               fontSize: 14,
+                        //               height: 19.36 / 14,
+                        //               fontWeight: FontWeight.w500,
+                        //             ),
+                        //           ),
+                        //           Text(
+                        //             "Posted on ${data?.createdAt ?? ''}",
+                        //             style: TextStyle(
+                        //               color: Color(0xff617C9D),
+                        //               fontFamily: 'Inter',
+                        //               fontSize: 12,
+                        //               height: 19.36 / 12,
+                        //               fontWeight: FontWeight.w500,
+                        //             ),
+                        //           ),
+                        //         ],
+                        //       ),
+                        //     );
+                        //   },
+                        // ),
                       ],
                       SizedBox(height: h * 0.01),
-                      Divider(thickness: 1, height: 1, color: Color(0xffEEF2F6)),
+                      Divider(
+                          thickness: 1, height: 1, color: Color(0xffEEF2F6)),
                     ],
                     SizedBox(height: h * 0.03),
-                    Text(
-                      "YOU MAY ALSO LIKE",
-                      style: TextStyle(
-                        color: Color(0xff121926),
-                        fontFamily: 'RozhaOne',
-                        fontSize: 22,
-                        height: 19.36 / 14,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                    SizedBox(height: h * 0.02),
-                    SingleChildScrollView(
-                      scrollDirection: Axis.horizontal, // Enables horizontal scrolling
-                      child: Consumer<ProductListProvider>(
-                          builder: (context, profileProvider, child) {
-                            final products_list = profileProvider.productList;
-                            return Row(
-                              children: List.generate(products_list.length, (index) {
-                                var data = products_list[index];
-                                return Container(
-                                  width: w * 0.45,
-                                  // Control the width of each item
-                                  padding: EdgeInsets.all(8.0),
-                                  margin: EdgeInsets.only(left:10,right: 8.0),
-                                  // Space between items
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                      color: Color(0xffEEF2F6),
-                                      width: 1,
-                                    ),
-                                  ),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Center(
-                                        child: InkWell(
-                                          onTap: () {
-                                            // Your onTap action here
-                                          },
-                                          child: Image.network(
-                                            data.image ?? "",
-                                            height: h * 0.2,
-                                            width: w * 0.45,
-                                            fit: BoxFit.contain,
-                                          ),
+                    Consumer<ProductListProvider>(
+                        builder: (context, profileProvider, child) {
+                      final products_list = profileProvider.productList;
+                     return  Column(
+                        children: [
+                          if(products_list.length!=0)...[
+                            Text(
+                              "YOU MAY ALSO LIKE",
+                              style: TextStyle(
+                                color: Color(0xff121926),
+                                fontFamily: 'RozhaOne',
+                                fontSize: 22,
+                                height: 19.36 / 14,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                            SizedBox(height: h * 0.02),
+                            SingleChildScrollView(
+                              scrollDirection:
+                              Axis.horizontal, // Enables horizontal scrolling
+                              child: Row(
+                                children:
+                                List.generate(products_list.length, (index) {
+                                  var data = products_list[index];
+                                  return InkWell(
+                                    onTap: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                ProductDetailsScreen(
+                                                    productid: data.id ?? "",
+                                                    category_id: widget.category_id),
+                                          ));
+                                    },
+                                    child: Container(
+                                      width: w * 0.45,
+                                      // Control the width of each item
+                                      padding: EdgeInsets.all(8.0),
+                                      margin:
+                                      EdgeInsets.only(left: 10, right: 8.0),
+                                      // Space between items
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                          color: Color(0xffEEF2F6),
+                                          width: 1,
                                         ),
                                       ),
-                                      SizedBox(height: 15),
-                                      // Row(
-                                      //   children: [
-                                      //     InkWell(
-                                      //       onTap: () {
-                                      //         Navigator.push(
-                                      //           context,
-                                      //           MaterialPageRoute(
-                                      //             builder: (context) => UploaderProfile(),
-                                      //           ),
-                                      //         );
-                                      //       },
-                                      //       child: CircleAvatar(
-                                      //         radius: 12,
-                                      //         child: ClipOval(
-                                      //           child: Image.asset(
-                                      //             "assets/postedBY.png",
-                                      //             fit: BoxFit.contain,
-                                      //           ),
-                                      //         ),
-                                      //       ),
-                                      //     ),
-                                      //     SizedBox(width: w * 0.03),
-                                      //     Text(
-                                      //       "POSTED BY",
-                                      //       style: TextStyle(
-                                      //         color: Color(0xff617C9D),
-                                      //         fontFamily: 'RozhaOne',
-                                      //         fontSize: 14,
-                                      //         height: 19.36 / 14,
-                                      //         fontWeight: FontWeight.w400,
-                                      //       ),
-                                      //     )
-                                      //   ],
-                                      // ),
-                                      SizedBox(height: 10),
-                                      Text(
-                                        data.title ?? "",
-                                        style: TextStyle(
-                                          color: Color(0xff121926),
-                                          fontFamily: 'RozhaOne',
-                                          fontSize: 16,
-                                          height: 24 / 16,
-                                          fontWeight: FontWeight.w400,
-                                        ),
-                                        maxLines: 2, // Limits the number of lines to 2
-                                        overflow: TextOverflow.ellipsis, // Adds ellipsis when text overflows
-                                      ),
-                                      SizedBox(height: 10),
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.start,
+                                      child: Column(
+                                        mainAxisAlignment:
+                                        MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                         children: [
+                                          Center(
+                                            child: Image.network(
+                                              data.image ?? "",
+                                              height: h * 0.2,
+                                              width: w * 0.45,
+                                              fit: BoxFit.contain,
+                                            ),
+                                          ),
+                                          SizedBox(height: 15),
+                                          // Row(
+                                          //   children: [
+                                          //     InkWell(
+                                          //       onTap: () {
+                                          //         Navigator.push(
+                                          //           context,
+                                          //           MaterialPageRoute(
+                                          //             builder: (context) => UploaderProfile(),
+                                          //           ),
+                                          //         );
+                                          //       },
+                                          //       child: CircleAvatar(
+                                          //         radius: 12,
+                                          //         child: ClipOval(
+                                          //           child: Image.asset(
+                                          //             "assets/postedBY.png",
+                                          //             fit: BoxFit.contain,
+                                          //           ),
+                                          //         ),
+                                          //       ),
+                                          //     ),
+                                          //     SizedBox(width: w * 0.03),
+                                          //     Text(
+                                          //       "POSTED BY",
+                                          //       style: TextStyle(
+                                          //         color: Color(0xff617C9D),
+                                          //         fontFamily: 'RozhaOne',
+                                          //         fontSize: 14,
+                                          //         height: 19.36 / 14,
+                                          //         fontWeight: FontWeight.w400,
+                                          //       ),
+                                          //     )
+                                          //   ],
+                                          // ),
+                                          SizedBox(height: 10),
                                           Text(
-                                            "₹${data.salePrice ?? ""}",
+                                            data.title ?? "",
                                             style: TextStyle(
                                               color: Color(0xff121926),
                                               fontFamily: 'RozhaOne',
-                                              fontSize: 18,
-                                              height: 24 / 16,
-                                              fontWeight: FontWeight.w500,
-                                            ),
-                                          ),
-                                          SizedBox(width: w * 0.03),
-                                          Text(
-                                            "₹${data.mrp ?? ""}",
-                                            style: TextStyle(
-                                              color: Color(0xff617C9D),
-                                              fontFamily: 'RozhaOne',
-                                              fontSize: 15,
+                                              fontSize: 16,
                                               height: 24 / 16,
                                               fontWeight: FontWeight.w400,
-                                              decoration: TextDecoration.lineThrough,
-                                              decorationColor: Color(0xff617C9D),
                                             ),
+                                            maxLines:
+                                            2, // Limits the number of lines to 2
+                                            overflow: TextOverflow
+                                                .ellipsis, // Adds ellipsis when text overflows
+                                          ),
+                                          SizedBox(height: 10),
+                                          Row(
+                                            mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                "₹${data.salePrice ?? ""}",
+                                                style: TextStyle(
+                                                  color: Color(0xff121926),
+                                                  fontFamily: 'RozhaOne',
+                                                  fontSize: 18,
+                                                  height: 24 / 16,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                              ),
+                                              SizedBox(width: w * 0.03),
+                                              Text(
+                                                "₹${data.mrp ?? ""}",
+                                                style: TextStyle(
+                                                  color: Color(0xff617C9D),
+                                                  fontFamily: 'RozhaOne',
+                                                  fontSize: 15,
+                                                  height: 24 / 16,
+                                                  fontWeight: FontWeight.w400,
+                                                  decoration:
+                                                  TextDecoration.lineThrough,
+                                                  decorationColor:
+                                                  Color(0xff617C9D),
+                                                ),
+                                              ),
+                                            ],
                                           ),
                                         ],
                                       ),
-                                    ],
-                                  ),
-                                );
-                              }),
-                            );
-                          }),
-                    ),
+                                    ),
+                                  );
+                                }),
+                              ),
+                            ),
+                          ]
+                        ],
+                      );
+                    }),
                   ],
                 ),
               ),

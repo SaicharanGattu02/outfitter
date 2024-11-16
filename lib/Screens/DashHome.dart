@@ -336,16 +336,11 @@ class _DashHomeState extends State<DashHome> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Center(
-                            child: InkWell(
-                              onTap: () {
-                                // Your onTap action here
-                              },
-                              child: Image.network(
-                                data.image ?? "",
-                                height: h * 0.2,
-                                width: w * 0.45,
-                                fit: BoxFit.contain,
-                              ),
+                            child: Image.network(
+                              data.image ?? "",
+                              height: h * 0.2,
+                              width: w * 0.45,
+                              fit: BoxFit.contain,
                             ),
                           ),
                           SizedBox(height: 15),

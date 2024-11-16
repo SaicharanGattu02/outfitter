@@ -1,12 +1,11 @@
 class OrderDetailsModel {
-  OrderDetails? orderDetail;
+  OrderDetails? data;
   Settings? settings;
 
-  OrderDetailsModel({this.orderDetail, this.settings});
+  OrderDetailsModel({this.data, this.settings});
 
   OrderDetailsModel.fromJson(Map<String, dynamic> json) {
-    orderDetail =
-    json['data'] != null ? new OrderDetails.fromJson(json['data']) : null;
+    data = json['data'] != null ? new OrderDetails.fromJson(json['data']) : null;
     settings = json['settings'] != null
         ? new Settings.fromJson(json['settings'])
         : null;
@@ -14,8 +13,8 @@ class OrderDetailsModel {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.orderDetail != null) {
-      data['data'] = this.orderDetail!.toJson();
+    if (this.data != null) {
+      data['data'] = this.data!.toJson();
     }
     if (this.settings != null) {
       data['settings'] = this.settings!.toJson();
@@ -26,6 +25,7 @@ class OrderDetailsModel {
 
 class OrderDetails {
   String? id;
+  String? orderId;
   String? status;
   String? paymentMethod;
   bool? isPaid;
@@ -33,19 +33,23 @@ class OrderDetails {
   Address? address;
   int? orderValue;
   Product? product;
+  Shipping? shipping;
 
   OrderDetails(
       {this.id,
-        this.status,
-        this.paymentMethod,
-        this.isPaid,
-        this.items,
-        this.address,
-        this.orderValue,
-        this.product});
+      this.orderId,
+      this.status,
+      this.paymentMethod,
+      this.isPaid,
+      this.items,
+      this.address,
+      this.orderValue,
+      this.product,
+      this.shipping});
 
   OrderDetails.fromJson(Map<String, dynamic> json) {
     id = json['id'];
+    orderId = json['order_id'];
     status = json['status'];
     paymentMethod = json['payment_method'];
     isPaid = json['is_paid'];
@@ -56,14 +60,18 @@ class OrderDetails {
       });
     }
     address =
-    json['address'] != null ? new Address.fromJson(json['address']) : null;
+        json['address'] != null ? new Address.fromJson(json['address']) : null;
     orderValue = json['order_value'];
     product = json['product'];
+    shipping = json['shipping'] != null
+        ? new Shipping.fromJson(json['shipping'])
+        : null;
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
+    data['order_id'] = this.orderId;
     data['status'] = this.status;
     data['payment_method'] = this.paymentMethod;
     data['is_paid'] = this.isPaid;
@@ -75,6 +83,9 @@ class OrderDetails {
     }
     data['order_value'] = this.orderValue;
     data['product'] = this.product;
+    if (this.shipping != null) {
+      data['shipping'] = this.shipping!.toJson();
+    }
     return data;
   }
 }
@@ -90,7 +101,7 @@ class Items {
   Items.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     product =
-    json['product'] != null ? new Product.fromJson(json['product']) : null;
+        json['product'] != null ? new Product.fromJson(json['product']) : null;
     quantity = json['quantity'];
     amount = json['amount'];
   }
@@ -111,34 +122,34 @@ class Product {
   String? id;
   String? title;
   String? category;
+  bool? isBestSeller;
   String? brand;
-  Null? colors;
   String? postedBy;
   int? mrp;
   int? salePrice;
   bool? isInWishlist;
   String? image;
-  dynamic rating;
+  int? rating;
 
   Product(
       {this.id,
-        this.title,
-        this.category,
-        this.brand,
-        this.colors,
-        this.postedBy,
-        this.mrp,
-        this.salePrice,
-        this.isInWishlist,
-        this.image,
-        this.rating});
+      this.title,
+      this.category,
+      this.isBestSeller,
+      this.brand,
+      this.postedBy,
+      this.mrp,
+      this.salePrice,
+      this.isInWishlist,
+      this.image,
+      this.rating});
 
   Product.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     title = json['title'];
     category = json['category'];
+    isBestSeller = json['is_best_seller'];
     brand = json['brand'];
-    colors = json['colors'];
     postedBy = json['posted_by'];
     mrp = json['mrp'];
     salePrice = json['sale_price'];
@@ -152,8 +163,8 @@ class Product {
     data['id'] = this.id;
     data['title'] = this.title;
     data['category'] = this.category;
+    data['is_best_seller'] = this.isBestSeller;
     data['brand'] = this.brand;
-    data['colors'] = this.colors;
     data['posted_by'] = this.postedBy;
     data['mrp'] = this.mrp;
     data['sale_price'] = this.salePrice;
@@ -176,13 +187,13 @@ class Address {
 
   Address(
       {this.id,
-        this.mobile,
-        this.alternateMobile,
-        this.fullName,
-        this.default_address,
-        this.address,
-        this.addressType,
-        this.pincode});
+      this.mobile,
+      this.alternateMobile,
+      this.fullName,
+      this.default_address,
+      this.address,
+      this.addressType,
+      this.pincode});
 
   Address.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -205,6 +216,47 @@ class Address {
     data['address'] = this.address;
     data['address_type'] = this.addressType;
     data['pincode'] = this.pincode;
+    return data;
+  }
+}
+
+class Shipping {
+  String? id;
+  int? handlingCharges;
+  int? shippingFee;
+  int? deliveryCharges;
+  int? discount;
+  int? totalAmount;
+  int? saleAmount;
+
+  Shipping(
+      {this.id,
+      this.handlingCharges,
+      this.shippingFee,
+      this.deliveryCharges,
+      this.discount,
+      this.totalAmount,
+      this.saleAmount});
+
+  Shipping.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    handlingCharges = json['handling_charges'];
+    shippingFee = json['shipping_fee'];
+    deliveryCharges = json['delivery_charges'];
+    discount = json['discount'];
+    totalAmount = json['total_amount'];
+    saleAmount = json['sale_amount'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['handling_charges'] = this.handlingCharges;
+    data['shipping_fee'] = this.shippingFee;
+    data['delivery_charges'] = this.deliveryCharges;
+    data['discount'] = this.discount;
+    data['total_amount'] = this.totalAmount;
+    data['sale_amount'] = this.saleAmount;
     return data;
   }
 }
