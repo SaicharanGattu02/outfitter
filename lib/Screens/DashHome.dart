@@ -77,7 +77,6 @@ class _DashHomeState extends State<DashHome> {
   @override
   void initState() {
     GetCategoriesList();
-    BestSellersListApi();
     super.initState();
   }
 
@@ -85,25 +84,10 @@ class _DashHomeState extends State<DashHome> {
     final categories_list_provider =
         Provider.of<CategoriesProvider>(context, listen: false);
     categories_list_provider.fetchCategoriesList();
+    categories_list_provider.fetchBestSellersList();
   }
 
   List<ProductsList> productlist = [];
-  Future<void> BestSellersListApi() async {
-    try {
-      final res = await Userapi.getBestSellersList();
-      if (res != null) {
-        setState(() {
-          if (res.settings?.success == 1) {
-            productlist = res.data ?? [];
-          } else {
-            CustomSnackBar.show(context, res.settings?.message ?? "");
-          }
-        });
-      }
-    } catch (e) {
-      CustomSnackBar.show(context, "Failed to load best sellers.");
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -325,190 +309,123 @@ class _DashHomeState extends State<DashHome> {
               ),
             ),
             SizedBox(height: h * 0.02),
-            // GridView.builder(
-            //   physics: NeverScrollableScrollPhysics(),
-            //   scrollDirection: Axis.horizontal,
-            //   shrinkWrap: true,
-            //   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            //     crossAxisCount: 2,
-            //     mainAxisSpacing: 2,
-            //     childAspectRatio: 0.51,
-            //   ),
-            //   itemCount: productlist.length,
-            //   itemBuilder: (context, index) {
-            //     return Column(
-            //       children: [
-            //         Stack(
-            //           children: [
-            //             Container(
-            //               padding: EdgeInsets.all(8.0),
-            //               decoration: BoxDecoration(
-            //                 border: Border.all(
-            //                   color: Color(0xffEEF2F6),
-            //                   width: 1,
-            //                 ),
-            //               ),
-            //               child: Column(
-            //                 mainAxisAlignment: MainAxisAlignment.start,
-            //                 crossAxisAlignment: CrossAxisAlignment.start,
-            //                 children: [
-            //                   Center(
-            //                     child: InkWell(
-            //                       onTap: () {
-            //
-            //                       },
-            //                       child: Image.asset(
-            //                         gridList[index]['image']!,
-            //                         height: h * 0.2,
-            //                         width: w * 0.45,
-            //                         fit: BoxFit.contain,
-            //                       ),
-            //                     ),
-            //                   ),
-            //                   SizedBox(
-            //                     height: 15,
-            //                   ),
-            //                   Row(
-            //                     children: [
-            //                       InkWell(
-            //                         onTap: () {
-            //                           Navigator.push(
-            //                               context,
-            //                               MaterialPageRoute(
-            //                                   builder: (context) =>
-            //                                       UploaderProfile()));
-            //                         },
-            //                         child: CircleAvatar(
-            //                           radius: 12,
-            //                           child: ClipOval(
-            //                             child: Image.asset(
-            //                               "assets/postedBY.png",
-            //                               fit: BoxFit.contain,
-            //                             ),
-            //                           ),
-            //                         ),
-            //                       ),
-            //                       SizedBox(
-            //                         width: w * 0.03,
-            //                       ),
-            //                       Text(
-            //                         "POSTED BY",
-            //                         style: TextStyle(
-            //                           color: Color(0xff617C9D),
-            //                           fontFamily: 'RozhaOne',
-            //                           fontSize: 14,
-            //                           height: 19.36 / 14,
-            //                           fontWeight: FontWeight.w400,
-            //                         ),
-            //                       )
-            //                     ],
-            //                   ),
-            //                   SizedBox(
-            //                     height: 10,
-            //                   ),
-            //                   Text(
-            //                     "Straight Regular Jeans",
-            //                     style: TextStyle(
-            //                       color: Color(0xff121926),
-            //                       fontFamily: 'RozhaOne',
-            //                       fontSize: 16,
-            //                       height: 24 / 16,
-            //                       fontWeight: FontWeight.w400,
-            //                     ),
-            //                   ),
-            //                   SizedBox(
-            //                     height: 10,
-            //                   ),
-            //                   Row(
-            //                     mainAxisAlignment: MainAxisAlignment.start,
-            //                     children: [
-            //                       Text(
-            //                         "₹2340.00",
-            //                         style: TextStyle(
-            //                           color: Color(0xff121926),
-            //                           fontFamily: 'RozhaOne',
-            //                           fontSize: 16,
-            //                           height: 24 / 16,
-            //                           fontWeight: FontWeight.w400,
-            //                         ),
-            //                       ),
-            //                       SizedBox(
-            //                         width: w * 0.03,
-            //                       ),
-            //                       Text(
-            //                         "₹2340.00",
-            //                         style: TextStyle(
-            //                           color: Color(0xff617C9D),
-            //                           fontFamily: 'RozhaOne',
-            //                           fontSize: 16,
-            //                           height: 24 / 16,
-            //                           fontWeight: FontWeight.w400,
-            //                         ),
-            //                       ),
-            //                     ],
-            //                   ),
-            //                   SizedBox(height: h * 0.01),
-            //                   Row(
-            //                     mainAxisAlignment: MainAxisAlignment.start,
-            //                     children: colors.map((color) {
-            //                       return GestureDetector(
-            //                         onTap: () => _toggleColorSelection(color),
-            //                         child: Container(
-            //                           padding: EdgeInsets.all(3),
-            //                           decoration: BoxDecoration(
-            //                             borderRadius:
-            //                                 BorderRadius.circular(100),
-            //                             border: Border.all(
-            //                               color: selectedColors.contains(color)
-            //                                   ? Colors.black
-            //                                   : Colors.transparent,
-            //                               width: 0.5,
-            //                             ),
-            //                           ),
-            //                           child: Container(
-            //                             width: 20,
-            //                             height: 20,
-            //                             decoration: BoxDecoration(
-            //                               color:
-            //                                   // selectedColors.contains(color)
-            //                                   //     ?
-            //                                   color,
-            //                               // : Colors.grey[300],
-            //                               borderRadius:
-            //                                   BorderRadius.circular(100),
-            //                             ),
-            //                           ),
-            //                         ),
-            //                       );
-            //                     }).toList(),
-            //                   ),
-            //                 ],
-            //               ),
-            //             ),
-            //             Positioned(
-            //               top: 8,
-            //               right: 8,
-            //               child: Container(
-            //                 padding: EdgeInsets.all(8),
-            //                 decoration: BoxDecoration(
-            //                   color: Color(0xffFFE5E6),
-            //                   borderRadius: BorderRadius.circular(100),
-            //                 ),
-            //                 child: Image.asset(
-            //                   "assets/fav.png",
-            //                   width: 18,
-            //                   height: 18,
-            //                   fit: BoxFit.contain,
-            //                   color: Color(0xff000000),
-            //                 ),
-            //               ),
-            //             ),
-            //           ],
-            //         ),
-            //       ],
-            //     );
-            //   },
-            // ),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal, // Enables horizontal scrolling
+              child: Consumer<CategoriesProvider>(
+                  builder: (context, profileProvider, child) {
+                final products_list = profileProvider.bestsellerList;
+                return Row(
+                  children: List.generate(products_list.length, (index) {
+                    var data = products_list[index];
+                    return Container(
+                      width: w * 0.45,
+                      // Control the width of each item
+                      padding: EdgeInsets.all(8.0),
+                      margin: EdgeInsets.only(left:10,right: 8.0),
+                      // Space between items
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: Color(0xffEEF2F6),
+                          width: 1,
+                        ),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Center(
+                            child: InkWell(
+                              onTap: () {
+                                // Your onTap action here
+                              },
+                              child: Image.network(
+                                data.image ?? "",
+                                height: h * 0.2,
+                                width: w * 0.45,
+                                fit: BoxFit.contain,
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 15),
+                          // Row(
+                          //   children: [
+                          //     InkWell(
+                          //       onTap: () {
+                          //         Navigator.push(
+                          //           context,
+                          //           MaterialPageRoute(
+                          //             builder: (context) => UploaderProfile(),
+                          //           ),
+                          //         );
+                          //       },
+                          //       child: CircleAvatar(
+                          //         radius: 12,
+                          //         child: ClipOval(
+                          //           child: Image.asset(
+                          //             "assets/postedBY.png",
+                          //             fit: BoxFit.contain,
+                          //           ),
+                          //         ),
+                          //       ),
+                          //     ),
+                          //     SizedBox(width: w * 0.03),
+                          //     Text(
+                          //       "POSTED BY",
+                          //       style: TextStyle(
+                          //         color: Color(0xff617C9D),
+                          //         fontFamily: 'RozhaOne',
+                          //         fontSize: 14,
+                          //         height: 19.36 / 14,
+                          //         fontWeight: FontWeight.w400,
+                          //       ),
+                          //     )
+                          //   ],
+                          // ),
+                          SizedBox(height: 10),
+                          Text(
+                            data.title ?? "",
+                            style: TextStyle(
+                              color: Color(0xff121926),
+                              fontFamily: 'RozhaOne',
+                              fontSize: 16,
+                              height: 24 / 16,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                          SizedBox(height: 10),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text(
+                                "₹${data.salePrice ?? ""}",
+                                style: TextStyle(
+                                  color: Color(0xff121926),
+                                  fontFamily: 'RozhaOne',
+                                  fontSize: 16,
+                                  height: 24 / 16,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                              SizedBox(width: w * 0.03),
+                              Text(
+                                "₹${data.mrp ?? ""}",
+                                style: TextStyle(
+                                  color: Color(0xff617C9D),
+                                  fontFamily: 'RozhaOne',
+                                  fontSize: 16,
+                                  height: 24 / 16,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    );
+                  }),
+                );
+              }),
+            ),
             // SizedBox(height: h * 0.01),
             // Center(
             //   child: Container(
@@ -738,33 +655,6 @@ class _DashHomeState extends State<DashHome> {
                     ),
                     textAlign: TextAlign.center,
                   ),
-
-                  Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Review(72)",
-                        style: TextStyle(
-                          color: Color(0xff110B0F),
-                          fontFamily: 'RozhaOne',
-                          fontSize: 16,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                      Text(
-                        "Write review",
-                        style: TextStyle(
-                          color: Color(0xff088AB2),
-                          fontFamily: 'RozhaOne',
-                          fontSize: 16,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-
-
-                  ],),
-
-
-
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [

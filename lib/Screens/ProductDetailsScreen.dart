@@ -152,7 +152,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   void initState() {
     super.initState();
     GetProductDetails();
-
+    print("ID:${widget.productid}");
   }
   Future<void> GetProductDetails() async {
     final ProductdetailsProvider = Provider.of<ProductDetailsProvider>(context, listen: false);
@@ -570,7 +570,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                           height: 1,
                           color: Color(0xffEEF2F6),
                         ),
-                        if(productData?.colors.length != 0)...[
+                        if (productData?.colors?.isNotEmpty ?? false) ...[
                           SizedBox(height: h * 0.01),
                           Text(
                             "COLORS",
@@ -587,7 +587,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                               crossAxisCount: 6,
                               childAspectRatio: 1,
                             ),
-                            itemCount: productData?.colors?.length,
+                            itemCount: productData?.colors?.length ?? 0,
                             physics: NeverScrollableScrollPhysics(),
                             shrinkWrap: true,
                             itemBuilder: (context, index) {
@@ -603,8 +603,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                       borderRadius: BorderRadius.circular(100),
                                       border: Border.all(
                                         color: selectedColors.contains(color)
-                                            ? Color(
-                                            0xffCAA16C) // Highlight selected color
+                                            ? Color(0xffCAA16C) // Highlight selected color
                                             : Colors.transparent,
                                         width: 1,
                                       ),
@@ -623,7 +622,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                             },
                           ),
                         ],
-                        if(productData?.size?.length != 0)...[
+
+
+                        if (productData?.size?.isNotEmpty ?? false) ...[
                           SizedBox(height: h * 0.01),
                           Row(
                             children: [
@@ -637,17 +638,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                   fontWeight: FontWeight.w400,
                                 ),
                               ),
-                              // Spacer(),
-                              // Text(
-                              //   "Size Chart",
-                              //   style: TextStyle(
-                              //     color: Color(0xff088AB2),
-                              //     fontFamily: 'RozhaOne',
-                              //     fontSize: 14,
-                              //     height: 19.36 / 14,
-                              //     fontWeight: FontWeight.w400,
-                              //   ),
-                              // ),
+                              // Optionally show "Size Chart" link here if needed.
                             ],
                           ),
                           SizedBox(height: h * 0.01),
@@ -656,11 +647,11 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                               crossAxisCount: 6,
                               childAspectRatio: 1,
                             ),
-                            itemCount: productData?.size.length,
+                            itemCount: productData?.size?.length ?? 0,
                             physics: NeverScrollableScrollPhysics(),
                             shrinkWrap: true,
                             itemBuilder: (context, index) {
-                              final sizeItem = productData?.size[index];
+                              final sizeItem = productData?.size?[index];
                               return GestureDetector(
                                 onTap: () {
                                   _toggleSizeSelection(sizeItem ?? "");
@@ -684,8 +675,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                       decoration: BoxDecoration(
                                         color: Color(0xffFCFCFD),
                                         borderRadius: BorderRadius.circular(100),
-                                        border: Border.all(
-                                            color: Color(0xffEEF2F6), width: 1),
+                                        border: Border.all(color: Color(0xffEEF2F6), width: 1),
                                       ),
                                       child: Center(
                                         child: Text(
@@ -706,6 +696,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                             },
                           ),
                         ],
+
                         SizedBox(height: h * 0.01),
                         Row(
                           children: [
