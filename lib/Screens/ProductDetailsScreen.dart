@@ -881,6 +881,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                         ),
                         SizedBox(height: h * 0.01),
                         if (_isReviewsVisible)
+                          // Text("Reviews")
                           Text(
                             "Customers love this shirt! 'Fits perfectly and the fabric is so soft!' - Jane D.\n'Great value for the price!' - John S.",
                             style: TextStyle(

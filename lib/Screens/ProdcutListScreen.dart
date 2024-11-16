@@ -19,12 +19,12 @@ class ProdcutListScreen extends StatefulWidget {
 
 class _ProdcutListScreenState extends State<ProdcutListScreen> {
   ScrollController _scrollController = ScrollController();
-  List<Color> colors = [
-    Colors.red,
-    Colors.blue,
-    Colors.green,
-  ];
-
+  // List<Color> colors = [
+  //   Colors.red,
+  //   Colors.blue,
+  //   Colors.green,
+  // ];
+int rating=0;
   List<Color> selectedColors = [];
   String _selectedIndex="";
 
@@ -188,7 +188,7 @@ class _ProdcutListScreenState extends State<ProdcutListScreen> {
                       crossAxisCount: 2,
                       crossAxisSpacing: 8.0,
                       mainAxisSpacing: 8.0,
-                      childAspectRatio: 0.46,
+                      childAspectRatio: 0.66,
                     ),
                     itemCount: product_list.length,
                     itemBuilder: (context, index) {
@@ -229,40 +229,40 @@ class _ProdcutListScreenState extends State<ProdcutListScreen> {
                                           ),
                                         ),
                                       ),
-                                      const SizedBox(height: 15),
-                                      Row(
-                                        children: [
-                                          InkWell(
-                                            onTap: () {
-                                              Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          UploaderProfile()));
-                                            },
-                                            child: CircleAvatar(
-                                              radius: 12,
-                                              child: ClipOval(
-                                                child: Image.asset(
-                                                  "assets/postedBY.png",
-                                                  fit: BoxFit.contain,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          SizedBox(width: w * 0.03),
-                                          Text(
-                                            "POSTED BY",
-                                            style: TextStyle(
-                                              color: Color(0xff617C9D),
-                                              fontFamily: 'RozhaOne',
-                                              fontSize: 14,
-                                              height: 19.36 / 14,
-                                              fontWeight: FontWeight.w400,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
+                                      // const SizedBox(height: 15),
+                                      // Row(
+                                      //   children: [
+                                      //     InkWell(
+                                      //       onTap: () {
+                                      //         Navigator.push(
+                                      //             context,
+                                      //             MaterialPageRoute(
+                                      //                 builder: (context) =>
+                                      //                     UploaderProfile()));
+                                      //       },
+                                      //       child: CircleAvatar(
+                                      //         radius: 12,
+                                      //         child: ClipOval(
+                                      //           child: Image.asset(
+                                      //             "assets/postedBY.png",
+                                      //             fit: BoxFit.contain,
+                                      //           ),
+                                      //         ),
+                                      //       ),
+                                      //     ),
+                                      //     SizedBox(width: w * 0.03),
+                                      //     Text(
+                                      //       "POSTED BY",
+                                      //       style: TextStyle(
+                                      //         color: Color(0xff617C9D),
+                                      //         fontFamily: 'RozhaOne',
+                                      //         fontSize: 14,
+                                      //         height: 19.36 / 14,
+                                      //         fontWeight: FontWeight.w400,
+                                      //       ),
+                                      //     ),
+                                      //   ],
+                                      // ),
                                       const SizedBox(height: 10),
                                       Text(
                                         productData.title ?? '',
@@ -275,22 +275,36 @@ class _ProdcutListScreenState extends State<ProdcutListScreen> {
                                         ),
                                       ),
                                       const SizedBox(height: 10),
+                                      rating > 0
+                                          ? Row(
+                                        children: List.generate(5, (starIndex) {
+                                          int ratingValue = int.tryParse(productData.rating.toString()) ?? 0;
+
+                                          return Icon(
+                                            starIndex < ratingValue ? Icons.star : Icons.star_border,
+                                            color: Color(0xffF79009),
+                                            size: 14,
+                                          );
+                                        }),
+                                      )
+                                          : SizedBox.shrink(),  // If rating is 0 or less, no space will be taken
+
+                                      const SizedBox(height: 10),
                                       Row(
                                         children: [
                                           Text(
-                                            productData.mrp.toString() ?? "",
+                                            '₹ ${productData.salePrice.toString() ?? ""}',
                                             style: TextStyle(
                                               color: Color(0xff121926),
                                               fontFamily: 'RozhaOne',
-                                              fontSize: 14,
-                                              height: 21 / 14,
-                                              fontWeight: FontWeight.w400,
+                                              fontSize: 16,
+                                              height: 21 / 16,
+                                              fontWeight: FontWeight.w500,
                                             ),
                                           ),
                                           SizedBox(width: w * 0.03),
                                           Text(
-                                            productData.salePrice.toString() ??
-                                                "",
+                                            '₹ ${productData.mrp.toString() ?? ""}',
                                             style: TextStyle(
                                               color: Color(0xff617C9D),
                                               fontFamily: 'RozhaOne',
@@ -301,41 +315,41 @@ class _ProdcutListScreenState extends State<ProdcutListScreen> {
                                           ),
                                         ],
                                       ),
-                                      const SizedBox(height: 10),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: colors.map((color) {
-                                          return GestureDetector(
-                                            onTap: () =>
-                                                _toggleColorSelection(color),
-                                            child: Container(
-                                              padding: EdgeInsets.all(3),
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(100),
-                                                border: Border.all(
-                                                  color: selectedColors
-                                                          .contains(color)
-                                                      ? Colors.black
-                                                      : Colors.transparent,
-                                                  width: 0.5,
-                                                ),
-                                              ),
-                                              child: Container(
-                                                width: 20,
-                                                height: 20,
-                                                decoration: BoxDecoration(
-                                                  color: color,
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          100),
-                                                ),
-                                              ),
-                                            ),
-                                          );
-                                        }).toList(),
-                                      ),
+                                      // const SizedBox(height: 10),
+                                      // Row(
+                                      //   mainAxisAlignment:
+                                      //       MainAxisAlignment.start,
+                                      //   children: colors.map((color) {
+                                      //     return GestureDetector(
+                                      //       onTap: () =>
+                                      //           _toggleColorSelection(color),
+                                      //       child: Container(
+                                      //         padding: EdgeInsets.all(3),
+                                      //         decoration: BoxDecoration(
+                                      //           borderRadius:
+                                      //               BorderRadius.circular(100),
+                                      //           border: Border.all(
+                                      //             color: selectedColors
+                                      //                     .contains(color)
+                                      //                 ? Colors.black
+                                      //                 : Colors.transparent,
+                                      //             width: 0.5,
+                                      //           ),
+                                      //         ),
+                                      //         child: Container(
+                                      //           width: 20,
+                                      //           height: 20,
+                                      //           decoration: BoxDecoration(
+                                      //             color: color,
+                                      //             borderRadius:
+                                      //                 BorderRadius.circular(
+                                      //                     100),
+                                      //           ),
+                                      //         ),
+                                      //       ),
+                                      //     );
+                                      //   }).toList(),
+                                      // ),
                                     ],
                                   ),
                                 ),
