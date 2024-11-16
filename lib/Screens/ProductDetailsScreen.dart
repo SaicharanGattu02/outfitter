@@ -20,6 +20,7 @@ class ProductDetailsScreen extends StatefulWidget {
 
 class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   int quantity = 0;
+  int rating = 0;
   final List<Map<String, String>> grid = [
     {"image": 'assets/c1.png', 'name': 'Peaked Collar'},
     {"image": 'assets/c2.png', 'name': 'Spread Collar'},
@@ -871,20 +872,471 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                           ],
                         ),
                         SizedBox(height: h * 0.01),
-                        if (_isReviewsVisible)
+                        if (_isReviewsVisible)...[
+                          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Reviews(72)",
+                                style: TextStyle(
+                                  color: Color(0xff121926),
+                                  fontFamily: 'Inter',
+                                  fontSize: 14,
+                                  height: 19.36 / 14,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              Text(
+                                "Write review",
+                                style: TextStyle(
+                                  color: Color(0xff088AB2),
+                                  fontFamily: 'Inter',
+                                  fontSize: 14,
+                                  height: 19.36 / 14,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
 
-                          // Text("Reviews")
-                          Text(
-                            "Customers love this shirt! 'Fits perfectly and the fabric is so soft!' - Jane D.\n'Great value for the price!' - John S.",
-                            style: TextStyle(
-                              color: Color(0xff4B5565),
-                              fontFamily: 'RozhaOne',
-                              fontSize: 14,
-                              height: 19.36 / 14,
-                              fontWeight: FontWeight.w400,
-                            ),
-                            textAlign: TextAlign.left,
+
+                            ],),
+
+                          Row(
+                            children: [
+                              Container(width: w*0.45,
+                                decoration: BoxDecoration(),child:Center(child:
+
+                                Row(mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Column(
+                                      children: [
+                                        Text(
+                                          "4.8",
+                                          style: TextStyle(
+                                            color: Color(0xff110B0F),
+                                            fontFamily: 'RozhaOne',
+                                            fontSize: 80,
+                                            fontWeight: FontWeight.w400,
+                                          ),
+                                        ),
+
+                                        Text(
+                                          "15.3k Total Reviews",
+                                          style: TextStyle(
+                                            color: Color(0xff110B0F),
+                                            fontFamily: 'Inter',
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w400,
+                                          ),
+                                        ),
+
+                                      ],
+                                    ),
+
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 10),
+                                      child: Icon(
+                                        size: 22,
+                                        Icons.star_rate_rounded,
+                                        color:
+                                        Colors.orangeAccent,
+                                      ),
+                                    ),
+
+                                  ],
+                                ),)
+                                ,),
+                              Spacer(),
+                              Container( height: 108,width:w*0.001,color: Color(0xff000000),),
+                              Spacer(),
+
+                              Container(
+                                width: w*0.45,
+                                padding: const EdgeInsets.only(left: 10.0),
+                                child: Row(
+                                  mainAxisAlignment:
+                                  MainAxisAlignment.start,
+                                  children: [
+                                    Column(
+                                      children: [
+                                        for (int i = 5; i > 0; i--) ...[
+                                          Container(
+                                              margin: EdgeInsets.only(bottom: 2),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                                children: [
+                                                  Text("$i",
+                                                      style: TextStyle(
+                                                          fontFamily:
+                                                          "Inter",
+                                                          fontSize: 14.5)),
+                                                  Icon(
+                                                    size: 12,
+                                                    Icons.star_rate_rounded,
+                                                    color:
+                                                    Colors.orangeAccent,
+                                                  ),
+                                                ],
+                                              ))
+                                        ],
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      width:
+                                      w * 0.33,
+                                      child: Column(
+                                        crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                        children: [
+
+                                          Container(
+                                            margin: EdgeInsets.only(left: 6),
+                                            width:  w *
+                                                0.35,
+
+
+                                            child: Row(
+                                              crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                              children: <Widget>[
+                                                // LinearProgressIndicator
+                                                SizedBox(
+                                                  width:w * 0.25,
+                                                  child: ClipRRect(
+                                                    borderRadius:
+                                                    BorderRadius
+                                                        .circular(3.0),
+                                                    // Set the corner radius
+                                                    child: LinearProgressIndicator(
+                                                        value: double.parse(
+                                                          // review.r5 ??
+                                                            "30") /
+                                                            100.0,
+                                                        minHeight: 4.0,
+                                                        valueColor:
+                                                        AlwaysStoppedAnimation(
+                                                            Color(
+                                                                0xff8ECAE6)),
+                                                        backgroundColor:
+                                                        Colors
+                                                            .grey),
+                                                  ),
+                                                ),
+                                                // Text widget displaying the rating value
+                                                Padding(
+                                                  padding:
+                                                  const EdgeInsets.only(
+                                                      left: 5.0),
+                                                  // Add some space between the progress indicator and the text
+                                                  child: Text(
+                                                    // '${review.r5 ?? "0"}%',
+                                                    "10",style:
+                                                  TextStyle(
+                                                    color: Color(0xff697586),
+                                                    fontFamily: 'RozhaOne',
+                                                    fontSize: 14,
+                                                    height: 24 / 14,
+                                                    fontWeight: FontWeight.w400,
+                                                  ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          Container(
+                                            width:  w *
+                                                0.35, // Set the desired width
+                                            margin: EdgeInsets.only(left: 6),
+
+                                            child: Row(
+                                              crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                              children: <Widget>[
+                                                // LinearProgressIndicator
+                                                SizedBox(
+                                                  width:w * 0.25,
+                                                  child: ClipRRect(
+                                                    borderRadius:
+                                                    BorderRadius
+                                                        .circular(3.0),
+                                                    // Set the corner radius
+                                                    child: LinearProgressIndicator(
+                                                        value: double.parse(
+                                                          // review.r5 ??
+                                                            "30") /
+                                                            100.0,
+                                                        minHeight: 4.0,
+                                                        valueColor:
+                                                        AlwaysStoppedAnimation(
+                                                            Color(
+                                                                0xff8ECAE6)),
+                                                        backgroundColor:
+                                                        Colors
+                                                            .grey),
+                                                  ),
+                                                ),
+                                                // Text widget displaying the rating value
+                                                Padding(
+                                                  padding:
+                                                  const EdgeInsets.only(
+                                                      left: 5.0),
+                                                  // Add some space between the progress indicator and the text
+                                                  child: Text(
+                                                    // '${review.r5 ?? "0"}%',
+                                                    "10",style:
+                                                  TextStyle(
+                                                    color: Color(0xff697586),
+                                                    fontFamily: 'RozhaOne',
+                                                    fontSize: 14,
+                                                    height: 24 / 14,
+                                                    fontWeight: FontWeight.w400,
+                                                  ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          Container(
+                                            width:  w *
+                                                0.35, // Set the desired width
+                                            margin: EdgeInsets.only(left: 6),
+                                            child: Row(
+                                              crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                              children: <Widget>[
+                                                // LinearProgressIndicator
+                                                SizedBox(
+                                                  width:w * 0.25,
+                                                  child: ClipRRect(
+                                                    borderRadius:
+                                                    BorderRadius
+                                                        .circular(3.0),
+                                                    // Set the corner radius
+                                                    child: LinearProgressIndicator(
+                                                        value: double.parse(
+                                                          // review.r5 ??
+                                                            "30") /
+                                                            100.0,
+                                                        minHeight: 4.0,
+                                                        valueColor:
+                                                        AlwaysStoppedAnimation(
+                                                            Color(
+                                                                0xff8ECAE6)),
+                                                        backgroundColor:
+                                                        Colors
+                                                            .grey),
+                                                  ),
+                                                ),
+                                                // Text widget displaying the rating value
+                                                Padding(
+                                                  padding:
+                                                  const EdgeInsets.only(
+                                                      left: 5.0),
+                                                  // Add some space between the progress indicator and the text
+                                                  child: Text(
+                                                    // '${review.r5 ?? "0"}%',
+                                                    "10",style:
+                                                  TextStyle(
+                                                    color: Color(0xff697586),
+                                                    fontFamily: 'RozhaOne',
+                                                    fontSize: 14,
+                                                    height: 24 / 14,
+                                                    fontWeight: FontWeight.w400,
+                                                  ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          Container(
+                                            width:  w *
+                                                0.35, // Set the desired width
+                                            margin: EdgeInsets.only(left: 6),
+
+
+                                            child: Row(
+                                              crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                              children: <Widget>[
+                                                // LinearProgressIndicator
+                                                SizedBox(
+                                                  width:w * 0.25,
+                                                  child: ClipRRect(
+                                                    borderRadius:
+                                                    BorderRadius
+                                                        .circular(3.0),
+                                                    // Set the corner radius
+                                                    child: LinearProgressIndicator(
+                                                        value: double.parse(
+                                                          // review.r5 ??
+                                                            "30") /
+                                                            100.0,
+                                                        minHeight: 4.0,
+                                                        valueColor:
+                                                        AlwaysStoppedAnimation(
+                                                            Color(
+                                                                0xff8ECAE6)),
+                                                        backgroundColor:
+                                                        Colors
+                                                            .grey),
+                                                  ),
+                                                ),
+                                                // Text widget displaying the rating value
+                                                Padding(
+                                                  padding:
+                                                  const EdgeInsets.only(
+                                                      left: 5.0),
+                                                  // Add some space between the progress indicator and the text
+                                                  child: Text(
+                                                    // '${review.r5 ?? "0"}%',
+                                                    "10",style:
+                                                  TextStyle(
+                                                    color: Color(0xff697586),
+                                                    fontFamily: 'RozhaOne',
+                                                    fontSize: 14,
+                                                    height: 24 / 14,
+                                                    fontWeight: FontWeight.w400,
+                                                  ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          Container(
+                                            width:  w *
+                                                0.35, // Set the desired width
+                                            margin: EdgeInsets.only(left: 6),
+
+                                            child: Row(
+                                              crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                              children: <Widget>[
+                                                // LinearProgressIndicator
+                                                SizedBox(
+                                                  width:w * 0.25,
+                                                  child: ClipRRect(
+                                                    borderRadius:
+                                                    BorderRadius
+                                                        .circular(3.0),
+                                                    // Set the corner radius
+                                                    child: LinearProgressIndicator(
+                                                        value: double.parse(
+                                                          // review.r5 ??
+                                                            "30") /
+                                                            100.0,
+                                                        minHeight: 4.0,
+                                                        valueColor:
+                                                        AlwaysStoppedAnimation(
+                                                            Color(
+                                                                0xff8ECAE6)),
+                                                        backgroundColor:
+                                                        Colors
+                                                            .grey),
+                                                  ),
+                                                ),
+                                                // Text widget displaying the rating value
+                                                Padding(
+                                                  padding:
+                                                  const EdgeInsets.only(
+                                                      left: 5.0),
+                                                  // Add some space between the progress indicator and the text
+                                                  child: Text(
+                                                    // '${review.r5 ?? "0"}%',
+                                                    "10",style:
+                                                  TextStyle(
+                                                    color: Color(0xff697586),
+                                                    fontFamily: 'RozhaOne',
+                                                    fontSize: 14,
+                                                    height: 24 / 14,
+                                                    fontWeight: FontWeight.w400,
+                                                  ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+
+
+                            ],
                           ),
+
+                          SizedBox(height: 10,),
+                          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Varun",
+                                style: TextStyle(
+                                  color: Color(0xff121926),
+                                  fontFamily: 'Inter',
+                                  fontSize: 14,
+                                  height: 19.36 / 14,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+
+                              Text(
+                                "Posted on 30 jun 2022",
+                                style: TextStyle(
+                                  color: Color(0xff617C9D),
+                                  fontFamily: 'Inter',
+                                  fontSize: 12,
+                                  height: 19.36 / 12,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+
+
+
+                            ],
+                          ),
+
+
+                          Column(mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+
+                              rating > 0
+                                  ? Row(
+                                children: List.generate(5, (starIndex) {
+                                  int ratingValue = int.tryParse(
+                                      productData?.rating.toString()??"") ?? 0;
+
+
+                                  return Icon(
+                                    starIndex < ratingValue ? Icons.star : Icons.star_border,
+                                    color: Color(0xffF79009),
+                                    size: 14,
+                                  );
+                                }),
+                              )
+                                  : SizedBox.shrink(),  // If rating is 0 or less, no space will be taken
+
+
+                              Text(
+                                productData?.productDetails ?? "",
+                                style: TextStyle(
+                                  color: Color(0xff4B5565),
+                                  fontFamily: 'Inter',
+                                  fontSize: 10,
+                                  height: 19.36 / 10,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                                textAlign: TextAlign.left,
+                              ),
+                            ],
+                          ),
+
+
+
+                        ],
+
+
+
                         SizedBox(height: h * 0.01),
                         Divider(thickness: 1, height: 1, color: Color(0xffEEF2F6)),
                         SizedBox(height: h * 0.01),
