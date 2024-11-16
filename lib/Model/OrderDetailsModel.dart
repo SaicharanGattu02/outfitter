@@ -111,14 +111,14 @@ class Product {
   String? id;
   String? title;
   String? category;
-  Null? brand;
+  String? brand;
   Null? colors;
   String? postedBy;
   int? mrp;
   int? salePrice;
   bool? isInWishlist;
   String? image;
-  int? rating;
+  dynamic rating;
 
   Product(
       {this.id,

@@ -19,9 +19,9 @@ class CartProvider with ChangeNotifier {
     }
   }
 
-  Future<String?> addToCartApi(String productID, String quantity) async {
+  Future<String?> addToCartApi(String productID, String quantity,String color,String size) async {
     try {
-      var res = await Userapi.addCartQuanitity(productID, quantity);
+      var res = await Userapi.addCartQuanitity(productID, quantity,color,size);
       if (res != null && res.settings?.success == 1) {
         fetchCartProducts();
         return "Product added to cart successfully!";// Re-fetch the cart list after adding

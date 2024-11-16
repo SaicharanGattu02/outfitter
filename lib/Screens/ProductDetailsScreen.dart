@@ -76,8 +76,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     Colors.green,
   ];
 
-  List<Color> selectedColors = [];
-  List<String> selectedSizes = [];
+  int? selectedIndex;
+  String? selectedSizeItem;
+  String? selectedColor;
 
 
   Color hexToColor(String hexColor) {
@@ -89,24 +90,26 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     }
   }
 
-  void _toggleColorSelection(String colorHex) {
+  void _toggleColorSelection(int index,String hexColor) {
     setState(() {
-      Color color = hexToColor(colorHex);
-      if (selectedColors.contains(color)) {
-        selectedColors.remove(color); // Deselect color
+      // If the tapped color is already selected, deselect it (set it to null)
+      if (selectedIndex == index) {
+        selectedIndex = null;
       } else {
-        selectedColors
-            .clear(); // Clear other selections if you want single selection
-        selectedColors.add(color); // Select new color
+        selectedIndex = index; // Select new color based on index
+        selectedColor = hexColor; // Select new color based on index
       }
     });
   }
 
-
-  void _toggleSizeSelection(String sizeName) {
+  void _toggleSizeSelection(String sizeItem) {
     setState(() {
-      selectedSizes.clear(); // Clear previous selection
-      selectedSizes.add(sizeName); // Add the newly selected size
+      // If the tapped size is already selected, deselect it (set to null)
+      if (selectedSizeItem == sizeItem) {
+        selectedSizeItem = null;
+      } else {
+        selectedSizeItem = sizeItem; // Select new size based on sizeItem
+      }
     });
   }
 
@@ -141,7 +144,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   Future<void>AddToCartApi(String productID,String quantity) async {
     final cart_provider =
     Provider.of<CartProvider>(context, listen: false);
-    var msg =await cart_provider.addToCartApi(productID,quantity);
+    var msg =await cart_provider.addToCartApi(productID,quantity,selectedColor??"",selectedSizeItem??"");
     if(msg!="" || msg!=null){
       CustomSnackBar.show(context, msg??"");
     }
@@ -588,14 +591,18 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                               crossAxisCount: 6,
                               childAspectRatio: 1,
                             ),
-                            itemCount: productData?.colors?.length ?? 0,
+                            itemCount: productData?.colors.length ?? 0,
                             physics: NeverScrollableScrollPhysics(),
                             shrinkWrap: true,
                             itemBuilder: (context, index) {
-                              final colorHex = productData?.colors?[index];
+                              final colorHex = productData?.colors[index];
                               Color color = hexToColor(colorHex ?? "");
+                              if (productData?.colors.isNotEmpty ?? false) {
+                                  selectedIndex = 0;
+                                  selectedColor=colorHex;
+                              }
                               return GestureDetector(
-                                onTap: () => _toggleColorSelection(colorHex ?? ""),
+                                onTap: () => _toggleColorSelection(index, colorHex??""),
                                 child: Padding(
                                   padding: EdgeInsets.all(10),
                                   child: Container(
@@ -603,7 +610,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(100),
                                       border: Border.all(
-                                        color: selectedColors.contains(color)
+                                        color:selectedIndex == index
                                             ? Color(0xffCAA16C) // Highlight selected color
                                             : Colors.transparent,
                                         width: 1,
@@ -625,7 +632,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                         ],
 
 
-                        if (productData?.size?.isNotEmpty ?? false) ...[
+                        if (productData?.size.isNotEmpty ?? false) ...[
                           SizedBox(height: h * 0.01),
                           Row(
                             children: [
@@ -648,11 +655,14 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                               crossAxisCount: 6,
                               childAspectRatio: 1,
                             ),
-                            itemCount: productData?.size?.length ?? 0,
+                            itemCount: productData?.size.length ?? 0,
                             physics: NeverScrollableScrollPhysics(),
                             shrinkWrap: true,
                             itemBuilder: (context, index) {
-                              final sizeItem = productData?.size?[index];
+                              final sizeItem = productData?.size[index];
+                              if (productData?.size.isNotEmpty ?? false) {
+                                selectedSizeItem = productData?.size.first; // Default selection (first size)
+                              }
                               return GestureDetector(
                                 onTap: () {
                                   _toggleSizeSelection(sizeItem ?? "");
@@ -664,7 +674,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(100),
                                       border: Border.all(
-                                        color: selectedSizes.contains(sizeItem ?? "")
+                                        color:selectedSizeItem == sizeItem
                                             ? Color(0xffCAA16C)
                                             : Colors.transparent,
                                         width: 1,
@@ -987,13 +997,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                         crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                         children: [
-
                                           Container(
                                             margin: EdgeInsets.only(left: 6),
-                                            width:  w *
-                                                0.35,
-
-
+                                            width:  w * 0.35,
                                             child: Row(
                                               crossAxisAlignment:
                                               CrossAxisAlignment.center,
@@ -1303,10 +1309,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                               rating > 0
                                   ? Row(
                                 children: List.generate(5, (starIndex) {
-                                  int ratingValue = int.tryParse(
-                                      productData?.rating.toString()??"") ?? 0;
-
-
+                                  int ratingValue = int.tryParse(productData?.ratingStats.averageRating.toString()??"") ?? 0;
                                   return Icon(
                                     starIndex < ratingValue ? Icons.star : Icons.star_border,
                                     color: Color(0xffF79009),
@@ -1315,8 +1318,6 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                 }),
                               )
                                   : SizedBox.shrink(),  // If rating is 0 or less, no space will be taken
-
-
                               Text(
                                 productData?.productDetails ?? "",
                                 style: TextStyle(
@@ -1476,8 +1477,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                                       BorderRadius.circular(
                                                           100),
                                                       border: Border.all(
-                                                        color: selectedColors
-                                                            .contains(color)
+                                                        color: selectedIndex == index
                                                             ? Colors.black
                                                             : Colors.transparent,
                                                         width: 0.5,

@@ -275,11 +275,13 @@ class Userapi {
   }
 
   //
-  static Future<RegisterModel?> addCartQuanitity(String product,String quantity) async {
+  static Future<RegisterModel?> addCartQuanitity(String productID, String quantity,String color,String size) async {
     try {
       Map<String, String> data = {
-        "product": product,
-        "quantity": quantity
+        "product": productID,
+        "quantity": quantity,
+        "color": color,
+        "size": size
       };
       final url = Uri.parse("${host}/api/carts");
       final headers = await getheader2();
