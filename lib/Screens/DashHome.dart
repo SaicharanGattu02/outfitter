@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 
 import '../Model/ProductsListModel.dart';
 import '../Services/UserApi.dart';
+import '../providers/CartProvider.dart';
 import '../utils/CustomSnackBar.dart';
 import 'ProdcutListScreen.dart';
 import 'Orders.dart';
@@ -187,20 +188,31 @@ class _DashHomeState extends State<DashHome> {
                   SizedBox(width: w * 0.025),
                   InkWell(
                     onTap: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => Cart()));
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Cart()),  // Navigate to your cart screen
+                      );
                     },
                     child: Container(
                       alignment: Alignment.center,
-                      child: Image.asset(
-                        "assets/cart.png",
-                        width: 28,
-                        height: 28,
-                        fit: BoxFit.contain,
-                        color: Color(0xffffffff),
+                      child: Badge.count(
+                        count: Cart.cartCount,  // Get the cart count from your CartProvider
+                        backgroundColor: Colors.red,  // Set the badge background color (red for cart)
+                        textColor: Colors.white,  // Set the badge text color (white for visibility)
+                        smallSize: 12,  // Set the small size of the badge
+                        largeSize: 16,  // Set the large size if needed
+                        isLabelVisible: cartProvider.cartCount > 0,  // Only show badge if count > 0
+                        alignment: Alignment.topRight,  // Align badge to top right of the cart icon
+                        child: Image.asset(
+                          "assets/cart.png",  // The cart icon
+                          width: 28,
+                          height: 28,
+                          fit: BoxFit.contain,
+                          color: Color(0xffffffff),
+                        ),
                       ),
                     ),
-                  ),
+                  )
                 ],
               ),
             ],

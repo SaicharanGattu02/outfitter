@@ -14,7 +14,6 @@ class UserDetailsProvider with ChangeNotifier {
     try {
       // Fetching user details from the API
       var response = await Userapi.getUserdetsils();
-
       // Check if response is not null and contains data
       if (response?.data != null) {
         _userdetails = response?.data;

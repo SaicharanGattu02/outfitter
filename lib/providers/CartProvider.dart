@@ -7,45 +7,63 @@ import '../Services/UserApi.dart';
 class CartProvider with ChangeNotifier {
   List<CartList> _cartList = [];
 
+  // This will store the total quantity of all products in the cart.
+  int _cartCount = 0;
+
+  // Getter for cart list
   List<CartList> get cartList => _cartList;
 
+  // Getter for cart count
+  int get cartCount => _cartCount;
+
+  // Method to fetch cart products
   Future<void> fetchCartProducts() async {
     try {
       var response = await Userapi.GetCartList();
       _cartList = response?.data ?? [];
+      _updateCartCount(); // Update the cart count after fetching
       notifyListeners();
     } catch (e) {
-      throw Exception('Failed to fetch cartlist: $e');
+      throw Exception('Failed to fetch cart list: $e');
     }
   }
 
-  Future<String?> addToCartApi(String productID, String quantity,String color,String size) async {
+  // Method to add a product to the cart
+  Future<String?> addToCartApi(String productID, String quantity, String color, String size) async {
     try {
-      var res = await Userapi.addCartQuanitity(productID, quantity,color,size);
+      var res = await Userapi.addCartQuanitity(productID, quantity, color, size);
       if (res != null && res.settings?.success == 1) {
-        fetchCartProducts();
-        return "Product added to cart successfully!";// Re-fetch the cart list after adding
+        fetchCartProducts();  // Re-fetch the cart list after adding
+        return "Product added to cart successfully!";
       } else {
-        return res?.settings?.message;// Re-fetch the cart list after adding
+        return res?.settings?.message;
       }
     } catch (e) {
       throw Exception('Failed to add to cart: $e');
     }
   }
 
+  // Method to update the quantity of a product in the cart
   Future<void> updateCartApi(String productID, String quantity) async {
     try {
       var res = await Userapi.updateCartQuanitity(productID, quantity);
       if (res != null && res.settings?.success == 1) {
-        fetchCartProducts(); // Re-fetch the cart list after adding
+        fetchCartProducts();  // Re-fetch the cart list after updating
       } else {
-        throw Exception('Failed to add product to cart');
+        throw Exception('Failed to update cart');
       }
     } catch (e) {
-      throw Exception('Failed to add to cart: $e');
+      throw Exception('Failed to update cart: $e');
     }
   }
 
+  // Update the cart count whenever the cart changes
+  void _updateCartCount() {
+    _cartCount = _cartList.fold(0, (total, item) => total + (item.quantity ?? 0));
+    notifyListeners(); // Notify listeners when cart count changes
+  }
+
+  // Method to update the quantity of an item directly in the cart
   void updateQuantity(String productId, int quantity) {
     // Find the cart item matching the productId
     var cartItem = _cartList.firstWhere(
@@ -58,10 +76,12 @@ class CartProvider with ChangeNotifier {
       // Update quantity if greater than zero, else remove the item
       if (quantity > 0) {
         cartItem.quantity = quantity;
+        _updateCartCount(); // Recalculate the cart count
         notifyListeners();  // Notify listeners to update the UI
       } else {
         // Remove the item if quantity is zero
         _cartList.removeWhere((item) => item.product?.id == productId);
+        _updateCartCount(); // Recalculate the cart count
         notifyListeners();  // Notify listeners to update the UI
       }
     } else {
@@ -69,4 +89,5 @@ class CartProvider with ChangeNotifier {
     }
   }
 }
+
 

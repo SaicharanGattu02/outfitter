@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:outfitter/AddRating.dart';
 import 'package:outfitter/Screens/UploderProfile.dart';
 import 'package:outfitter/providers/CartProvider.dart';
 import 'package:outfitter/providers/ProductDetailsProvider.dart';
@@ -959,16 +960,21 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
-                            // Text(
-                            //   "Write review",
-                            //   style: TextStyle(
-                            //     color: Color(0xff088AB2),
-                            //     fontFamily: 'Inter',
-                            //     fontSize: 14,
-                            //     height: 19.36 / 14,
-                            //     fontWeight: FontWeight.w500,
-                            //   ),
-                            // ),
+                            InkResponse(
+                              onTap: (){
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => AddProductRating(id: productData?.id),));
+                              },
+                              child: Text(
+                                "Write review",
+                                style: TextStyle(
+                                  color: Color(0xff088AB2),
+                                  fontFamily: 'Inter',
+                                  fontSize: 14,
+                                  height: 19.36 / 14,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
                           ],
                         ),
                         SizedBox(
@@ -986,9 +992,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                     Column(
                                       children: [
                                         Text(
-                                          productData?.ratingStats.averageRating
-                                                  .toString() ??
-                                              '', // Fallback to 'N/A' if null
+                                          productData?.ratingStats.averageRating.toString() ?? '',
                                           style: TextStyle(
                                             color: Color(0xff110B0F),
                                             fontFamily: 'RozhaOne',

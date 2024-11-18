@@ -781,6 +781,40 @@ class Userapi {
    }
   }
 
+  static Future<RegisterModel?> SubmitReviewApi(String page_source, String rating, String review) async {
+      try {
+        // Prepare the data
+        Map<String, String> data = {
+          "rating": rating,
+          "details": review,
+          "page_source": page_source,
+        };
+        print("SubmitReviewApi: ${data}");
+
+        final url = Uri.parse("$host/api/create_review");
+        final headers =
+        await getheader2(); // Assuming this fetches headers with Authorization
+
+        // Send the POST request
+        final response = await http.post(
+          url,
+          headers: headers,
+          body: data, // Use data directly for x-www-form-urlencoded
+        );
+        if (response.statusCode == 200) {
+          final jsonResponse = jsonDecode(response.body);
+          print("SubmitReview Status: ${response.body}");
+          return RegisterModel.fromJson(jsonResponse);
+        } else {
+          print("Error: ${response.statusCode} ${response.body}");
+          return null;
+        }
+      } catch (e) {
+        print("Error occurred: $e");
+        return null;
+      }
+  }
+
 
 
 
