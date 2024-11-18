@@ -141,7 +141,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
                                   Row(
                                     children: [
                                       Text(
-                                        item.product?.salePrice.toString() ?? "",
+                                        ('₹ ${item.product?.salePrice.toString() ?? ""}'),
                                         style: TextStyle(
                                           color: Color(0xff181725),
                                           fontFamily: 'RozhaOne',
@@ -152,7 +152,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
                                       ),
                                       SizedBox(width: w * 0.02),
                                       Text(
-                                        item.product?.mrp.toString() ?? "",
+                                        ('₹ ${item.product?.mrp.toString() ?? ""}'),
                                         style: TextStyle(
                                           fontFamily: 'RozhaOne',
                                           fontSize: 12,

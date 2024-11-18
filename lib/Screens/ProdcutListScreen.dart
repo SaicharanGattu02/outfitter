@@ -33,9 +33,9 @@ class _ProdcutListScreenState extends State<ProdcutListScreen> {
     'Popularity': 'best-seller',
   };
   // Initial range values
-  double minPrice = 500;
+  double minPrice = 0;
   double maxPrice = 10000;
-  double selectedMinPrice = 500;
+  double selectedMinPrice = 0;
   double selectedMaxPrice = 2000;
 
   int rating = 0;

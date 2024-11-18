@@ -221,7 +221,8 @@ class _CartState extends State<Cart> {
                         Row(
                           children: [
                             Text(
-                              cartItem.product?.salePrice.toString() ?? "",
+
+                            ('₹ ${cartItem.product?.salePrice.toString() ?? ""}'),
                               style: TextStyle(
                                 color: Color(0xff181725),
                                 fontFamily: 'RozhaOne',
@@ -231,12 +232,13 @@ class _CartState extends State<Cart> {
                             ),
                             SizedBox(width: 4),
                             Text(
-                              cartItem.product?.mrp.toString() ?? "",
+                              ('₹ ${cartItem.product?.mrp.toString() ?? ""}'),
                               style: TextStyle(
                                 color: Color(0xffED1C24),
                                 fontFamily: 'RozhaOne',
                                 fontSize: 12,
                                 decoration: TextDecoration.lineThrough,
+                                decorationColor: Color(0xffED1C24),
                                 fontWeight: FontWeight.w400,
                               ),
                             ),

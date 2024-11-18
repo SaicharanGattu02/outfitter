@@ -143,6 +143,8 @@ class Userapi {
   static Future<ProductsListModel?> getProductsList(String category_id,selectedSort,filterminprice,filtermaxprice) async {
     try {
       final url = Uri.parse("${host}/api/products?category=${category_id}&sort_by=${selectedSort}&min_price=${filterminprice}&max_price=${filtermaxprice}");
+      print("url>>${url}");
+
       final headers = await getheader1();
       final response = await http.get(
         url,
