@@ -39,7 +39,7 @@ class CustomAppBar2 extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      automaticallyImplyLeading: true,
+      automaticallyImplyLeading: false,
       leading: null,
       actions: <Widget>[Container()],
       toolbarHeight: 50,

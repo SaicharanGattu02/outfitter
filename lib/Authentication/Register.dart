@@ -545,13 +545,13 @@ class _RegisterState extends State<Register> {
                               scale: 0.9, // Adjust the scale to decrease the size
                               child: Radio<String>(
                                 value: 'Male',
-
                                 groupValue: _gender,
                                 activeColor:
                                 Color(0xffCAA16C), // Change the active color
                                 onChanged: (value) {
                                   setState(() {
                                     _gender = value!;
+                                    _validateGender="";
                                   });
                                 },
                               ),
@@ -578,6 +578,7 @@ class _RegisterState extends State<Register> {
                                 onChanged: (value) {
                                   setState(() {
                                     _gender = value!;
+                                    _validateGender="";
                                   });
                                 },
                               ),
@@ -597,13 +598,13 @@ class _RegisterState extends State<Register> {
                               scale: 0.9, // Adjust the scale to decrease the size
                               child: Radio<String>(
                                 value: 'Others',
-
                                 groupValue: _gender,
                                 activeColor:
                                 Color(0xffCAA16C), // Change the active color
                                 onChanged: (value) {
                                   setState(() {
                                     _gender = value!;
+                                    _validateGender="";
                                   });
                                 },
                               ),

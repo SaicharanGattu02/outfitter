@@ -118,144 +118,162 @@ class _SearchscreenState extends State<Searchscreen> {
               ],
             ),
             SizedBox(height: h * 0.03),
-
-            isLoading?
-            Center(child: CircularProgressIndicator(
-              color: Color(0xffCAA16C),
-            )):
-            products.length==0?
-            Center(
-              child: Column(
-                children: [
-                  SizedBox(height: w*0.5,),
-                  Image.asset(
-                    alignment: Alignment.center,
-                    'assets/no_search.png', // Your "no items" image
-                    width: 160,
-                    height: 160,
-                    fit: BoxFit.cover,
-                  ),
-                  SizedBox(height: 30,),
-                  Text("Enter text to search the products!",
-                    style: TextStyle(
-                      color: Color(0xff000000),
-                      fontFamily: 'RozhaOne',
-                      fontSize: 16,
-                      height: 18 / 16,
-                      fontWeight: FontWeight.w400,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-
-                ],
-              ),
-            ):
-              Expanded(
-                child: ListView.builder(
-                  itemCount: products.length,
-                  itemBuilder: (context, index) {
-                    final item = products[index];
-                    return InkWell(
-                      onTap: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => ProductDetailsScreen(productid: item.id??"", category_id: ""),));
-                      },
-                      child: Container(
-                        width: w,
-                        padding: EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          color: Color(0xffFFFDF6),
-                          border: Border.all(color: Color(0xffF3EFE1), width: 1),
-                          borderRadius: BorderRadius.circular(7),
-                        ),
-                        margin: EdgeInsets.only(bottom: 16),
-                        child: Row(
+            isLoading
+                ? Center(
+                    child: CircularProgressIndicator(
+                    color: Color(0xffCAA16C),
+                  ))
+                : products.length == 0
+                    ? Center(
+                        child: Column(
                           children: [
-                            Stack(
-                              children: [
-                                Container(
-                                  decoration: BoxDecoration(
-                                    color: Color(0xffFFFFFF),
-                                    borderRadius: BorderRadius.circular(6),
-                                    border: Border.all(
-                                        color: Color(0xffE7C6A0), width: 1),
-                                  ),
-                                  child: Center(
-                                    child: Image.network(
-                                      item.image ?? "",
-                                      width: w * 0.2,
-                                      height: h * 0.1,
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                ),
-                              ],
+                            SizedBox(
+                              height: w * 0.5,
                             ),
-                            SizedBox(width: w * 0.03),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    item.title ?? "",
-                                    style: TextStyle(
-                                        color: Color(0xff181725),
-                                        fontFamily: 'RozhaOne',
-                                        fontSize: 16,
-                                        height: 18 / 16,
-                                        fontWeight: FontWeight.w400,
-                                        overflow: TextOverflow.ellipsis),
-                                    maxLines: 3,
-                                  ),
-                                  // SizedBox(height: h * 0.008),
-                                  // Row(
-                                  //   children: List.generate(5, (starIndex) {
-                                  //     return Icon(
-                                  //       starIndex < item.rating
-                                  //           ? Icons.star
-                                  //           : Icons.star_border,
-                                  //       color: Color(0xffF79009),
-                                  //       size: 14,
-                                  //     );
-                                  //   }),
-                                  // ),
-                                  SizedBox(height: h * 0.008),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        '₹ ${item.salePrice}',
-                                        style: TextStyle(
-                                          color: Color(0xff181725),
-                                          fontFamily: 'RozhaOne',
-                                          fontSize: 18,
-                                          height: 21 / 18,
-                                          fontWeight: FontWeight.w400,
-                                        ),
-                                      ),
-                                      SizedBox(width: w * 0.02),
-                                      Text(
-                                        '₹ ${item.mrp}',
-                                        style: TextStyle(
-                                          color: Color(0xffED1C24),
-                                          fontFamily: 'RozhaOne',
-                                          fontSize: 12,
-                                          decoration: TextDecoration.lineThrough,
-                                          decorationColor: Color(0xffED1C24),
-                                          height: 18 / 12,
-                                          fontWeight: FontWeight.w400,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
+                            Image.asset(
+                              alignment: Alignment.center,
+                              'assets/no_search.png', // Your "no items" image
+                              width: 160,
+                              height: 160,
+                              fit: BoxFit.cover,
+                            ),
+                            SizedBox(
+                              height: 30,
+                            ),
+                            Text(
+                              "Enter text to search the products!",
+                              style: TextStyle(
+                                color: Color(0xff000000),
+                                fontFamily: 'RozhaOne',
+                                fontSize: 16,
+                                height: 18 / 16,
+                                fontWeight: FontWeight.w400,
                               ),
+                              textAlign: TextAlign.center,
                             ),
                           ],
                         ),
+                      )
+                    : Expanded(
+                        child: ListView.builder(
+                          itemCount: products.length,
+                          itemBuilder: (context, index) {
+                            final item = products[index];
+                            return InkWell(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          ProductDetailsScreen(
+                                              productid: item.id ?? "",
+                                              category_id: ""),
+                                    ));
+                              },
+                              child: Container(
+                                width: w,
+                                padding: EdgeInsets.all(16),
+                                decoration: BoxDecoration(
+                                  color: Color(0xffFFFDF6),
+                                  border: Border.all(
+                                      color: Color(0xffF3EFE1), width: 1),
+                                  borderRadius: BorderRadius.circular(7),
+                                ),
+                                margin: EdgeInsets.only(bottom: 16),
+                                child: Row(
+                                  children: [
+                                    Stack(
+                                      children: [
+                                        Container(
+                                          decoration: BoxDecoration(
+                                            color: Color(0xffFFFFFF),
+                                            borderRadius:
+                                                BorderRadius.circular(6),
+                                            border: Border.all(
+                                                color: Color(0xffE7C6A0),
+                                                width: 1),
+                                          ),
+                                          child: Center(
+                                            child: Image.network(
+                                              item.image ?? "",
+                                              width: w * 0.2,
+                                              height: h * 0.1,
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(width: w * 0.03),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            item.title ?? "",
+                                            style: TextStyle(
+                                                color: Color(0xff181725),
+                                                fontFamily: 'RozhaOne',
+                                                fontSize: 16,
+                                                height: 18 / 16,
+                                                fontWeight: FontWeight.w400,
+                                                overflow:
+                                                    TextOverflow.ellipsis),
+                                            maxLines: 3,
+                                          ),
+                                          // SizedBox(height: h * 0.008),
+                                          // Row(
+                                          //   children: List.generate(5, (starIndex) {
+                                          //     return Icon(
+                                          //       starIndex < item.rating
+                                          //           ? Icons.star
+                                          //           : Icons.star_border,
+                                          //       color: Color(0xffF79009),
+                                          //       size: 14,
+                                          //     );
+                                          //   }),
+                                          // ),
+                                          SizedBox(height: h * 0.008),
+                                          Row(
+                                            children: [
+                                              Text(
+                                                '₹ ${item.salePrice}',
+                                                style: TextStyle(
+                                                  color: Color(0xff181725),
+                                                  fontFamily: 'RozhaOne',
+                                                  fontSize: 18,
+                                                  height: 21 / 18,
+                                                  fontWeight: FontWeight.w400,
+                                                ),
+                                              ),
+                                              SizedBox(width: w * 0.02),
+                                              Text(
+                                                '₹ ${item.mrp}',
+                                                style: TextStyle(
+                                                  color: Color(0xffED1C24),
+                                                  fontFamily: 'RozhaOne',
+                                                  fontSize: 12,
+                                                  decoration: TextDecoration
+                                                      .lineThrough,
+                                                  decorationColor:
+                                                      Color(0xffED1C24),
+                                                  height: 18 / 12,
+                                                  fontWeight: FontWeight.w400,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        ),
                       ),
-                    );
-                  },
-                ),
-              ),
           ],
         ),
       ),
