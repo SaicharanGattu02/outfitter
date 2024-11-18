@@ -534,7 +534,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                   context.read<ProductListProvider>());
                             }
                           },
-                          child: Container(
+                          child:
+                          Container(
                             padding: const EdgeInsets.all(8),
                             decoration: BoxDecoration(
                               color: Colors.grey[200],
@@ -1156,117 +1157,163 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                                     category_id: widget.category_id),
                                           ));
                                     },
-                                    child: Container(
-                                      width: w * 0.45,
-                                      // Control the width of each item
-                                      padding: EdgeInsets.all(8.0),
-                                      margin:
-                                      EdgeInsets.only(left: 10, right: 8.0),
-                                      // Space between items
-                                      decoration: BoxDecoration(
-                                        border: Border.all(
-                                          color: Color(0xffEEF2F6),
-                                          width: 1,
+                                    child:
+                                    Stack(
+                                      children: [
+                                        Container(
+                                        width: w * 0.45,
+                                        padding:EdgeInsets.all(8.0),
+                                        margin:EdgeInsets.only(left: 10, right: 8.0),
+                                        decoration: BoxDecoration(
+                                          border: Border.all(
+                                            color: Color(0xffEEF2F6),
+                                            width: 1,
+                                          ),
+                                        ),
+                                        child: Column(
+                                          mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                          children: [
+                                            Center(
+                                              child: Image.network(
+                                                data.image ?? "",
+                                                height: h * 0.2,
+                                                width: w * 0.45,
+                                                fit: BoxFit.contain,
+                                              ),
+                                            ),
+                                            SizedBox(height: 15),
+                                            // Row(
+                                            //   children: [
+                                            //     InkWell(
+                                            //       onTap: () {
+                                            //         Navigator.push(
+                                            //           context,
+                                            //           MaterialPageRoute(
+                                            //             builder: (context) => UploaderProfile(),
+                                            //           ),
+                                            //         );
+                                            //       },
+                                            //       child: CircleAvatar(
+                                            //         radius: 12,
+                                            //         child: ClipOval(
+                                            //           child: Image.asset(
+                                            //             "assets/postedBY.png",
+                                            //             fit: BoxFit.contain,
+                                            //           ),
+                                            //         ),
+                                            //       ),
+                                            //     ),
+                                            //     SizedBox(width: w * 0.03),
+                                            //     Text(
+                                            //       "POSTED BY",
+                                            //       style: TextStyle(
+                                            //         color: Color(0xff617C9D),
+                                            //         fontFamily: 'RozhaOne',
+                                            //         fontSize: 14,
+                                            //         height: 19.36 / 14,
+                                            //         fontWeight: FontWeight.w400,
+                                            //       ),
+                                            //     )
+                                            //   ],
+                                            // ),
+                                            SizedBox(height: 10),
+                                            Text(
+                                              data.title ?? "",
+                                              style: TextStyle(
+                                                color: Color(0xff121926),
+                                                fontFamily: 'RozhaOne',
+                                                fontSize: 16,
+                                                height: 24 / 16,
+                                                fontWeight: FontWeight.w400,
+                                              ),
+                                              maxLines:
+                                              2, // Limits the number of lines to 2
+                                              overflow: TextOverflow
+                                                  .ellipsis, // Adds ellipsis when text overflows
+                                            ),
+                                            SizedBox(height: 10),
+                                            Row(
+                                              mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  "₹${data.salePrice ?? ""}",
+                                                  style: TextStyle(
+                                                    color: Color(0xff121926),
+                                                    fontFamily: 'RozhaOne',
+                                                    fontSize: 18,
+                                                    height: 24 / 16,
+                                                    fontWeight: FontWeight.w500,
+                                                  ),
+                                                ),
+                                                SizedBox(width: w * 0.03),
+                                                Text(
+                                                  "₹${data.mrp ?? ""}",
+                                                  style: TextStyle(
+                                                    color: Color(0xff617C9D),
+                                                    fontFamily: 'RozhaOne',
+                                                    fontSize: 15,
+                                                    height: 24 / 16,
+                                                    fontWeight: FontWeight.w400,
+                                                    decoration:
+                                                    TextDecoration.lineThrough,
+                                                    decorationColor:
+                                                    Color(0xff617C9D),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
                                         ),
                                       ),
-                                      child: Column(
-                                        mainAxisAlignment:
-                                        MainAxisAlignment.start,
-                                        crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                        children: [
-                                          Center(
-                                            child: Image.network(
-                                              data.image ?? "",
-                                              height: h * 0.2,
-                                              width: w * 0.45,
-                                              fit: BoxFit.contain,
+                                        Positioned(
+                                          top: 8,
+                                          right: 8,
+                                          child: InkResponse(
+                                            onTap: () {
+                                              if (data.isInWishlist ?? false) {
+                                                // Remove from wishlist
+                                                context
+                                                    .read<WishlistProvider>()
+                                                    .removeFromWishlist(
+                                                    data.id ?? "");
+                                              } else {
+                                                // Add to wishlist
+                                                context
+                                                    .read<WishlistProvider>()
+                                                    .addToWishlist(data.id ?? "");
+                                              }
+                                            },
+                                            child: Container(
+                                              padding: const EdgeInsets.all(8),
+                                              decoration: BoxDecoration(
+                                                color: Colors.grey[200],
+                                                borderRadius: BorderRadius.circular(100),
+                                              ),
+                                              child: data.isInWishlist ?? false
+                                                  ? Icon(
+                                                Icons
+                                                    .favorite, // Filled heart icon when item is in wishlist
+                                                size: 18,
+                                                color: Colors
+                                                    .red, // Red color for filled icon
+                                              )
+                                                  : Icon(
+                                                Icons
+                                                    .favorite_border, // Outline heart icon when item is NOT in wishlist
+                                                size: 18,
+                                                color: Colors
+                                                    .black, // Black color for outline icon
+                                              ),
                                             ),
                                           ),
-                                          SizedBox(height: 15),
-                                          // Row(
-                                          //   children: [
-                                          //     InkWell(
-                                          //       onTap: () {
-                                          //         Navigator.push(
-                                          //           context,
-                                          //           MaterialPageRoute(
-                                          //             builder: (context) => UploaderProfile(),
-                                          //           ),
-                                          //         );
-                                          //       },
-                                          //       child: CircleAvatar(
-                                          //         radius: 12,
-                                          //         child: ClipOval(
-                                          //           child: Image.asset(
-                                          //             "assets/postedBY.png",
-                                          //             fit: BoxFit.contain,
-                                          //           ),
-                                          //         ),
-                                          //       ),
-                                          //     ),
-                                          //     SizedBox(width: w * 0.03),
-                                          //     Text(
-                                          //       "POSTED BY",
-                                          //       style: TextStyle(
-                                          //         color: Color(0xff617C9D),
-                                          //         fontFamily: 'RozhaOne',
-                                          //         fontSize: 14,
-                                          //         height: 19.36 / 14,
-                                          //         fontWeight: FontWeight.w400,
-                                          //       ),
-                                          //     )
-                                          //   ],
-                                          // ),
-                                          SizedBox(height: 10),
-                                          Text(
-                                            data.title ?? "",
-                                            style: TextStyle(
-                                              color: Color(0xff121926),
-                                              fontFamily: 'RozhaOne',
-                                              fontSize: 16,
-                                              height: 24 / 16,
-                                              fontWeight: FontWeight.w400,
-                                            ),
-                                            maxLines:
-                                            2, // Limits the number of lines to 2
-                                            overflow: TextOverflow
-                                                .ellipsis, // Adds ellipsis when text overflows
-                                          ),
-                                          SizedBox(height: 10),
-                                          Row(
-                                            mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                "₹${data.salePrice ?? ""}",
-                                                style: TextStyle(
-                                                  color: Color(0xff121926),
-                                                  fontFamily: 'RozhaOne',
-                                                  fontSize: 18,
-                                                  height: 24 / 16,
-                                                  fontWeight: FontWeight.w500,
-                                                ),
-                                              ),
-                                              SizedBox(width: w * 0.03),
-                                              Text(
-                                                "₹${data.mrp ?? ""}",
-                                                style: TextStyle(
-                                                  color: Color(0xff617C9D),
-                                                  fontFamily: 'RozhaOne',
-                                                  fontSize: 15,
-                                                  height: 24 / 16,
-                                                  fontWeight: FontWeight.w400,
-                                                  decoration:
-                                                  TextDecoration.lineThrough,
-                                                  decorationColor:
-                                                  Color(0xff617C9D),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
+                                        ),
+
+                                      ]
+
                                     ),
                                   );
                                 }),

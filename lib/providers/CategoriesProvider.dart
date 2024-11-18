@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';  // For ChangeNotifier
 import '../Model/CategoriesModel.dart';
 import '../Model/ProductsDetailsModel.dart';
 import '../Model/ProductsListModel.dart';
+import '../Model/WishlistModel.dart';
 import '../Services/UserApi.dart';
 
 class CategoriesProvider with ChangeNotifier {
@@ -13,6 +14,11 @@ class CategoriesProvider with ChangeNotifier {
 
   List<Categories> get categoriesList => _categories??[];
   List<ProductsList> get bestsellerList => _productlist??[];
+
+  List<Wishlist>? _wishlistproducts = [];
+
+  List<Wishlist> get wishlistProducts => _wishlistproducts ?? [];
+
 
   Future<void> fetchCategoriesList() async{
     try {

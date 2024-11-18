@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import '../Model/CategoriesModel.dart';
 import '../Services/UserApi.dart';
 import '../providers/CategoriesProvider.dart';
+import 'ProdcutListScreen.dart';
 
 class Category extends StatefulWidget {
   const Category({super.key});
@@ -64,22 +65,33 @@ class _CategoryState extends State<Category> {
                 ),
                 itemCount: categories_list.length,
                 itemBuilder: (context, index) {
+
                   final data = categories_list[index];
+
                   return Column(
                     children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Color(0xff110B0F),
-                          borderRadius: BorderRadius.circular(7),
-                        ),
-                        padding: const EdgeInsets.all(8.0),
-                        child: Center(
-                          child: Image.network(
-                            data.image ?? '',
-                            // Default to an empty string if image is null
-                            width: 80,
-                            height: 80,
-                            fit: BoxFit.contain,
+                      InkResponse(onTap:(){  Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ProdcutListScreen(
+                                  selectid: data.id??"")));
+
+
+                  },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Color(0xff110B0F),
+                            borderRadius: BorderRadius.circular(7),
+                          ),
+                          padding: const EdgeInsets.all(8.0),
+                          child: Center(
+                            child: Image.network(
+                              data.image ?? '',
+                              // Default to an empty string if image is null
+                              width: 80,
+                              height: 80,
+                              fit: BoxFit.contain,
+                            ),
                           ),
                         ),
                       ),

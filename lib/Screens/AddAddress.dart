@@ -917,23 +917,23 @@ class _AddAddressState extends State<AddAddress> {
                           ),
 
                           // Other radio button
-                          Row(
-                            children: [
-                              Radio<String>(
-                                activeColor: Color(0xffCAA16C),
-                                value: 'Other',
-                                groupValue: _selectedOption,
-                                onChanged: _handleRadioValueChanged,
-                              ),
-                              Text('Other',
-                                  style: TextStyle(
-                                      color: Color(0xff110B0F),
-                                      fontFamily: 'RozhaOne',
-                                      fontSize: 15,
-                                      height: 21.3 / 15,
-                                      fontWeight: FontWeight.w400)),
-                            ],
-                          ),
+                          // Row(
+                          //   children: [
+                          //     Radio<String>(
+                          //       activeColor: Color(0xffCAA16C),
+                          //       value: 'Other',
+                          //       groupValue: _selectedOption,
+                          //       onChanged: _handleRadioValueChanged,
+                          //     ),
+                          //     Text('Other',
+                          //         style: TextStyle(
+                          //             color: Color(0xff110B0F),
+                          //             fontFamily: 'RozhaOne',
+                          //             fontSize: 15,
+                          //             height: 21.3 / 15,
+                          //             fontWeight: FontWeight.w400)),
+                          //   ],
+                          // ),
                         ]),
                   ],
                 ),
