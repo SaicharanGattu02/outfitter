@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:outfitter/providers/WishlistProvider.dart';
+import 'package:outfitter/utils/CustomAppBar.dart';
 import 'package:outfitter/utils/CustomAppBar1.dart';
 import 'package:provider/provider.dart';
 
@@ -30,7 +31,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
     var h = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      appBar: CustomApp(title: 'WishList', w: w),
+      appBar: CustomAppBar2(title: 'WishList', w: w),
       body: Column(
         children: [
           SizedBox(

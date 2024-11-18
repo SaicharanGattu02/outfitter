@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:outfitter/utils/CustomAppBar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../Model/UserDetailsModel.dart';
 import '../Services/UserApi.dart';
@@ -123,6 +124,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
     return Scaffold(
       appBar: CustomApp(title: 'Edit Profile', w: w),
+
       body: Padding(
         padding: EdgeInsets.all(16.0),
         child: SingleChildScrollView(

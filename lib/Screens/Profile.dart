@@ -5,6 +5,7 @@ import 'package:outfitter/Screens/Edit%20Profile%20screeen.dart';
 import 'package:outfitter/Screens/OrderListScreen.dart';
 import 'package:outfitter/Screens/Orders.dart';
 import 'package:outfitter/Screens/WishList.dart';
+import 'package:outfitter/utils/CustomAppBar.dart';
 import 'package:outfitter/utils/CustomAppBar1.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -50,7 +51,7 @@ class _ProfileState extends State<Profile> {
     var h = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      appBar: CustomApp(title: 'Profile', w: w),
+      appBar: CustomAppBar2(title: 'Profile', w: w),
       body: Padding(
         padding: const EdgeInsets.all(24),
         child: isLoading

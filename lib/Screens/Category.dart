@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:outfitter/utils/CustomAppBar.dart';
 import 'package:outfitter/utils/CustomAppBar1.dart';
 import 'package:provider/provider.dart';
 
@@ -14,42 +15,19 @@ class Category extends StatefulWidget {
 }
 
 class _CategoryState extends State<Category> {
-  // final List<Map<String, String>> grid = [
-  //   {"image": 'assets/hoodie.png', 'name': 'HOODIE'},
-  //   {"image": 'assets/jeans.png', 'name': 'JEANS'},
-  //   {"image": 'assets/sleaves.png', 'name': 'HALF SLEEVES'},
-  //   {"image": 'assets/cargo.png', 'name': 'CARGO'},
-  //   {"image": 'assets/shirt.png', 'name': 'SHIRT'},
-  //   {"image": 'assets/formals.png', 'name': 'FORMALS'},
-  //   {"image": 'assets/polo.png', 'name': 'POLO'},
-  //   {"image": 'assets/trousar.png', 'name': 'TROUSERS'},
-  // ];
 
   @override
   void initState() {
     // GetCategoriesList();
     super.initState();
   }
-  // List<Categories> categories=[];
-  // Future<void> GetCategoriesList() async{
-  //   var res = await Userapi.getCategories();
-  //   if (res!=null){
-  //     setState(() {
-  //       if(res.settings?.success==1){
-  //         categories=res.data??[];
-  //       }else{
-  //
-  //       }
-  //     });
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
     var w = MediaQuery.of(context).size.width;
     var h = MediaQuery.of(context).size.height;
     return Scaffold(
-      appBar: CustomApp(title: 'Category', w: w),
+      appBar: CustomAppBar2(title: 'Category', w: w),
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
