@@ -206,19 +206,19 @@ class _ProfileState extends State<Profile> {
                           );
                         },
                       ),
-                      _buildDivider(h),
-                      _buildMenuItem(
-                        context,
-                        iconPath: "assets/fav.png",
-                        label: 'Wishlist',
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => WishlistScreen()),
-                          );
-                        },
-                      ),
+                      // _buildDivider(h),
+                      // _buildMenuItem(
+                      //   context,
+                      //   iconPath: "assets/fav.png",
+                      //   label: 'Wishlist',
+                      //   onTap: () {
+                      //     Navigator.push(
+                      //       context,
+                      //       MaterialPageRoute(
+                      //           builder: (context) => WishlistScreen()),
+                      //     );
+                      //   },
+                      // ),
                       // _buildDivider(h),
                       // _buildMenuItem(
                       //   context,

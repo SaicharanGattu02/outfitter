@@ -443,142 +443,107 @@ class _AddAddressState extends State<AddAddress> {
                     SizedBox(
                       height: 3,
                     ),
-                    Row(
+                    Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              width: w * 0.45,
-                              height:
-                                  MediaQuery.of(context).size.height * 0.050,
-                              child: TextFormField(
-                                controller: _pincodeController,
-                                keyboardType: TextInputType.phone,
-                                inputFormatters: [
-                                  FilteringTextInputFormatter
-                                      .digitsOnly, // Only allow digits
-                                  LengthLimitingTextInputFormatter(
-                                      6), // Limit input to 10 digits
-                                ],
-                                cursorColor: Color(0xff8856F4),
-                                onTap: () {
-                                  setState(() {
-                                    // _validateTitle="";
-                                  });
-                                },
-                                onChanged: (v) {
-                                  setState(() {
-                                    // _validateTitle="";
-                                  });
-                                },
-                                decoration: InputDecoration(
-                                  contentPadding: EdgeInsets.symmetric(
-                                      vertical: 0, horizontal: 10),
-                                  hintText: "Pincode",
-                                  hintStyle: TextStyle(
-                                    overflow: TextOverflow.ellipsis,
-                                    fontSize: 14,
-                                    letterSpacing: 0,
-                                    height: 19.36 / 14,
-                                    color: Color(0xffAFAFAF),
-                                    fontFamily: 'Inter',
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                  filled: true,
-                                  fillColor: const Color(0xffFCFAFF),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(7),
-                                    borderSide: const BorderSide(
-                                        width: 1, color: Color(0xffd0cbdb)),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(7),
-                                    borderSide: const BorderSide(
-                                        width: 1, color: Color(0xffd0cbdb)),
-                                  ),
-                                  errorBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(7),
-                                    borderSide: const BorderSide(
-                                        width: 1, color: Color(0xffd0cbdb)),
-                                  ),
-                                  focusedErrorBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(7),
-                                    borderSide: const BorderSide(
-                                        width: 1, color: Color(0xffd0cbdb)),
-                                  ),
-                                ),
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontFamily: 'RozhaOne',
-                                  overflow: TextOverflow
-                                      .ellipsis, // Add ellipsis for long text
-                                ),
-                                textAlignVertical: TextAlignVertical
-                                    .center,
+                        Container(
+
+                          height:
+                              MediaQuery.of(context).size.height * 0.050,
+                          child: TextFormField(
+                            controller: _pincodeController,
+                            keyboardType: TextInputType.phone,
+                            inputFormatters: [
+                              FilteringTextInputFormatter
+                                  .digitsOnly, // Only allow digits
+                              LengthLimitingTextInputFormatter(
+                                  6), // Limit input to 10 digits
+                            ],
+                            cursorColor: Color(0xff8856F4),
+                            onTap: () {
+                              setState(() {
+                                // _validateTitle="";
+                              });
+                            },
+                            onChanged: (v) {
+                              setState(() {
+                                // _validateTitle="";
+                              });
+                            },
+                            decoration: InputDecoration(
+                              contentPadding: EdgeInsets.symmetric(
+                                  vertical: 0, horizontal: 10),
+                              hintText: "Pincode",
+                              hintStyle: TextStyle(
+                                overflow: TextOverflow.ellipsis,
+                                fontSize: 14,
+                                letterSpacing: 0,
+                                height: 19.36 / 14,
+                                color: Color(0xffAFAFAF),
+                                fontFamily: 'Inter',
+                                fontWeight: FontWeight.w400,
+                              ),
+                              filled: true,
+                              fillColor: const Color(0xffFCFAFF),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(7),
+                                borderSide: const BorderSide(
+                                    width: 1, color: Color(0xffd0cbdb)),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(7),
+                                borderSide: const BorderSide(
+                                    width: 1, color: Color(0xffd0cbdb)),
+                              ),
+                              errorBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(7),
+                                borderSide: const BorderSide(
+                                    width: 1, color: Color(0xffd0cbdb)),
+                              ),
+                              focusedErrorBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(7),
+                                borderSide: const BorderSide(
+                                    width: 1, color: Color(0xffd0cbdb)),
                               ),
                             ),
-                            if (_validatePincode.isNotEmpty) ...[
-                              Container(
-                                alignment: Alignment.topLeft,
-                                margin: EdgeInsets.only(
-                                    left: 8, bottom: 10, top: 5),
-                                width: MediaQuery.of(context).size.width * 0.4,
-                                child: ShakeWidget(
-                                  key: Key("value"),
-                                  duration: Duration(milliseconds: 700),
-                                  child: Text(
-                                    _validatePincode,
-                                    style: TextStyle(
-                                      fontFamily: "Poppins",
-                                      fontSize: 12,
-                                      color: Colors.red,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontFamily: 'RozhaOne',
+                              overflow: TextOverflow
+                                  .ellipsis, // Add ellipsis for long text
+                            ),
+                            textAlignVertical: TextAlignVertical
+                                .center,
+                          ),
+                        ),
+                        if (_validatePincode.isNotEmpty) ...[
+                          Container(
+                            alignment: Alignment.topLeft,
+                            margin: EdgeInsets.only(
+                                left: 8, bottom: 10, top: 5),
+                            width: MediaQuery.of(context).size.width * 0.4,
+                            child: ShakeWidget(
+                              key: Key("value"),
+                              duration: Duration(milliseconds: 700),
+                              child: Text(
+                                _validatePincode,
+                                style: TextStyle(
+                                  fontFamily: "Poppins",
+                                  fontSize: 12,
+                                  color: Colors.red,
+                                  fontWeight: FontWeight.w500,
                                 ),
                               ),
-                            ] else ...[
-                              SizedBox(height: 3),
-                            ],
-                          ],
-                        ),
-                        SizedBox(
-                          width: w * 0.01,
-                        ),
-                        Spacer(),
-                        Container(
-                          width: w * 0.45,
-                          height: MediaQuery.of(context).size.height * 0.050,
-                          decoration: BoxDecoration(
-                              color: Color(0xffffffff),
-                              border: Border.all(
-                                  color: Color(0xffd0cbdb), width: 1),
-                              borderRadius: BorderRadius.circular(8)),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.gps_fixed_sharp,
-                                color: Color(0xffE7C6A0),
-                              ),
-                              SizedBox(
-                                width: w * 0.01,
-                              ),
-                              Text('Use My Location',
-                                  style: TextStyle(
-                                      color: Color(0xff110B0F),
-                                      fontFamily: 'RozhaOne',
-                                      fontSize: 15,
-                                      height: 21.3 / 15,
-                                      fontWeight: FontWeight.w400)),
-                            ],
+                            ),
                           ),
-                        )
+                        ] else ...[
+                          SizedBox(height: 3),
+                        ],
                       ],
+                    ),
+                    SizedBox(
+                      width: w * 0.01,
                     ),
                     SizedBox(
                       height: 3,

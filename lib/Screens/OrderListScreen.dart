@@ -111,7 +111,7 @@ class _OrderListScreenState extends State<OrderListScreen> {
                       InkWell(
                         onTap: () {},
                         child: Image.asset(
-                          "assets/filter.png",
+                          "assets/calender.png",
                           width: 22,
                           height: 22,
                           color: Color(0xffCAA16C),
@@ -120,7 +120,7 @@ class _OrderListScreenState extends State<OrderListScreen> {
                       ),
                       Spacer(),
                       Text(
-                        "Filters",
+                        "Date",
                         style: TextStyle(
                           color: Color(0xffCAA16C),
                           fontFamily: 'RozhaOne',
@@ -129,11 +129,15 @@ class _OrderListScreenState extends State<OrderListScreen> {
                           fontWeight: FontWeight.w400,
                         ),
                       ),
+                      Spacer(),
                     ],
                   ),
+
                   SizedBox(
                     height: 10,
                   ),
+
+
                   ListView.builder(
                     physics: NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
@@ -141,14 +145,17 @@ class _OrderListScreenState extends State<OrderListScreen> {
                     itemBuilder: (context, index) {
                       final item = orders_list[index];
 
-                      return InkResponse(
+
+                      return
+                        InkResponse(
                           onTap: () {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => OrderDetailScreen(id: item.id.toString(),)));
                           },
-                          child: Container(
+                          child:
+                      Container(
                             width: w,
                             padding: EdgeInsets.all(16),
                             decoration: BoxDecoration(
@@ -265,7 +272,8 @@ class _OrderListScreenState extends State<OrderListScreen> {
                                 ),
                               ],
                             ),
-                          ));
+                          )
+                        );
                     },
                   )
                 ]),

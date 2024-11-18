@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:outfitter/Authentication/Login.dart';
 import 'package:outfitter/Screens/dashbord.dart';
 import 'package:outfitter/Services/UserApi.dart';
 import 'package:outfitter/utils/Preferances.dart';
@@ -59,7 +60,7 @@ class _OtpState extends State<Otp> {
           _isLoading=false;
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(
-              "Please enter a valid mobile number.",
+              res.settings?.message??"",
               style: TextStyle(color: Color(0xff000000)),
             ),
             duration: Duration(seconds: 1),
@@ -132,71 +133,117 @@ class _OtpState extends State<Otp> {
                             SizedBox(
                               height: h * 0.03,
                             ),
+                            // Center(
+                            //   child: Text("OTP Verification",
+                            //       style: TextStyle(
+                            //           color: Color(0xff110B0F),
+                            //           fontFamily: 'RozhaOne',
+                            //           fontSize: 22,
+                            //           height: 21.3 / 22,
+                            //           fontWeight: FontWeight.w400)),
+                            // ),
+                            // SizedBox(
+                            //   height: h * 0.01,
+                            // ),
                             Center(
-                              child: Text("OTP Verification",
-                                  style: TextStyle(
-                                      color: Color(0xff110B0F),
-                                      fontFamily: 'RozhaOne',
-                                      fontSize: 22,
-                                      height: 21.3 / 22,
-                                      fontWeight: FontWeight.w400)),
-                            ),
-                            SizedBox(
-                              height: h * 0.01,
-                            ),
-                            Column(
-                              children: [
-                                Center(
-                                  child: Text(
-                                    "We will send you a one-time password on this \n mobile number ",
-                                    style: TextStyle(
-                                      color: Color(0xff110B0F),
-                                      fontFamily: 'RozhaOne',
-                                      fontSize: 14,
-                                      height: 19 / 14,
-                                      fontWeight: FontWeight.w400,
-                                    ),
+                              child: Column(
+                                children: [
+                                  RichText(
                                     textAlign: TextAlign.center,
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 2,
+                                    text: TextSpan(
+                                      children: [
+                                        TextSpan(
+                                          text: "We will send you a one-time password on this \n mobile number ",
+                                          style: TextStyle(
+                                            color: Color(0xff110B0F),
+                                            fontFamily: 'RozhaOne',
+                                            fontSize: 14,
+                                            height: 19 / 14,
+                                            fontWeight: FontWeight.w400,
+                                          ),
+                                        ),
+                                        TextSpan(
+                                          text: "+91 ${widget.mobileNumber}",
+                                          style: TextStyle(
+                                            color: Color(0xff110B0F),
+                                            fontFamily: 'RozhaOne',
+                                            fontSize: 16,
+                                            height: 19 / 16,
+                                            fontWeight: FontWeight.w500,
+
+                                          ),
+
+                                        ),
+
+                                      ],
+                                    ),
                                   ),
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      "+91 ${widget.mobileNumber}",
-                                      style: TextStyle(
-                                        color: Color(0xff110B0F),
-                                        fontFamily: 'RozhaOne',
-                                        fontSize: 16,
-                                        height: 19 / 16,
-                                        fontWeight: FontWeight.w400,
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: w * 0.01,
-                                    ),
-                                    InkResponse(
-                                      onTap: () {
-                                        Navigator.pop(context);
-                                      },
-                                      child: Container(
-                                        width: 20,
-                                        height: 20,
-                                        child: Image.asset(
-                                          "assets/pen.png",
-                                          fit: BoxFit.contain,
+                                  SizedBox(
+                                    height: h * 0.01,
+                                  ),
+                                  Row(mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        "+91 ${widget.mobileNumber}",
+                                        style: TextStyle(
+                                          color: Color(0xff110B0F),
+                                          fontFamily: 'RozhaOne',
+                                          fontSize: 16,
+                                          height: 19 / 16,
+                                          fontWeight: FontWeight.w500,
                                         ),
                                       ),
-                                    )
-                                  ],
-                                ),
-                              ],
+                                      SizedBox(width: 5),  // Small space between the number and image
+                                      InkResponse(onTap: (){
+                                        Navigator.push(context, MaterialPageRoute(builder: (context)=>Login()));
+                                      },
+                                        child: Container(
+                                          width: 20,
+                                          height: 20,
+                                          child: Image.asset(
+                                            "assets/pen.png",
+                                            fit: BoxFit.contain,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+
+                                ],
+                              ),
                             ),
+
                             SizedBox(
-                              height: h * 0.05,
+                              height: h * 0.02,
                             ),
+                            // Center(
+                            //   child:
+                            //   Row(
+                            //     children: [
+                            //       Text(
+                            //         "+91 ${widget.mobileNumber}",
+                            //         style: TextStyle(
+                            //           color: Color(0xff110B0F),
+                            //           fontFamily: 'RozhaOne',
+                            //           fontSize: 16,
+                            //           height: 19 / 16,
+                            //           fontWeight: FontWeight.w500,
+                            //         ),
+                            //       ),
+                            //       SizedBox(width: 5),  // Small space between the number and image
+                            //       Container(
+                            //         width: 20,
+                            //         height: 20,
+                            //         child: Image.asset(
+                            //           "assets/pen.png",
+                            //           fit: BoxFit.contain,
+                            //         ),
+                            //       ),
+                            //     ],
+                            //   ),
+                            // ),
+
                             Column(
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
