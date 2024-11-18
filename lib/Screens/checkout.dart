@@ -133,6 +133,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               ),
                             ),
                             SizedBox(width: w * 0.04),
+
                             Container(
                               padding: EdgeInsets.symmetric(
                                   horizontal: 6, vertical: 2),
