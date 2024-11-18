@@ -31,7 +31,6 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
 
 class CustomAppBar2 extends StatelessWidget implements PreferredSizeWidget {
-
   final double w;
   final String title;
 

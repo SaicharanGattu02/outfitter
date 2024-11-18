@@ -187,8 +187,9 @@ class _CartState extends State<Cart> {
                         child: Center(
                           child: Image.network(
                             cartItem.product?.image ?? "",
+                            fit: BoxFit.cover,
                             width: 100,
-                            height: 100,
+                            height: 110,
                           ),
                         ),
                       ),
@@ -204,9 +205,11 @@ class _CartState extends State<Cart> {
                           style: TextStyle(
                             color: Color(0xff181725),
                             fontFamily: 'RozhaOne',
+                            overflow: TextOverflow.ellipsis,
                             fontSize: 16,
                             fontWeight: FontWeight.w400,
                           ),
+                          maxLines: 2,
                         ),
                         SizedBox(height: 8),
                         Row(
@@ -217,18 +220,6 @@ class _CartState extends State<Cart> {
                                 color: Color(0xff181725),
                                 fontFamily: 'RozhaOne',
                                 fontSize: 18,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                            SizedBox(width: 8),
-                            Text(
-                              "M.R.P",
-                              style: TextStyle(
-                                color: Color(0xffCAA16C),
-                                fontFamily: 'RozhaOne',
-                                fontSize: 12,
-                                decoration: TextDecoration.lineThrough,
-                                height: 1.5,
                                 fontWeight: FontWeight.w400,
                               ),
                             ),
@@ -262,8 +253,8 @@ class _CartState extends State<Cart> {
                                 }
                               },
                               child: Container(
-                                width: 30,
-                                height: 30,
+                                width: 25,
+                                height: 25,
                                 decoration: BoxDecoration(
                                   border: Border.all(
                                       color: Color(0xffE7C6A0), width: 1),
@@ -298,8 +289,8 @@ class _CartState extends State<Cart> {
                                     newQuantity.toString());
                               },
                               child: Container(
-                                width: 30,
-                                height: 30,
+                                width: 25,
+                                height: 25,
                                 decoration: BoxDecoration(
                                   border: Border.all(
                                       color: Color(0xffE7C6A0), width: 1),

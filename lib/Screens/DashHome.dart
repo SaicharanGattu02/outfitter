@@ -195,21 +195,25 @@ class _DashHomeState extends State<DashHome> {
                     },
                     child: Container(
                       alignment: Alignment.center,
-                      child: Badge.count(
-                        count: Cart.cartCount,  // Get the cart count from your CartProvider
-                        backgroundColor: Colors.red,  // Set the badge background color (red for cart)
-                        textColor: Colors.white,  // Set the badge text color (white for visibility)
-                        smallSize: 12,  // Set the small size of the badge
-                        largeSize: 16,  // Set the large size if needed
-                        isLabelVisible: cartProvider.cartCount > 0,  // Only show badge if count > 0
-                        alignment: Alignment.topRight,  // Align badge to top right of the cart icon
-                        child: Image.asset(
-                          "assets/cart.png",  // The cart icon
-                          width: 28,
-                          height: 28,
-                          fit: BoxFit.contain,
-                          color: Color(0xffffffff),
-                        ),
+                      child: Consumer<CartProvider>(  // Using Consumer to listen to CartProvider changes
+                        builder: (context, cartProvider, child) {
+                          return Badge.count(
+                            count: cartProvider.cartCount,  // Get the cart count from CartProvider
+                            backgroundColor: Colors.red,  // Set the badge background color (red for cart)
+                            textColor: Colors.white,  // Set the badge text color (white for visibility)
+                            smallSize: 12,  // Set the small size of the badge
+                            largeSize: 16,  // Set the large size if needed
+                            isLabelVisible: cartProvider.cartCount > 0,  // Only show badge if count > 0
+                            alignment: Alignment.topRight,  // Align badge to top right of the cart icon
+                            child: Image.asset(
+                              "assets/cart.png",  // The cart icon
+                              width: 28,
+                              height: 28,
+                              fit: BoxFit.contain,
+                              color: Color(0xffffffff),
+                            ),
+                          );
+                        },
                       ),
                     ),
                   )
