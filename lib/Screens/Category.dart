@@ -74,7 +74,7 @@ class _CategoryState extends State<Category> {
                           context,
                           MaterialPageRoute(
                               builder: (context) => ProdcutListScreen(
-                                  selectid: data.id??"")));
+                                  selectid: data.id??"",minprice:"" ,maxprice:"",)));
 
 
                   },

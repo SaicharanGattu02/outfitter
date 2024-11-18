@@ -27,32 +27,15 @@ class DashHome extends StatefulWidget {
 
 class _DashHomeState extends State<DashHome> {
   ScrollController _scrollController = ScrollController();
-  final List<Map<String, String>> grid = [
-    {"image": 'assets/hoodie.png', 'name': 'HOODIE'},
-    {"image": 'assets/jeans.png', 'name': 'JEANS'},
-    {"image": 'assets/sleaves.png', 'name': 'HALF SLEEVES'},
-    {"image": 'assets/cargo.png', 'name': 'CARGO'},
-    {"image": 'assets/shirt.png', 'name': 'SHIRT'},
-    {"image": 'assets/formals.png', 'name': 'FORMALS'},
-    {"image": 'assets/polo.png', 'name': 'POLO'},
-    {"image": 'assets/trousar.png', 'name': 'TROUSERS'},
-  ];
+
+  int minprice1 = 0;
+  int maxprice1 = 299;
 
   final List<Map<String, String>> gridmore = [
     {"color": "0xff4CA8D9", "price": "299"},
     {"color": "0xffE98839", "price": "499"},
     {"color": "0xff84B538", "price": "799"},
     {"color": "0xffB9356F", "price": "999"},
-  ];
-
-  final List<Map<String, String>> gridList = [
-    {
-      "image": 'assets/shirt.png',
-    },
-    {"image": 'assets/hoodie.png'},
-    {"image": 'assets/cargo.png'},
-    {"image": 'assets/formals.png'},
-    {"image": 'assets/hoodie.png'},
   ];
 
   int _selectedIndex = 0;
@@ -86,8 +69,10 @@ class _DashHomeState extends State<DashHome> {
   }
 
   Future<void> GetCategoriesList() async {
-    final categories_list_provider = Provider.of<CategoriesProvider>(context, listen: false);
-    final bestseller_list_provider = Provider.of<ProductListProvider>(context, listen: false);
+    final categories_list_provider =
+        Provider.of<CategoriesProvider>(context, listen: false);
+    final bestseller_list_provider =
+        Provider.of<ProductListProvider>(context, listen: false);
     categories_list_provider.fetchCategoriesList();
     bestseller_list_provider.fetchBestSellersList();
   }
@@ -138,7 +123,11 @@ class _DashHomeState extends State<DashHome> {
                   ] else ...[
                     InkWell(
                       onTap: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => Searchscreen(),));
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => Searchscreen(),
+                            ));
                       },
                       child: Container(
                         alignment: Alignment.center,
@@ -171,44 +160,53 @@ class _DashHomeState extends State<DashHome> {
                         ),
                       ),
                     ),
-                  ] else ...[
-                    InkWell(
-                      onTap: () {
-                        // Handle notifications icon tap
-                      },
-                      child: Container(
-                        alignment: Alignment.center,
-                        child: Image.asset(
-                          "assets/notification.png",
-                          width: 28,
-                          height: 28,
-                          fit: BoxFit.contain,
-                        ),
-                      ),
-                    ),
-                  ],
+                  ] ,
+                  // else ...[
+                    // InkWell(
+                    //   onTap: () {
+                    //
+                    //   },
+                    //   child: Container(
+                    //     alignment: Alignment.center,
+                    //     child: Image.asset(
+                    //       "assets/notification.png",
+                    //       width: 28,
+                    //       height: 28,
+                    //       fit: BoxFit.contain,
+                    //     ),
+                    //   ),
+                    // ),
+                  // ],
                   SizedBox(width: w * 0.025),
                   InkWell(
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => Cart()),  // Navigate to your cart screen
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                Cart()), // Navigate to your cart screen
                       );
                     },
                     child: Container(
                       alignment: Alignment.center,
-                      child: Consumer<CartProvider>(  // Using Consumer to listen to CartProvider changes
+                      child: Consumer<CartProvider>(
+                        // Using Consumer to listen to CartProvider changes
                         builder: (context, cartProvider, child) {
                           return Badge.count(
-                            count: cartProvider.cartCount,  // Get the cart count from CartProvider
-                            backgroundColor: Colors.red,  // Set the badge background color (red for cart)
-                            textColor: Colors.white,  // Set the badge text color (white for visibility)
-                            smallSize: 12,  // Set the small size of the badge
-                            largeSize: 16,  // Set the large size if needed
-                            isLabelVisible: cartProvider.cartCount > 0,  // Only show badge if count > 0
-                            alignment: Alignment.topRight,  // Align badge to top right of the cart icon
+                            count: cartProvider
+                                .cartCount, // Get the cart count from CartProvider
+                            backgroundColor: Colors
+                                .red, // Set the badge background color (red for cart)
+                            textColor: Colors
+                                .white, // Set the badge text color (white for visibility)
+                            smallSize: 12, // Set the small size of the badge
+                            largeSize: 16, // Set the large size if needed
+                            isLabelVisible: cartProvider.cartCount >
+                                0, // Only show badge if count > 0
+                            alignment: Alignment
+                                .topRight, // Align badge to top right of the cart icon
                             child: Image.asset(
-                              "assets/cart.png",  // The cart icon
+                              "assets/cart.png", // The cart icon
                               width: 28,
                               height: 28,
                               fit: BoxFit.contain,
@@ -225,8 +223,7 @@ class _DashHomeState extends State<DashHome> {
           ),
         ),
       ),
-      body:
-      SingleChildScrollView(
+      body: SingleChildScrollView(
         controller: _scrollController,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -278,7 +275,10 @@ class _DashHomeState extends State<DashHome> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => ProdcutListScreen(
-                                        selectid: categorielist.id ?? "")));
+                                          selectid: categorielist.id ?? "",
+                                          minprice: "",
+                                          maxprice: "",
+                                        )));
                           },
                           child: Container(
                             decoration: BoxDecoration(
@@ -338,17 +338,21 @@ class _DashHomeState extends State<DashHome> {
                 return Row(
                   children: List.generate(products_list.length, (index) {
                     var data = products_list[index];
-                    return InkResponse(onTap: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=>ProductDetailsScreen(productid: data.id.toString(), category_id: "")));
-                    },
-                      child:
-                      Stack(
-                        children:[
-                          Container(
+                    return InkResponse(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ProductDetailsScreen(
+                                    productid: data.id.toString(),
+                                    category_id: "")));
+                      },
+                      child: Stack(children: [
+                        Container(
                           width: w * 0.45,
                           // Control the width of each item
                           padding: EdgeInsets.all(8.0),
-                          margin: EdgeInsets.only(left:10,right: 8.0),
+                          margin: EdgeInsets.only(left: 10, right: 8.0),
                           // Space between items
                           decoration: BoxDecoration(
                             border: Border.all(
@@ -445,50 +449,47 @@ class _DashHomeState extends State<DashHome> {
                             ],
                           ),
                         ),
-                          Positioned(
-                            top: 8,
-                            right: 10,
-                            child: InkResponse(
-                              onTap: () {
-                                if (data.isInWishlist ?? false) {
-                                  context
-                                      .read<WishlistProvider>()
-                                      .removeFromWishlist(
-                                      data.id ?? "");
-                                } else {
-                                  // Add to wishlist
-                                  context
-                                      .read<WishlistProvider>()
-                                      .addToWishlist(data.id ?? "");
-                                }
-                              },
-                              child: Container(
-                                padding: const EdgeInsets.all(8),
-                                decoration: BoxDecoration(
-                                  color: Colors.grey[200],
-                                  borderRadius: BorderRadius.circular(100),
-                                ),
-                                child: data.isInWishlist ?? false
-                                    ? Icon(
-                                  Icons
-                                      .favorite, // Filled heart icon when item is in wishlist
-                                  size: 18,
-                                  color: Colors
-                                      .red, // Red color for filled icon
-                                )
-                                    : Icon(
-                                  Icons
-                                      .favorite_border, // Outline heart icon when item is NOT in wishlist
-                                  size: 18,
-                                  color: Colors
-                                      .black, // Black color for outline icon
-                                ),
+                        Positioned(
+                          top: 8,
+                          right: 10,
+                          child: InkResponse(
+                            onTap: () {
+                              if (data.isInWishlist ?? false) {
+                                context
+                                    .read<WishlistProvider>()
+                                    .removeFromWishlist(data.id ?? "");
+                              } else {
+                                // Add to wishlist
+                                context
+                                    .read<WishlistProvider>()
+                                    .addToWishlist(data.id ?? "");
+                              }
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                color: Colors.grey[200],
+                                borderRadius: BorderRadius.circular(100),
                               ),
+                              child: data.isInWishlist ?? false
+                                  ? Icon(
+                                      Icons
+                                          .favorite, // Filled heart icon when item is in wishlist
+                                      size: 18,
+                                      color: Colors
+                                          .red, // Red color for filled icon
+                                    )
+                                  : Icon(
+                                      Icons
+                                          .favorite_border, // Outline heart icon when item is NOT in wishlist
+                                      size: 18,
+                                      color: Colors
+                                          .black, // Black color for outline icon
+                                    ),
                             ),
                           ),
-                        ]
-
-                      ),
+                        ),
+                      ]),
                     );
                   }),
                 );
@@ -546,41 +547,57 @@ class _DashHomeState extends State<DashHome> {
                 itemBuilder: (context, index) {
                   return Column(
                     children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Color(int.parse(gridmore[index]['color']!)),
-                          borderRadius: BorderRadius.circular(7),
-                        ),
-                        padding: const EdgeInsets.all(8.0),
-                        child: Center(
-                            child: Column(
-                          children: [
-                            Text(
-                              "Under",
-                              style: TextStyle(
-                                color: Color(0xffFFFFFF),
-                                fontFamily: 'RozhaOne',
-                                fontSize: 14,
-                                height: 20 / 14,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                            SizedBox(height: 8),
-                            Center(
-                              child: Text(
-                                gridmore[index]['price']!,
+                      InkResponse(
+                        onTap: () {
+                          String selectedMaxPrice =
+                              gridmore[index]['price'] ?? '0';
+
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ProdcutListScreen(
+                                        selectid: "",
+                                        minprice: minprice1.toString(),
+                                        maxprice: selectedMaxPrice,
+                                      )));
+                          print("maxprice>>${selectedMaxPrice}");
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Color(int.parse(gridmore[index]['color']!)),
+                            borderRadius: BorderRadius.circular(7),
+                          ),
+                          padding: const EdgeInsets.all(8.0),
+                          child: Center(
+                              child: Column(
+                            children: [
+                              Text(
+                                "Under",
                                 style: TextStyle(
                                   color: Color(0xffFFFFFF),
                                   fontFamily: 'RozhaOne',
-                                  fontSize: 32,
-                                  height: 34 / 32,
+                                  fontSize: 14,
+                                  height: 20 / 14,
                                   fontWeight: FontWeight.w400,
                                 ),
-                                textAlign: TextAlign.center,
                               ),
-                            ),
-                          ],
-                        )),
+                              SizedBox(height: 8),
+                              Center(
+                                child: Text(
+                                  gridmore[index]['price']!,
+                                  style: TextStyle(
+                                    color: Color(0xffFFFFFF),
+                                    fontFamily: 'RozhaOne',
+                                    fontSize: 32,
+                                    height: 34 / 32,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ],
+                          )),
+                        ),
                       ),
                     ],
                   );

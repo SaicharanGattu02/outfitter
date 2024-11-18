@@ -11,7 +11,9 @@ import '../Services/UserApi.dart';
 
 class ProdcutListScreen extends StatefulWidget {
   final String selectid;
-  ProdcutListScreen({super.key, required this.selectid});
+  final String minprice;
+  final String maxprice;
+  ProdcutListScreen({super.key, required this.selectid,required this.minprice,required this.maxprice});
 
   @override
   State<ProdcutListScreen> createState() => _ProdcutListScreenState();
@@ -53,7 +55,7 @@ class _ProdcutListScreenState extends State<ProdcutListScreen> {
   @override
   void initState() {
     _selectedIndex = widget.selectid;
-    GetProductcategoryList(widget.selectid, "","","");
+    GetProductcategoryList(widget.selectid, "",widget.minprice,widget.maxprice);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _scrollToSelectedIndex();
     });

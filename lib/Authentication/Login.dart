@@ -46,7 +46,7 @@ class _LoginState extends State<Login> {
             _loading=false;
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               content: Text(
-                "Please enter a valid mobile number.",
+                data.settings?.message??"",
                 style: TextStyle(color: Color(0xff000000)),
               ),
               duration: Duration(seconds: 1),
@@ -284,7 +284,7 @@ class _LoginState extends State<Login> {
                           ],
                         ),
                         SizedBox(
-                          height: 8,
+                          height: 20,
                         ),
                       ],
                     ),

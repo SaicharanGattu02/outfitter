@@ -55,7 +55,7 @@ class _SearchscreenState extends State<Searchscreen> {
     var h = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      appBar: CustomApp(title: 'Search Screen', w: w),
+      appBar: CustomApp(title: 'Search', w: w),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
