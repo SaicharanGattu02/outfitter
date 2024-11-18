@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:outfitter/Screens/checkout.dart';
+import 'package:outfitter/Screens/dashbord.dart';
 import 'package:outfitter/providers/ShippingDetailsProvider.dart';
 import 'package:outfitter/utils/CustomAppBar1.dart';
 import 'package:provider/provider.dart';
@@ -21,7 +22,8 @@ class _CartState extends State<Cart> {
   }
 
   Future<void> GetCartList() async {
-    final cart_list_provider = Provider.of<CartProvider>(context, listen: false);
+    final cart_list_provider =
+        Provider.of<CartProvider>(context, listen: false);
     final shipping_provider =
         Provider.of<ShippingDetailsProvider>(context, listen: false);
     cart_list_provider.fetchCartProducts();
@@ -33,25 +35,264 @@ class _CartState extends State<Cart> {
     var w = MediaQuery.of(context).size.width;
     var h = MediaQuery.of(context).size.height;
     return Scaffold(
-      appBar: CustomApp(title: 'Cart', w: w),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.only(left: 20, right: 20, top: 8),
-          child: Column(
-            children: [
-              if (selectedIndex == 0) ...[
-                _buildItemList(w, h),
-              ]
-            ],
+        appBar: CustomApp(title: 'Cart', w: w),
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.only(left: 20, right: 20, top: 8),
+            child: Column(
+              children: [
+                Consumer<CartProvider>(
+                  builder: (context, cartProvider, child) {
+                    final cart_list = cartProvider.cartList;
+                    if (cart_list.isEmpty) {
+                      return Center(
+                        child: Column(
+                          children: [
+                            SizedBox(height: w*0.4,),
+                            Image.asset(
+                              alignment: Alignment.center,
+                              'assets/no_cart.png', // Your "no items" image
+                              width: 160,
+                              height: 160,
+                              fit: BoxFit.cover,
+                            ),
+                            SizedBox(height: 30,),
+                            Text("Cart is Empty",
+                              style: TextStyle(
+                                color: Color(0xffCAA16C),
+                                fontFamily: 'RozhaOne',
+                                fontSize: 22,
+                                height: 18 / 16,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                            SizedBox(height: 10,),
+                            Text("It Seems like you haven’t added anything to Your Cart yet!",
+                              style: TextStyle(
+                                color: Color(0xff000000),
+                                fontFamily: 'RozhaOne',
+                                fontSize: 16,
+                                height: 18 / 16,
+                                fontWeight: FontWeight.w400,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                            SizedBox(height: w*0.2,),
+                            InkWell(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => Dashbord()),
+                                );
+                              },
+                              child: Container(
+                                width: w*0.5,
+                                padding:
+                                EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                                decoration: BoxDecoration(
+                                  color: Color(0xff110B0F),
+                                  borderRadius: BorderRadius.circular(6),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    "Shop Now",
+                                    style: TextStyle(
+                                      color: Color(0xffCAA16C),
+                                      fontFamily: 'RozhaOne',
+                                      fontSize: 16,
+                                      height: 21.06 / 16,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                              ),
+                            ),
+
+                          ],
+                        ),
+                      );
+                    }
+
+                    return ListView.builder(
+                      padding: EdgeInsets.all(0),
+                      physics: NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: cart_list.length,
+                      itemBuilder: (context, index) {
+                        final cartItem = cart_list[index];
+                        return Container(
+                          width: double.infinity,
+                          padding: EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            color: Color(0xffFFFDF6),
+                            border:
+                                Border.all(color: Color(0xffF3EFE1), width: 1),
+                            borderRadius: BorderRadius.circular(7),
+                          ),
+                          margin: EdgeInsets.only(bottom: 16),
+                          child: Row(
+                            children: [
+                              Stack(
+                                children: [
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      color: Color(0xffFFFFFF),
+                                      borderRadius: BorderRadius.circular(6),
+                                      border: Border.all(
+                                          color: Color(0xffE7C6A0), width: 1),
+                                    ),
+                                    child: Center(
+                                      child: Image.network(
+                                        cartItem.product?.image ?? "",
+                                        fit: BoxFit.contain,
+                                        width: 100,
+                                        height: 110,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(width: 16),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      cartItem.product?.title ?? "",
+                                      style: TextStyle(
+                                        color: Color(0xff181725),
+                                        fontFamily: 'RozhaOne',
+                                        overflow: TextOverflow.ellipsis,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                      maxLines: 2,
+                                    ),
+                                    SizedBox(height: 8),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          ('₹ ${cartItem.product?.salePrice.toString() ?? ""}'),
+                                          style: TextStyle(
+                                            color: Color(0xff181725),
+                                            fontFamily: 'RozhaOne',
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.w400,
+                                          ),
+                                        ),
+                                        SizedBox(width: 4),
+                                        Text(
+                                          ('₹ ${cartItem.product?.mrp.toString() ?? ""}'),
+                                          style: TextStyle(
+                                            color: Color(0xffED1C24),
+                                            fontFamily: 'RozhaOne',
+                                            fontSize: 12,
+                                            decoration:
+                                                TextDecoration.lineThrough,
+                                            decorationColor: Color(0xffED1C24),
+                                            fontWeight: FontWeight.w400,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(height: 8),
+                                    Row(
+                                      children: [
+                                        InkResponse(
+                                          onTap: () {
+                                            if ((cartItem.quantity ?? 0) > 0) {
+                                              // Decrease the quantity
+                                              int newQuantity =
+                                                  (cartItem.quantity ?? 0) - 1;
+                                              cartProvider.updateQuantity(
+                                                  cartItem.product?.id ?? "",
+                                                  newQuantity);
+                                              cartProvider.updateCartApi(
+                                                  cartItem.product?.id ?? "",
+                                                  newQuantity.toString());
+                                            }
+                                          },
+                                          child: Container(
+                                            width: 25,
+                                            height: 25,
+                                            decoration: BoxDecoration(
+                                              border: Border.all(
+                                                  color: Color(0xffE7C6A0),
+                                                  width: 1),
+                                            ),
+                                            child: Icon(
+                                              Icons.remove,
+                                              size: 20,
+                                              color: Color(0xffE7C6A0),
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(width: 8),
+                                        // Display quantity
+                                        Text(
+                                          cartItem.quantity.toString(),
+                                          style: TextStyle(
+                                            color: Color(0xffE7C6A0),
+                                            fontFamily: 'RozhaOne',
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w400,
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                        SizedBox(width: 8),
+                                        InkResponse(
+                                          onTap: () {
+                                            int newQuantity =
+                                                (cartItem.quantity ?? 0) + 1;
+                                            cartProvider.updateQuantity(
+                                                cartItem.product?.id ?? "",
+                                                newQuantity);
+                                            cartProvider.updateCartApi(
+                                                cartItem.product?.id ?? "",
+                                                newQuantity.toString());
+                                          },
+                                          child: Container(
+                                            width: 25,
+                                            height: 25,
+                                            decoration: BoxDecoration(
+                                              border: Border.all(
+                                                  color: Color(0xffE7C6A0),
+                                                  width: 1),
+                                            ),
+                                            child: Icon(
+                                              Icons.add,
+                                              size: 20,
+                                              color: Color(0xffE7C6A0),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    );
+                  },
+                ),
+              ],
+            ),
           ),
         ),
-      ),
         bottomNavigationBar: Consumer<ShippingDetailsProvider>(
           builder: (context, shippingProvider, child) {
             final shipping_data = shippingProvider.shippingData;
             // Check if shipping_data is null or empty
-            if (shipping_data == null || shipping_data.totalAmount == null || shipping_data.totalAmount == 0) {
-              return SizedBox.shrink();  // Hide the bottom navigation bar when data is null or empty
+            if (shipping_data == null ||
+                shipping_data.totalAmount == null ||
+                shipping_data.totalAmount == 0) {
+              return SizedBox
+                  .shrink(); // Hide the bottom navigation bar when data is null or empty
             }
             return Column(
               mainAxisSize: MainAxisSize.min,
@@ -77,8 +318,9 @@ class _CartState extends State<Cart> {
                 SizedBox(height: h * 0.008),
                 Container(
                   color: Colors.white,
-                  padding: const EdgeInsets.only(left: 16, right: 16, bottom: 5),
-                  margin: EdgeInsets.only(bottom: 15,top: 5),
+                  padding:
+                      const EdgeInsets.only(left: 16, right: 16, bottom: 5),
+                  margin: EdgeInsets.only(bottom: 15, top: 5),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -110,11 +352,13 @@ class _CartState extends State<Cart> {
                         onTap: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => CheckoutScreen()),
+                            MaterialPageRoute(
+                                builder: (context) => CheckoutScreen()),
                           );
                         },
                         child: Container(
-                          padding: EdgeInsets.symmetric(horizontal: 16,vertical: 8),
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                           decoration: BoxDecoration(
                             color: Color(0xff110B0F),
                             borderRadius: BorderRadius.circular(6),
@@ -141,192 +385,8 @@ class _CartState extends State<Cart> {
             );
           },
         )
-      // Empty Container for other
-    );
-  }
-
-  Widget _buildItemList(double w, double h) {
-    return Consumer<CartProvider>(
-      builder: (context, cartProvider, child) {
-        final cart_list = cartProvider.cartList;
-        if (cart_list.isEmpty) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(height: w*0.8,),
-              Text(
-                "No data found", // Text when cart is empty
-                style: TextStyle(
-                  fontSize: 18,
-                  color: Colors.black45,
-                  fontWeight: FontWeight.w400,
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ],
-          );
-        }
-
-        return ListView.builder(
-          padding: EdgeInsets.all(0),
-          physics: NeverScrollableScrollPhysics(),
-          shrinkWrap: true,
-          itemCount: cart_list.length,
-          itemBuilder: (context, index) {
-            final cartItem = cart_list[index];
-            return Container(
-              width: double.infinity,
-              padding: EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Color(0xffFFFDF6),
-                border: Border.all(color: Color(0xffF3EFE1), width: 1),
-                borderRadius: BorderRadius.circular(7),
-              ),
-              margin: EdgeInsets.only(bottom: 16),
-              child: Row(
-                children: [
-                  Stack(
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Color(0xffFFFFFF),
-                          borderRadius: BorderRadius.circular(6),
-                          border:
-                              Border.all(color: Color(0xffE7C6A0), width: 1),
-                        ),
-                        child: Center(
-                          child: Image.network(
-                            cartItem.product?.image ?? "",
-                            fit: BoxFit.contain,
-                            width: 100,
-                            height: 110,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(width: 16),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          cartItem.product?.title ?? "",
-                          style: TextStyle(
-                            color: Color(0xff181725),
-                            fontFamily: 'RozhaOne',
-                            overflow: TextOverflow.ellipsis,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w400,
-                          ),
-                          maxLines: 2,
-                        ),
-                        SizedBox(height: 8),
-                        Row(
-                          children: [
-                            Text(
-
-                            ('₹ ${cartItem.product?.salePrice.toString() ?? ""}'),
-                              style: TextStyle(
-                                color: Color(0xff181725),
-                                fontFamily: 'RozhaOne',
-                                fontSize: 18,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                            SizedBox(width: 4),
-                            Text(
-                              ('₹ ${cartItem.product?.mrp.toString() ?? ""}'),
-                              style: TextStyle(
-                                color: Color(0xffED1C24),
-                                fontFamily: 'RozhaOne',
-                                fontSize: 12,
-                                decoration: TextDecoration.lineThrough,
-                                decorationColor: Color(0xffED1C24),
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 8),
-                        Row(
-                          children: [
-                            InkResponse(
-                              onTap: () {
-                                if ((cartItem.quantity ?? 0) > 0) {
-                                  // Decrease the quantity
-                                  int newQuantity =
-                                      (cartItem.quantity ?? 0) - 1;
-                                  cartProvider.updateQuantity(
-                                      cartItem.product?.id ?? "", newQuantity);
-                                  cartProvider.updateCartApi(
-                                      cartItem.product?.id ?? "",
-                                      newQuantity.toString());
-                                }
-                              },
-                              child: Container(
-                                width: 25,
-                                height: 25,
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                      color: Color(0xffE7C6A0), width: 1),
-                                ),
-                                child: Icon(
-                                  Icons.remove,
-                                  size: 20,
-                                  color: Color(0xffE7C6A0),
-                                ),
-                              ),
-                            ),
-                            SizedBox(width: 8),
-                            // Display quantity
-                            Text(
-                              cartItem.quantity.toString(),
-                              style: TextStyle(
-                                color: Color(0xffE7C6A0),
-                                fontFamily: 'RozhaOne',
-                                fontSize: 16,
-                                fontWeight: FontWeight.w400,
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                            SizedBox(width: 8),
-                            InkResponse(
-                              onTap: () {
-                                int newQuantity = (cartItem.quantity ?? 0) + 1;
-                                cartProvider.updateQuantity(
-                                    cartItem.product?.id ?? "", newQuantity);
-                                cartProvider.updateCartApi(
-                                    cartItem.product?.id ?? "",
-                                    newQuantity.toString());
-                              },
-                              child: Container(
-                                width: 25,
-                                height: 25,
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                      color: Color(0xffE7C6A0), width: 1),
-                                ),
-                                child: Icon(
-                                  Icons.add,
-                                  size: 20,
-                                  color: Color(0xffE7C6A0),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            );
-          },
+        // Empty Container for other
         );
-      },
-    );
   }
 
   // Widget _buildItemList1(double w, double h) {

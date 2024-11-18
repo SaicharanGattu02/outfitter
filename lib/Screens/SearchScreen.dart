@@ -118,9 +118,38 @@ class _SearchscreenState extends State<Searchscreen> {
               ],
             ),
             SizedBox(height: h * 0.03),
-            if (isLoading)
-              Center(child: CircularProgressIndicator())
-            else
+
+            isLoading?
+            Center(child: CircularProgressIndicator(
+              color: Color(0xffCAA16C),
+            )):
+            products.length==0?
+            Center(
+              child: Column(
+                children: [
+                  SizedBox(height: w*0.5,),
+                  Image.asset(
+                    alignment: Alignment.center,
+                    'assets/no_search.png', // Your "no items" image
+                    width: 160,
+                    height: 160,
+                    fit: BoxFit.cover,
+                  ),
+                  SizedBox(height: 30,),
+                  Text("Enter text to search the products!",
+                    style: TextStyle(
+                      color: Color(0xff000000),
+                      fontFamily: 'RozhaOne',
+                      fontSize: 16,
+                      height: 18 / 16,
+                      fontWeight: FontWeight.w400,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+
+                ],
+              ),
+            ):
               Expanded(
                 child: ListView.builder(
                   itemCount: products.length,

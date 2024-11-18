@@ -5,6 +5,8 @@ import 'package:outfitter/utils/CustomAppBar.dart';
 import 'package:outfitter/utils/CustomAppBar1.dart';
 import 'package:provider/provider.dart';
 
+import 'dashbord.dart';
+
 class WishlistScreen extends StatefulWidget {
   const WishlistScreen({super.key});
 
@@ -73,6 +75,38 @@ class _WishlistScreenState extends State<WishlistScreen> {
                           fontSize: 16,
                           height: 18 / 16,
                           fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                      SizedBox(height: w*0.2,),
+                      InkWell(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => Dashbord()),
+                          );
+                        },
+                        child: Container(
+                          width: w*0.5,
+                          padding:
+                          EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                          decoration: BoxDecoration(
+                            color: Color(0xff110B0F),
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: Center(
+                            child: Text(
+                              "Start Shopping",
+                              style: TextStyle(
+                                color: Color(0xffCAA16C),
+                                fontFamily: 'RozhaOne',
+                                fontSize: 16,
+                                height: 21.06 / 16,
+                                fontWeight: FontWeight.w400,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
                         ),
                       ),
 

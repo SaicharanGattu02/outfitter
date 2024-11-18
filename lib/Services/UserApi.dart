@@ -772,7 +772,7 @@ class Userapi {
     final response = await http.get(url, headers:headers);
     if (response.statusCode == 200) {
       final jsonResponse = jsonDecode(response.body);
-      print("getOrdersList response: ${response.body}");
+      print("fetchProducts search response: ${response.body}");
       return ProductsListModel.fromJson(jsonResponse);
     } else {
       print("Request failed with status: ${response.statusCode}");

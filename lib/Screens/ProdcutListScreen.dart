@@ -203,7 +203,7 @@ class _ProdcutListScreenState extends State<ProdcutListScreen> {
                           SizedBox(height: w*0.2,),
                           Image.asset(
                             alignment: Alignment.center,
-                            'assets/no_address.png', // Your "no items" image
+                            'assets/no_product.png', // Your "no items" image
                             width: 160,
                             height: 160,
                             fit: BoxFit.cover,
