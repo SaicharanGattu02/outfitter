@@ -143,7 +143,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                               ? _image != null
                                   ? FileImage(_image!) as ImageProvider<Object>
                                   : NetworkImage(profile_image)
-                              : AssetImage('assets/avatar_placeholder.png')
+                              : AssetImage('assets/personProfile.png',)
                                   as ImageProvider,
                     ),
                     Positioned(
@@ -191,7 +191,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 Container(
                   alignment: Alignment.topLeft,
                   margin: EdgeInsets.only(left: 8, bottom: 10, top: 5),
-                  width: w * 0.6,
+                  width: w * w,
                   child: ShakeWidget(
                     key: Key("value"),
                     duration: Duration(milliseconds: 700),
@@ -221,7 +221,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 Container(
                   alignment: Alignment.topLeft,
                   margin: EdgeInsets.only(left: 8, bottom: 10, top: 5),
-                  width: w * 0.6,
+                  width: w * w,
                   child: ShakeWidget(
                     key: Key("value"),
                     duration: Duration(milliseconds: 700),

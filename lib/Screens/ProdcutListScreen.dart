@@ -137,6 +137,10 @@ class _ProdcutListScreenState extends State<ProdcutListScreen> {
                                     _selectedIndex = data.id ?? "";
                                     category_id = data.id ?? "";
                                     GetProductcategoryList(data.id ?? "", "","","");
+
+                                      selectedMinPrice = 0;  // Reset to 0 or null
+                                      selectedMaxPrice = 0;  // Reset to 0 or null
+
                                   });
                                 },
                                 child: Container(
@@ -252,7 +256,7 @@ class _ProdcutListScreenState extends State<ProdcutListScreen> {
                       crossAxisCount: 2,
                       crossAxisSpacing: 8.0,
                       mainAxisSpacing: 8.0,
-                      childAspectRatio: 0.575,
+                      childAspectRatio:h* 0.00082,
                     ),
                     itemCount: product_list.length,
                     itemBuilder: (context, index) {
@@ -626,8 +630,9 @@ class _ProdcutListScreenState extends State<ProdcutListScreen> {
                                       .pop(); // Close the BottomSheet when tapped
                                 },
                                 child: Container(
-                                  width: w * 0.05,
-                                  height: w * 0.05,
+                                  padding: EdgeInsets.all(5),
+                                  width: w * 0.06,
+                                  height: w * 0.06,
                                   decoration: BoxDecoration(
                                     color: Color(0xffE5E5E5),
                                     borderRadius: BorderRadius.circular(100),
@@ -737,8 +742,9 @@ class _ProdcutListScreenState extends State<ProdcutListScreen> {
                                 .pop(); // Close the BottomSheet when tapped
                           },
                           child: Container(
-                            width: w * 0.05,
-                            height: w * 0.05,
+                            padding: EdgeInsets.all(5),
+                            width: w * 0.06,
+                            height: w * 0.06,
                             decoration: BoxDecoration(
                               color: Color(0xffE5E5E5),
                               borderRadius: BorderRadius.circular(100),
@@ -803,39 +809,94 @@ class _ProdcutListScreenState extends State<ProdcutListScreen> {
                       },
                     ),
                     Spacer(),
-                    Center(
-                      child: InkResponse(onTap: (){
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Center(
+                          child: InkResponse(
+                            onTap: () async{
+                             await GetProductcategoryList(
+                                widget.selectid,
+                                "",
+                                "",
+                               "",
+                              );
 
-                        GetProductcategoryList(
-                            widget.selectid,"",selectedMinPrice.toInt(),selectedMaxPrice.toInt());
-                        Navigator.pop(context);
-                        print("selectedMaxPrice>>>${selectedMaxPrice}");
-
-                      },
-                        child: Container(
-                          width: w * 0.45,
-                          padding: EdgeInsets.all(12),
-                            decoration: BoxDecoration(
-                              color: Color(0xff110B0F),
-                              borderRadius: BorderRadius.circular(6),
-                            ),
-
-                          child: Center(
-                            child: Text(
-                              "Apply",
-                              style: TextStyle(
-                                color: Color(0xffE7C6A0),
-                                fontFamily: 'RozhaOne',
-                                fontSize: 16,
-                                height: 21.06 / 16,
-                                fontWeight: FontWeight.w400,
+                              setState(() {
+                                selectedMinPrice = 0;  // or null
+                                selectedMaxPrice = 0;  // or null
+                              });
+                              Navigator.pop(context);  // Close the filter modal
+                            },
+                            child: Container(
+                              width: w * 0.4,
+                              padding: EdgeInsets.all(12),
+                              decoration: BoxDecoration(
+                                color: Color(0xff110B0F),
+                                borderRadius: BorderRadius.circular(6),
                               ),
-                              textAlign: TextAlign.center,
+                              child: Center(
+                                child: Text(
+                                  "Clear Filter",
+                                  style: TextStyle(
+                                    color: Color(0xffE7C6A0),
+                                    fontFamily: 'RozhaOne',
+                                    fontSize: 16,
+                                    height: 21.06 / 16,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
                             ),
                           ),
                         ),
-                      ),
+                        Center(
+                          child: InkResponse(
+                            onTap: () async {
+                              // Apply the filter and fetch the data
+                              await
+                              GetProductcategoryList(
+                                widget.selectid,
+                                "",
+                                selectedMinPrice.toInt(),
+                                selectedMaxPrice.toInt(),
+                              );
+
+
+
+
+                              // Close the filter modal after applying
+                              Navigator.pop(context);
+
+                              print("Applied Filter: Min Price = $selectedMinPrice, Max Price = $selectedMaxPrice");
+                            },
+                            child: Container(
+                              width: w * 0.4,
+                              padding: EdgeInsets.all(12),
+                              decoration: BoxDecoration(
+                                color: Color(0xff110B0F),
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  "Apply",
+                                  style: TextStyle(
+                                    color: Color(0xffE7C6A0),
+                                    fontFamily: 'RozhaOne',
+                                    fontSize: 16,
+                                    height: 21.06 / 16,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
+
                     SizedBox(
                       height: 10,
                     )

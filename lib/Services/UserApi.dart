@@ -724,9 +724,10 @@ class Userapi {
     return null; // Return null if there's an error
   }
 
-  static Future<OrdersListModel?> getOrdersList() async {
+  static Future<OrdersListModel?> getOrdersList(String selectDate) async {
+    print("selectDate>>${selectDate}");
     try {
-      final url = Uri.parse("${host}/api/orders");
+      final url = Uri.parse("${host}/api/orders?date_filter=${selectDate}");
       final headers = await getheader1();
       final response = await http.get(url, headers: headers);
       if (response.statusCode == 200) {
