@@ -614,7 +614,7 @@ class Userapi {
       request.headers.addAll(headers);
 
       // Add fields (name, mobile, email)
-      request.fields['name'] = fullname;
+      request.fields['full_name'] = fullname;
       request.fields['mobile'] = mobile;
       request.fields['email'] = email;
 
