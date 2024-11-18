@@ -8,6 +8,7 @@ import 'ShippingDetailsProvider.dart';  // Import your ShippingDetailsProvider
 class CartProvider with ChangeNotifier {
   List<CartList> _cartList = [];
   int _cartCount = 0;
+  int _cartamount = 0;
   ShippingDetailsProvider shippingDetailsProvider; // Add this as a dependency
 
   // Constructor
@@ -18,12 +19,14 @@ class CartProvider with ChangeNotifier {
 
   // Getter for cart count
   int get cartCount => _cartCount;
+  int get cartAmount => _cartamount;
 
   // Method to fetch cart products
   Future<void> fetchCartProducts() async {
     try {
       var response = await Userapi.GetCartList();
       _cartList = response?.data ?? [];
+      _cartamount = response?.totalCartAmount ?? 0;
       _updateCartCount(); // Update the cart count after fetching
       notifyListeners();
     } catch (e) {

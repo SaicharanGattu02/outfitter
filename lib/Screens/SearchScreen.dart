@@ -223,7 +223,7 @@ class _SearchscreenState extends State<Searchscreen> {
                                   Row(
                                     children: [
                                       Text(
-                                        '₹ ${item.salePrice}',
+                                        '₹${item.salePrice}',
                                         style: TextStyle(
                                           color: Color(0xff181725),
                                           fontFamily: 'RozhaOne',

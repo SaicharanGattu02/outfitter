@@ -1,8 +1,11 @@
+import 'ProductsDetailsModel.dart';
+
 class GetCartListModel {
   List<CartList>? data;
+  int? totalCartAmount;
   Settings? settings;
 
-  GetCartListModel({this.data, this.settings});
+  GetCartListModel({this.data, this.totalCartAmount, this.settings});
 
   GetCartListModel.fromJson(Map<String, dynamic> json) {
     if (json['data'] != null) {
@@ -11,6 +14,7 @@ class GetCartListModel {
         data!.add(new CartList.fromJson(v));
       });
     }
+    totalCartAmount = json['total_cart_amount'];
     settings = json['settings'] != null
         ? new Settings.fromJson(json['settings'])
         : null;
@@ -21,6 +25,7 @@ class GetCartListModel {
     if (this.data != null) {
       data['data'] = this.data!.map((v) => v.toJson()).toList();
     }
+    data['total_cart_amount'] = this.totalCartAmount;
     if (this.settings != null) {
       data['settings'] = this.settings!.toJson();
     }
@@ -29,49 +34,81 @@ class GetCartListModel {
 }
 
 class CartList {
-  String? id;
+  String id;
   Product? product;
-  int? quantity;
+  int quantity;
+  int amount;
+  List<Sleeve> sleeve;
+  List<Neck> neck;
+  List<Placket> placket;
+  List<Pleat> pleat;
+  String size;
+  String color;
 
-  CartList({this.id, this.product, this.quantity});
+  CartList({
+    this.id = "", // default to empty string
+    this.product,
+    this.quantity = 0, // default to 0
+    this.amount = 0, // default to 0
+    List<Sleeve>? sleeve,
+    List<Neck>? neck,
+    List<Placket>? placket,
+    List<Pleat>? pleat,
+    this.size = "", // default to empty string
+    this.color = "", // default to empty string
+  })  : sleeve = sleeve ?? [],
+        neck = neck ?? [],
+        placket = placket ?? [],
+        pleat = pleat ?? [];
 
-  CartList.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    product =
-    json['product'] != null ? new Product.fromJson(json['product']) : null;
-    quantity = json['quantity'];
-  }
+  CartList.fromJson(Map<String, dynamic> json)
+      : id = json['id'] ?? "",
+        product = json['product'] != null ? Product.fromJson(json['product']) : null,
+        quantity = json['quantity'] ?? 0,
+        amount = json['amount'] ?? 0,
+        sleeve = (json['sleeve'] as List?)?.map((item) => Sleeve.fromJson(item)).toList() ?? [],
+        neck = (json['neck'] as List?)?.map((item) => Neck.fromJson(item)).toList() ?? [],
+        placket = (json['placket'] as List?)?.map((item) => Placket.fromJson(item)).toList() ?? [],
+        pleat = (json['pleat'] as List?)?.map((item) => Pleat.fromJson(item)).toList() ?? [],
+        size = json['size'] ?? "",
+        color = json['color'] ?? "";
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    if (this.product != null) {
-      data['product'] = this.product!.toJson();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    if (product != null) {
+      data['product'] = product!.toJson();
     }
-    data['quantity'] = this.quantity;
+    data['quantity'] = quantity;
+    data['amount'] = amount;
+    data['sleeve'] = sleeve.map((item) => item.toJson()).toList();
+    data['neck'] = neck.map((item) => item.toJson()).toList();
+    data['placket'] = placket.map((item) => item.toJson()).toList();
+    data['pleat'] = pleat.map((item) => item.toJson()).toList();
+    data['size'] = size;
+    data['color'] = color;
     return data;
   }
 }
-
 class Product {
   String? id;
   String? title;
   String? category;
+  bool? isBestSeller;
   String? brand;
-  List<String>? colors;
   String? postedBy;
   int? mrp;
   int? salePrice;
   bool? isInWishlist;
   String? image;
-  dynamic rating;
+  int? rating;
 
   Product(
       {this.id,
         this.title,
         this.category,
+        this.isBestSeller,
         this.brand,
-        this.colors,
         this.postedBy,
         this.mrp,
         this.salePrice,
@@ -83,10 +120,8 @@ class Product {
     id = json['id'];
     title = json['title'];
     category = json['category'];
+    isBestSeller = json['is_best_seller'];
     brand = json['brand'];
-
-   colors = (json['colors'] as List?)?.cast<String>() ?? [];
-
     postedBy = json['posted_by'];
     mrp = json['mrp'];
     salePrice = json['sale_price'];
@@ -100,8 +135,8 @@ class Product {
     data['id'] = this.id;
     data['title'] = this.title;
     data['category'] = this.category;
+    data['is_best_seller'] = this.isBestSeller;
     data['brand'] = this.brand;
-    data['colors'] = this.colors;
     data['posted_by'] = this.postedBy;
     data['mrp'] = this.mrp;
     data['sale_price'] = this.salePrice;

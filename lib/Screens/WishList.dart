@@ -21,11 +21,18 @@ class _WishlistScreenState extends State<WishlistScreen> {
     GetWishlistList();
     super.initState();
   }
+  bool loading=true;
 
   Future<void> GetWishlistList() async {
-    final wishlist_list_provider =
-        Provider.of<WishlistProvider>(context, listen: false);
-    wishlist_list_provider.fetchWishList();
+    final wishlist_list_provider = Provider.of<WishlistProvider>(context, listen: false);
+    var res= await wishlist_list_provider.fetchWishList();
+    setState(() {
+      if(res==1){
+        loading=false;
+      }else{
+        loading=false;
+      }
+    });
   }
 
   @override
@@ -35,7 +42,8 @@ class _WishlistScreenState extends State<WishlistScreen> {
 
     return Scaffold(
       appBar: CustomAppBar2(title: 'WishList', w: w),
-      body: Column(
+      body:loading?Center(child:CircularProgressIndicator(color: Color(0xffE7C6A0),)):
+      Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [

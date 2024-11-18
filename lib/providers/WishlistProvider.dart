@@ -22,11 +22,16 @@ class WishlistProvider with ChangeNotifier {
     productListProvider = newProvider;
   }
 
-  Future<void> fetchWishList() async {
+  Future<int?> fetchWishList() async {
     try {
       var response = await Userapi.getWishList();
-      _wishlistproducts = response?.data ?? [];
-      notifyListeners();
+      if(response?.settings?.success==1){
+        _wishlistproducts = response?.data ?? [];
+        notifyListeners();
+        return response?.settings?.success;
+      }else{
+        return response?.settings?.success;
+      }
     } catch (e) {
       throw Exception('Failed to fetch wishlist details: $e');
     }

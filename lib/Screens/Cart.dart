@@ -30,6 +30,17 @@ class _CartState extends State<Cart> {
     shipping_provider.fetchShippingDetails();
   }
 
+  Color hexToColor(String hexColor) {
+    final hex = hexColor.replaceAll('#', '');
+    if (hex.length == 6) {
+      return Color(
+          int.parse('FF$hex', radix: 16)); // Adding FF for full opacity
+    } else {
+      throw FormatException("Invalid Hex color code");
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
     var w = MediaQuery.of(context).size.width;
@@ -122,6 +133,7 @@ class _CartState extends State<Cart> {
                       itemCount: cart_list.length,
                       itemBuilder: (context, index) {
                         final cartItem = cart_list[index];
+                        Color color = hexToColor(cartItem.color ?? "");
                         return Container(
                           width: double.infinity,
                           padding: EdgeInsets.all(16),
@@ -148,7 +160,7 @@ class _CartState extends State<Cart> {
                                         cartItem.product?.image ?? "",
                                         fit: BoxFit.contain,
                                         width: 100,
-                                        height: 110,
+                                        height: 125,
                                       ),
                                     ),
                                   ),
@@ -170,7 +182,60 @@ class _CartState extends State<Cart> {
                                       ),
                                       maxLines: 2,
                                     ),
-                                    SizedBox(height: 8),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Text("Color:",
+                                              style: TextStyle(
+                                                color: Color(0xff181725),
+                                                fontFamily: 'RozhaOne',
+                                                overflow: TextOverflow.ellipsis,
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w400,
+                                              ),
+                                              maxLines: 2,
+                                            ),
+                                            SizedBox(width: 10,),
+                                            Container(
+                                              width: 18,
+                                              height: 18,
+                                              decoration: BoxDecoration(
+                                                color: color, // Set the color of the container
+                                                borderRadius: BorderRadius.circular(100),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+
+                                        Row(
+                                          children: [
+                                            Text("Size:",
+                                              style: TextStyle(
+                                                color: Color(0xff181725),
+                                                fontFamily: 'RozhaOne',
+                                                overflow: TextOverflow.ellipsis,
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w400,
+                                              ),
+                                              maxLines: 2,
+                                            ),
+                                            SizedBox(width: 10,),
+                                            Text(cartItem.size,
+                                              style: TextStyle(
+                                                color: Color(0xff181725),
+                                                fontFamily: 'RozhaOne',
+                                                overflow: TextOverflow.ellipsis,
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w400,
+                                              ),
+                                              maxLines: 2,
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
                                     Row(
                                       children: [
                                         Text(
@@ -284,13 +349,13 @@ class _CartState extends State<Cart> {
             ),
           ),
         ),
-        bottomNavigationBar: Consumer<ShippingDetailsProvider>(
+        bottomNavigationBar: Consumer<CartProvider>(
           builder: (context, shippingProvider, child) {
-            final shipping_data = shippingProvider.shippingData;
+            final cart_amount = shippingProvider.cartAmount;
             // Check if shipping_data is null or empty
-            if (shipping_data == null ||
-                shipping_data.totalAmount == null ||
-                shipping_data.totalAmount == 0) {
+            if (cart_amount == null ||
+                cart_amount == null ||
+                cart_amount == 0) {
               return SizedBox
                   .shrink(); // Hide the bottom navigation bar when data is null or empty
             }
@@ -337,7 +402,7 @@ class _CartState extends State<Cart> {
                             ),
                           ),
                           Text(
-                            "₹${shipping_data?.totalAmount.toString() ?? ""}",
+                            "₹${cart_amount}",
                             style: TextStyle(
                               color: Color(0xff617C9D),
                               fontFamily: 'RozhaOne',

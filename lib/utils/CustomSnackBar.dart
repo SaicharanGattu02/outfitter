@@ -17,7 +17,6 @@ class CustomSnackBar {
 }
 
 class Spinkits {
-
   Widget getFadingCircleSpinner({Color color = Colors.white}) {
     return SizedBox(
       height: 15,
@@ -32,6 +31,18 @@ class Spinkits {
             ),
           );
         },
+      ),
+    );
+  }
+}
+
+class Spinkits1 {
+  Widget getWavespinkit() {
+    return SizedBox(
+      height: 20,
+      width: 55,
+      child: SpinKitWave(
+        color: Color(0xffE7C6A0),
       ),
     );
   }
