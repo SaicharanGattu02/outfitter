@@ -21,8 +21,7 @@ class _CartState extends State<Cart> {
   }
 
   Future<void> GetCartList() async {
-    final cart_list_provider =
-        Provider.of<CartProvider>(context, listen: false);
+    final cart_list_provider = Provider.of<CartProvider>(context, listen: false);
     final shipping_provider =
         Provider.of<ShippingDetailsProvider>(context, listen: false);
     cart_list_provider.fetchCartProducts();
@@ -151,15 +150,21 @@ class _CartState extends State<Cart> {
       builder: (context, cartProvider, child) {
         final cart_list = cartProvider.cartList;
         if (cart_list.isEmpty) {
-          return Center(
-            child: Text(
-              "No data found", // Text when cart is empty
-              style: TextStyle(
-                fontSize: 18,
-                color: Colors.black45,
-                fontWeight: FontWeight.w400,
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(height: w*0.8,),
+              Text(
+                "No data found", // Text when cart is empty
+                style: TextStyle(
+                  fontSize: 18,
+                  color: Colors.black45,
+                  fontWeight: FontWeight.w400,
+                ),
+                textAlign: TextAlign.center,
               ),
-            ),
+            ],
           );
         }
 

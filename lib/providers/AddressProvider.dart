@@ -9,6 +9,7 @@ import '../Model/CategoriesModel.dart';
 import '../Model/ProductsListModel.dart';
 import '../Services/UserApi.dart';
 import 'ProductListProvider.dart';
+import 'ShippingDetailsProvider.dart';
 
 class AddressListProvider with ChangeNotifier {
   List<AddressList>? _addresslistproducts = [];
@@ -17,7 +18,12 @@ class AddressListProvider with ChangeNotifier {
 
   List<AddressList> get addressList => _addresslistproducts ?? [];
   AddressDetails? get addressDetails => _addressDetails;
-  String? get selectedAddressId => _selectedAddressId;  // Getter for selected address ID
+  String? get selectedAddressId => _selectedAddressId;
+
+  ShippingDetailsProvider shippingDetailsProvider; // Add this as a dependency
+
+  // Constructor
+  AddressListProvider({required this.shippingDetailsProvider});
 
   // Fetch address list from API
   Future<void> fetchAddressList() async {
@@ -54,6 +60,7 @@ class AddressListProvider with ChangeNotifier {
       if (res != null && res.settings?.success == 1) {
         print("AddAddress>>  ${res.settings?.message}");
         fetchAddressList();
+        shippingDetailsProvider.fetchShippingDetails();  // Fetch shipping details every time
         return res.settings?.success;
       } else {
         return res?.settings?.success;
@@ -70,6 +77,8 @@ class AddressListProvider with ChangeNotifier {
       if (res != null && res.settings?.success == 1) {
         print('Address removed successfully');
         fetchAddressList();
+        // Call fetchShippingDetails after adding to cart
+        shippingDetailsProvider.fetchShippingDetails();  // Fetch shipping details every time
       } else {
         throw Exception('Failed to remove address from address list');
       }
@@ -85,6 +94,8 @@ class AddressListProvider with ChangeNotifier {
       if (res != null && res.settings?.success == 1) {
         // Update the address list and re-fetch
         fetchAddressList();
+        // Call fetchShippingDetails after adding to cart
+        shippingDetailsProvider.fetchShippingDetails();  // Fetch shipping details every time
       } else {
         throw Exception('Failed to set default address');
       }
@@ -99,6 +110,8 @@ class AddressListProvider with ChangeNotifier {
       var res = await Userapi.updateAdress(addressID, pincode, mobile, address, address_type, fullname, alternate_mobile);
       if (res != null && res.settings?.success == 1) {
         fetchAddressList();
+        // Call fetchShippingDetails after adding to cart
+        shippingDetailsProvider.fetchShippingDetails();  // Fetch shipping details every time
         return res.settings?.success;
       } else {
         return res?.settings?.success;

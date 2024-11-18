@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';  // For ChangeNotifier
 import '../Model/UserDetailsModel.dart';
@@ -10,19 +12,21 @@ class UserDetailsProvider with ChangeNotifier {
   UserDetail? get userDetails => _userdetails;
 
   // Method to fetch user details asynchronously
-  Future<void> fetchUserDetails() async {
+  Future<int?> fetchUserDetails() async {
     try {
       // Fetching user details from the API
       var response = await Userapi.getUserdetsils();
-      // Check if response is not null and contains data
-      if (response?.data != null) {
+      if (response?.settings?.success==1) {
         _userdetails = response?.data;
+        notifyListeners();
+        return response?.settings?.success??0;
       } else {
-        _userdetails = null; // If no data is found, set _userdetails to null
+        _userdetails = null;
+        notifyListeners();
+        return response?.settings?.success??0;
       }
 
       // Notify listeners that the data has been updated
-      notifyListeners();
     } catch (e) {
       // If an error occurs, log or rethrow an exception
       print('Error fetching user details: $e');
@@ -31,7 +35,7 @@ class UserDetailsProvider with ChangeNotifier {
   }
 
   // Method to fetch user details asynchronously
-  Future<int?> updateUserDetails(name,mobile,email,image) async {
+  Future<int?> updateUserDetails(name,mobile,email,File? image) async {
     try {
       // Fetching user details from the API
       var response = await Userapi.updateProfile(name,mobile,email,image);

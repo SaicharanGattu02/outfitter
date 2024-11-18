@@ -5,8 +5,10 @@ import 'package:outfitter/Screens/Edit%20Profile%20screeen.dart';
 import 'package:outfitter/Screens/OrderListScreen.dart';
 import 'package:outfitter/Screens/Orders.dart';
 import 'package:outfitter/Screens/WishList.dart';
+import 'package:outfitter/providers/UserDetailsProvider.dart';
 import 'package:outfitter/utils/CustomAppBar.dart';
 import 'package:outfitter/utils/CustomAppBar1.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Model/UserDetailsModel.dart';
@@ -31,15 +33,16 @@ class _ProfileState extends State<Profile> {
 
   Future<void> _fetchUserProfile() async {
     try {
-      var data = await Userapi.getUserdetsils();
+      final profile_provider = Provider.of<UserDetailsProvider>(context, listen: false);
+      var res = await profile_provider.fetchUserDetails();
       setState(() {
-        userDetails = data;
-        isLoading = false;
+        if(res==1){
+          isLoading = false;
+        }else{
+          isLoading = false;
+        }
       });
     } catch (e) {
-      setState(() {
-        isLoading = false;
-      });
       // Handle error appropriately, e.g., show a toast or dialog
       print('Error fetching user profile: $e');
     }
@@ -55,226 +58,242 @@ class _ProfileState extends State<Profile> {
       body: Padding(
         padding: const EdgeInsets.all(24),
         child: isLoading
-            ? Center(child: CircularProgressIndicator(color: Color(0xffE7C6A0),))
-            : userDetails == null
-            ? Center(child: Text('Failed to load profile'))
+            ? Center(
+                child: CircularProgressIndicator(
+                color: Color(0xffE7C6A0),
+              ))
             : Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // User Info Row
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(7),
-                  ),
-                  clipBehavior: Clip.hardEdge,
-                  child: (userDetails?.data?.image != null && userDetails!.data!.image!.isNotEmpty)
-                      ? Image.network(
-                    userDetails!.data!.image!,
-                    width: w * 0.2,
-                    height: h * 0.1,
-                    fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) {
-                      // Fallback to show the first letter of the name if the image fails to load
-                      return _buildNamePlaceholder(userDetails?.data?.fullName, w, h);
-                    },
-                  )
-                      : _buildNamePlaceholder(userDetails?.data?.fullName, w, h),
-                ),
-                SizedBox(width: w * 0.04),
-                Expanded(
-                  child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            userDetails!.data?.fullName ?? 'No Name',
-                            style: TextStyle(
-                              color: const Color(0xff110B0F),
-                              fontFamily: 'RozhaOne',
-                              fontSize: 16,
-                              height: 21 / 16,
-                              fontWeight: FontWeight.w400,
+                      Consumer<UserDetailsProvider>(
+                          builder: (context, userdetailsProvider, child) {
+                        final user_data = userdetailsProvider.userDetails;
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(7),
+                              ),
+                              clipBehavior: Clip.hardEdge,
+                              child: (user_data?.image != null)
+                                  ? Image.network(
+                                     user_data?.image??"",
+                                      width: w * 0.2,
+                                      height: h * 0.1,
+                                      fit: BoxFit.cover,
+                                      errorBuilder:
+                                          (context, error, stackTrace) {
+                                        // Fallback to show the first letter of the name if the image fails to load
+                                        return _buildNamePlaceholder(
+                                            user_data?.fullName, w, h);
+                                      },
+                                    )
+                                  : _buildNamePlaceholder(
+                                  user_data?.fullName, w, h),
                             ),
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => EditProfileScreen()),
-                              );
-                            },
-                            child: Image.asset(
-                              'assets/edit.png',
-                              width: w * 0.09,
-                              height: h * 0.02,
+                            SizedBox(width: w * 0.04),
+                            Expanded(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        user_data?.fullName ??
+                                            'No Name',
+                                        style: TextStyle(
+                                          color: const Color(0xff110B0F),
+                                          fontFamily: 'RozhaOne',
+                                          fontSize: 16,
+                                          height: 21 / 16,
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    EditProfileScreen()),
+                                          );
+                                        },
+                                        child: Image.asset(
+                                          'assets/edit.png',
+                                          width: w * 0.09,
+                                          height: h * 0.02,
+                                          fit: BoxFit.contain,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: h * 0.01),
+                                  Row(
+                                    children: [
+                                      Image.asset(
+                                        'assets/call.png',
+                                        width: w * 0.09,
+                                        height: h * 0.02,
+                                        color: const Color(0xff617C9D),
+                                        fit: BoxFit.contain,
+                                      ),
+                                      const SizedBox(width: 4),
+                                      Text(
+                                        user_data?.mobile ??
+                                            '+91 XXXXXX',
+                                        style: TextStyle(
+                                          color: const Color(0xff617C9D),
+                                          fontFamily: 'RozhaOne',
+                                          fontSize: 16,
+                                          height: 21 / 16,
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: h * 0.01),
+                                  Row(
+                                    children: [
+                                      Image.asset(
+                                        'assets/mail.png',
+                                        width: w * 0.09,
+                                        height: h * 0.02,
+                                        color: const Color(0xff617C9D),
+                                        fit: BoxFit.contain,
+                                      ),
+                                      const SizedBox(width: 4),
+                                      Expanded(
+                                        child: Text(
+                                          user_data?.email ??
+                                              '',
+                                          style: TextStyle(
+                                            color: const Color(0xff617C9D),
+                                            fontFamily: 'RozhaOne',
+                                            fontSize: 16,
+                                            height: 21 / 16,
+                                            fontWeight: FontWeight.w400,
+                                          ),
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        );
+                      }),
+                      SizedBox(height: h * 0.06),
+                      // Menu Items (Orders, Wishlist, etc.)
+                      _buildMenuItem(
+                        context,
+                        iconPath: "assets/orders.png",
+                        label: 'Orders',
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => OrderListScreen()),
+                          );
+                        },
+                      ),
+                      _buildDivider(h),
+                      _buildMenuItem(
+                        context,
+                        iconPath: "assets/fav.png",
+                        label: 'Wishlist',
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => WishlistScreen()),
+                          );
+                        },
+                      ),
+                      // _buildDivider(h),
+                      // _buildMenuItem(
+                      //   context,
+                      //   iconPath: "assets/notification.png",
+                      //   label: 'Notifications',
+                      // ),
+                      // _buildDivider(h),
+                      // _buildMenuItem(
+                      //   context,
+                      //   iconPath: "assets/history.png",
+                      //   label: 'Payment Methods',
+                      // ),
+                      _buildDivider(h),
+                      _buildMenuItem(
+                        context,
+                        iconPath: "assets/address.png",
+                        label: 'Address',
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => AddressListScreen()),
+                          );
+                        },
+                      ),
+                      // _buildDivider(h),
+                      // _buildMenuItem(
+                      //   context,
+                      //   iconPath: "assets/helpsupport.png",
+                      //   label: 'Help & Support',
+                      // ),
+                      // _buildDivider(h),
+                      // _buildMenuItem(
+                      //   context,
+                      //   iconPath: "assets/Settings.png",
+                      //   label: 'Settings',
+                      // ),
+                      _buildDivider(h),
+                      const Spacer(),
+                      InkResponse(
+                        onTap: () async {
+                          SharedPreferences sharedPreferences =
+                              await SharedPreferences.getInstance();
+                          sharedPreferences.remove('token');
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(builder: (context) => Login()),
+                          );
+                        },
+                        child: Row(
+                          children: [
+                            Image.asset(
+                              "assets/logout.png",
+                              width: 24,
+                              height: 24,
+                              color: const Color(0xffED1C24),
                               fit: BoxFit.contain,
                             ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: h * 0.01),
-                      Row(
-                        children: [
-                          Image.asset(
-                            'assets/call.png',
-                            width: w * 0.09,
-                            height: h * 0.02,
-                            color: const Color(0xff617C9D),
-                            fit: BoxFit.contain,
-                          ),
-                          const SizedBox(width: 4),
-                          Text(
-                            userDetails!.data?.mobile ?? '+91 XXXXXX',
-                            style: TextStyle(
-                              color: const Color(0xff617C9D),
-                              fontFamily: 'RozhaOne',
-                              fontSize: 16,
-                              height: 21 / 16,
-                              fontWeight: FontWeight.w400,
-                            ),
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: h * 0.01),
-                      Row(
-                        children: [
-                          Image.asset(
-                            'assets/mail.png',
-                            width: w * 0.09,
-                            height: h * 0.02,
-                            color: const Color(0xff617C9D),
-                            fit: BoxFit.contain,
-                          ),
-                          const SizedBox(width: 4),
-                          Expanded(
-                            child: Text(
-                              userDetails!.data?.email ?? 'example@mail.com',
+                            SizedBox(width: w * 0.03),
+                            Text(
+                              'Logout',
                               style: TextStyle(
-                                color: const Color(0xff617C9D),
-                                fontFamily: 'RozhaOne',
-                                fontSize: 16,
-                                height: 21 / 16,
+                                color: const Color(0xffED1C24),
+                                fontFamily: 'Poppins',
+                                fontSize: 15,
+                                height: 20 / 15,
                                 fontWeight: FontWeight.w400,
                               ),
                               overflow: TextOverflow.ellipsis,
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
+                      SizedBox(height: h * 0.02),
                     ],
                   ),
-                ),
-              ],
-            ),
-            SizedBox(height: h * 0.06),
-            // Menu Items (Orders, Wishlist, etc.)
-            _buildMenuItem(
-              context,
-              iconPath: "assets/orders.png",
-              label: 'Orders',
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => OrderListScreen()),
-                );
-              },
-            ),
-            _buildDivider(h),
-            _buildMenuItem(
-              context,
-              iconPath: "assets/fav.png",
-              label: 'Wishlist',
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => WishlistScreen()),
-                );
-              },
-            ),
-            // _buildDivider(h),
-            // _buildMenuItem(
-            //   context,
-            //   iconPath: "assets/notification.png",
-            //   label: 'Notifications',
-            // ),
-            // _buildDivider(h),
-            // _buildMenuItem(
-            //   context,
-            //   iconPath: "assets/history.png",
-            //   label: 'Payment Methods',
-            // ),
-            _buildDivider(h),
-            _buildMenuItem(
-              context,
-              iconPath: "assets/address.png",
-              label: 'Address',
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => AddressListScreen()),
-                );
-              },
-            ),
-            // _buildDivider(h),
-            // _buildMenuItem(
-            //   context,
-            //   iconPath: "assets/helpsupport.png",
-            //   label: 'Help & Support',
-            // ),
-            // _buildDivider(h),
-            // _buildMenuItem(
-            //   context,
-            //   iconPath: "assets/Settings.png",
-            //   label: 'Settings',
-            // ),
-            _buildDivider(h),
-            const Spacer(),
-            InkResponse(
-              onTap: () async {
-                SharedPreferences sharedPreferences =
-                await SharedPreferences.getInstance();
-                sharedPreferences.remove('token');
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => Login()),
-                );
-              },
-              child: Row(
-                children: [
-                  Image.asset(
-                    "assets/logout.png",
-                    width: 24,
-                    height: 24,
-                    color: const Color(0xffED1C24),
-                    fit: BoxFit.contain,
-                  ),
-                  SizedBox(width: w * 0.03),
-                  Text(
-                    'Logout',
-                    style: TextStyle(
-                      color: const Color(0xffED1C24),
-                      fontFamily: 'Poppins',
-                      fontSize: 15,
-                      height: 20 / 15,
-                      fontWeight: FontWeight.w400,
-                    ),
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(height: h * 0.02),
-          ],
-        ),
       ),
     );
   }
@@ -321,6 +340,7 @@ class _ProfileState extends State<Profile> {
       ],
     );
   }
+
   Widget _buildNamePlaceholder(String? fullName, double w, double h) {
     // Extract the first letter and convert it to uppercase
     String firstLetter = (fullName != null && fullName.isNotEmpty)
@@ -332,7 +352,8 @@ class _ProfileState extends State<Profile> {
       height: h * 0.1,
       decoration: BoxDecoration(
         color: Colors.black, // Background color for the square
-        borderRadius: BorderRadius.circular(7), // Slightly rounded corners (optional)
+        borderRadius:
+            BorderRadius.circular(7), // Slightly rounded corners (optional)
       ),
       alignment: Alignment.center,
       child: Text(
@@ -345,6 +366,4 @@ class _ProfileState extends State<Profile> {
       ),
     );
   }
-
 }
-

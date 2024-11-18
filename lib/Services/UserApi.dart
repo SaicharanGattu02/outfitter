@@ -629,6 +629,8 @@ class Userapi {
         );
       }
 
+      print("Req filelds:${request.fields}");
+
       // Send the request
       final response = await request.send();
 
@@ -686,7 +688,7 @@ class Userapi {
     var request = http.MultipartRequest('POST', url)
       ..headers.addAll(headers)
       ..fields['order_value'] = order_value.toString()
-      ..fields['payment_method'] = 'Case on delivery'
+      ..fields['payment_method'] = 'Cash on delivery'
       ..fields['address'] = address;
 
     // Use this approach to handle multiple collaborators

@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:outfitter/utils/CustomAppBar.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../Model/UserDetailsModel.dart';
 import '../Services/UserApi.dart';
+import '../providers/UserDetailsProvider.dart';
 import '../utils/CustomAppBar1.dart';
 import '../utils/CustomSnackBar.dart';
 
@@ -37,19 +39,18 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     super.initState();
     _fetchUserProfile();  // Fetch user profile data when the screen is initialized
   }
-  UserDetail? userdata=UserDetail();
-// Function to fetch user details and set to fields
+
+  String profile_image="";
   Future<void> _fetchUserProfile() async {
     try {
-      var res = await Userapi.getUserdetsils();
+      final profile_provider = Provider.of<UserDetailsProvider>(context, listen: false);
+      var res = await profile_provider.userDetails;
       setState(() {
-        if (res != null && res.data != null) {
-          userdata = res.data;
-          // Populate your text fields with the data
-          fullnameController.text = userdata?.fullName ?? ''; // Use safe navigation
-          mobileController.text = userdata?.mobile ?? '';
-          emailController.text = userdata?.email ?? '';
-          _image=userdata?.image as File?;
+        if (res != null) {
+          fullnameController.text = res.fullName ?? ''; // Use safe navigation
+          mobileController.text = res.mobile ?? '';
+          emailController.text = res.email ?? '';
+          profile_image= res.image??"";
         }
         isLoading = false;
       });
@@ -78,37 +79,24 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   }
 
   Future<void> _updateProfile() async {
-    String fullname = fullnameController.text.trim();
-    String mobile = mobileController.text.trim();
-    String email = emailController.text.trim();
-
-    // Validate inputs
-    if (fullname.isEmpty || mobile.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Please fill in all fields")));
-      return;
-    }
-
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String userId = prefs.getString('userId') ?? "";  // Replace with actual user ID retrieval logic
-
-    // File imageUrl = _image?.path;
-
-    // Call the updateProfile API
-    var updatedUser = await Userapi.updateProfile(
+    String fullname = fullnameController.text;
+    String mobile = mobileController.text;
+    String email = emailController.text;
+    final profile_provider = Provider.of<UserDetailsProvider>(context, listen: false);
+    var response = await profile_provider.updateUserDetails(
       fullname,
       mobile,
       email,
       _image
     );
     setState(() {
-      isLoading = false;
-
-      if (updatedUser?.settings?.success==1) {
-
+      if (response==1) {
+        isLoading = false;
         Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Profile updated successfully")));
         // Optionally, you can navigate back or update the UI to reflect changes
       } else {
+        isLoading = false;
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Failed to update profile")));
       }
     });
@@ -153,9 +141,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       radius: 50,
                       backgroundColor: Colors.grey,
                       backgroundImage:
-                           userdata?.image != null &&
-                          userdata!.image!.isNotEmpty
-                          ? NetworkImage(userdata!.image!)
+                         profile_image != null && profile_image.isNotEmpty
+                          ? NetworkImage(profile_image)
                           : AssetImage(
                           'assets/avatar_placeholder.png')
                       as ImageProvider,

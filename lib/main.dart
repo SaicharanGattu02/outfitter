@@ -189,7 +189,9 @@ Future<void> main() async {
           create: (context) => UserDetailsProvider(),
         ),
         ChangeNotifierProvider(
-          create: (context) => AddressListProvider(),
+          create: (context) => AddressListProvider(
+            shippingDetailsProvider: Provider.of<ShippingDetailsProvider>(context, listen: false),
+          ),
         ),
         ChangeNotifierProxyProvider<ProductListProvider, WishlistProvider>(
           create: (context) => WishlistProvider(context.read<ProductListProvider>()),
