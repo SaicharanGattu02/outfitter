@@ -198,11 +198,39 @@ class _ProdcutListScreenState extends State<ProdcutListScreen> {
                   // Check if the product list is empty
                   if (product_list.isEmpty) {
                     return Center(
-                      child: Image.asset(
-                        'assets/noitems.png', // Your "no items" image
-                        width: 160,
-                        height: 160,
-                        fit: BoxFit.cover,
+                      child: Column(
+                        children: [
+                          SizedBox(height: w*0.2,),
+                          Image.asset(
+                            alignment: Alignment.center,
+                            'assets/no_address.png', // Your "no items" image
+                            width: 160,
+                            height: 160,
+                            fit: BoxFit.cover,
+                          ),
+                          SizedBox(height: 30,),
+                          Text("No Product",
+                            style: TextStyle(
+                              color: Color(0xffCAA16C),
+                              fontFamily: 'RozhaOne',
+                              fontSize: 22,
+                              height: 18 / 16,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                          SizedBox(height: 10,),
+                          Text("Come back for the product we are updating the product soon!",
+                            style: TextStyle(
+                              color: Color(0xff000000),
+                              fontFamily: 'RozhaOne',
+                              fontSize: 16,
+                              height: 18 / 16,
+                              fontWeight: FontWeight.w400,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+
+                        ],
                       ),
                     );
                   }

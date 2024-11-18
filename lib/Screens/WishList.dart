@@ -45,17 +45,39 @@ class _WishlistScreenState extends State<WishlistScreen> {
               final product_list = profileProvider.wishlistProducts;
               print("Consumer product list: ${product_list}");
               if (product_list.isEmpty) {
-                return Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Image.asset(
-                      'assets/nodata.jpg', // Your "no items" image
-                      width: 200,
-                      height: 200,
-                      fit: BoxFit.cover,
-                    ),
-                  ],
+                return Center(
+                  child: Column(
+                    children: [
+                      Image.asset(
+                        alignment: Alignment.center,
+                        'assets/no_wishlist.png', // Your "no items" image
+                        width: 200,
+                        height: 200,
+                        fit: BoxFit.cover,
+                      ),
+                      SizedBox(height: 30,),
+                      Text("Your Wishlist is Empty",
+                        style: TextStyle(
+                          color: Color(0xffCAA16C),
+                          fontFamily: 'RozhaOne',
+                          fontSize: 22,
+                          height: 18 / 16,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                      SizedBox(height: 10,),
+                      Text("Explore more and shortlist some items.",
+                        style: TextStyle(
+                          color: Color(0xff000000),
+                          fontFamily: 'RozhaOne',
+                          fontSize: 16,
+                          height: 18 / 16,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+
+                    ],
+                  ),
                 );
               }
 

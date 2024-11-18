@@ -133,7 +133,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               ),
                             ),
                             SizedBox(width: w * 0.04),
-
                             Container(
                               padding: EdgeInsets.symmetric(
                                   horizontal: 6, vertical: 2),
@@ -528,8 +527,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                         ),
                         Row(
                           children: [
-                            Text(
-                              cartItem.product?.salePrice.toString() ?? "",
+                            Text("₹${cartItem.product?.salePrice.toString() ?? ""}",
                               style: TextStyle(
                                 color: Color(0xff181725),
                                 fontFamily: 'RozhaOne',
@@ -551,12 +549,13 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                             // ),
                             // SizedBox(width: 4),
                             Text(
-                              cartItem.product?.mrp.toString() ?? "",
+                              "₹${cartItem.product?.mrp.toString() ?? ""}",
                               style: TextStyle(
                                 color: Color(0xffED1C24),
                                 fontFamily: 'RozhaOne',
                                 fontSize: 12,
                                 decoration: TextDecoration.lineThrough,
+                                decorationColor:Color(0xffED1C24),
                                 fontWeight: FontWeight.w400,
                               ),
                             ),
