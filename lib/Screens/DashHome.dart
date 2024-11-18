@@ -69,12 +69,13 @@ class _DashHomeState extends State<DashHome> {
   }
 
   Future<void> GetCategoriesList() async {
-    final categories_list_provider =
-        Provider.of<CategoriesProvider>(context, listen: false);
+    final categories_list_provider = Provider.of<CategoriesProvider>(context, listen: false);
+    final cart_list_provider = Provider.of<CartProvider>(context, listen: false);
     final bestseller_list_provider =
         Provider.of<ProductListProvider>(context, listen: false);
     categories_list_provider.fetchCategoriesList();
     bestseller_list_provider.fetchBestSellersList();
+    cart_list_provider.fetchCartProducts();
   }
 
   List<ProductsList> productlist = [];

@@ -34,6 +34,8 @@ class _WishlistScreenState extends State<WishlistScreen> {
     return Scaffold(
       appBar: CustomAppBar2(title: 'WishList', w: w),
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           SizedBox(
             height: 15,
@@ -42,16 +44,18 @@ class _WishlistScreenState extends State<WishlistScreen> {
             builder: (context, profileProvider, child) {
               final product_list = profileProvider.wishlistProducts;
               print("Consumer product list: ${product_list}");
-
-              // Check if the product list is empty
               if (product_list.isEmpty) {
-                return Center(
-                  child: Image.asset(
-                    'assets/noitems.png', // Your "no items" image
-                    width: 160,
-                    height: 160,
-                    fit: BoxFit.cover,
-                  ),
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Image.asset(
+                      'assets/nodata.jpg', // Your "no items" image
+                      width: 200,
+                      height: 200,
+                      fit: BoxFit.cover,
+                    ),
+                  ],
                 );
               }
 
@@ -141,7 +145,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
                                   Row(
                                     children: [
                                       Text(
-                                        ('₹ ${item.product?.salePrice.toString() ?? ""}'),
+                                        ('₹${item.product?.salePrice.toString() ?? ""}'),
                                         style: TextStyle(
                                           color: Color(0xff181725),
                                           fontFamily: 'RozhaOne',
@@ -152,7 +156,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
                                       ),
                                       SizedBox(width: w * 0.02),
                                       Text(
-                                        ('₹ ${item.product?.mrp.toString() ?? ""}'),
+                                        ('₹${item.product?.mrp.toString() ?? ""}'),
                                         style: TextStyle(
                                           fontFamily: 'RozhaOne',
                                           fontSize: 12,

@@ -78,6 +78,7 @@ class _CartState extends State<Cart> {
                 Container(
                   color: Colors.white,
                   padding: const EdgeInsets.only(left: 16, right: 16, bottom: 5),
+                  margin: EdgeInsets.only(bottom: 15,top: 5),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -88,7 +89,7 @@ class _CartState extends State<Cart> {
                             style: TextStyle(
                               color: Color(0xff000000),
                               fontFamily: 'RozhaOne',
-                              fontSize: 20,
+                              fontSize: 18,
                               height: 24 / 20,
                               fontWeight: FontWeight.w400,
                             ),
@@ -98,7 +99,7 @@ class _CartState extends State<Cart> {
                             style: TextStyle(
                               color: Color(0xff617C9D),
                               fontFamily: 'RozhaOne',
-                              fontSize: 20,
+                              fontSize: 24,
                               height: 24 / 20,
                               fontWeight: FontWeight.w400,
                             ),
@@ -113,8 +114,7 @@ class _CartState extends State<Cart> {
                           );
                         },
                         child: Container(
-                          width: w * 0.45,
-                          height: h * 0.05,
+                          padding: EdgeInsets.symmetric(horizontal: 16,vertical: 8),
                           decoration: BoxDecoration(
                             color: Color(0xff110B0F),
                             borderRadius: BorderRadius.circular(6),
@@ -198,7 +198,7 @@ class _CartState extends State<Cart> {
                         child: Center(
                           child: Image.network(
                             cartItem.product?.image ?? "",
-                            fit: BoxFit.cover,
+                            fit: BoxFit.contain,
                             width: 100,
                             height: 110,
                           ),
