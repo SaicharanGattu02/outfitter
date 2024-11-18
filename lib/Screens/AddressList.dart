@@ -70,7 +70,6 @@ class _AddressListScreenState extends State<AddressListScreen> {
               },
               child: Container(
                 width: w,
-                margin: EdgeInsets.all(16),
                 padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                 decoration: BoxDecoration(
                   border: Border.all(color: Color(0xffCAA16C), width: 1),

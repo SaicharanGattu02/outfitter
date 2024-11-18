@@ -432,7 +432,82 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                             fontWeight: FontWeight.w400,
                           ),
                         ),
-                        SizedBox(height: 8),
+                        Row(
+                          children: [
+                            // InkResponse(
+                            //   onTap: () {
+                            //     if ((cartItem.quantity ?? 0) > 0) {
+                            //       // Decrease the quantity
+                            //       int newQuantity =
+                            //           (cartItem.quantity ?? 0) - 1;
+                            //       cartProvider.updateQuantity(
+                            //           cartItem.product?.id ?? "", newQuantity);
+                            //       cartProvider.updateCartApi(
+                            //           cartItem.product?.id ?? "",
+                            //           newQuantity.toString());
+                            //     }
+                            //   },
+                            //   child: Container(
+                            //     width: 30,
+                            //     height: 30,
+                            //     decoration: BoxDecoration(
+                            //       border: Border.all(
+                            //           color: Color(0xffE7C6A0), width: 1),
+                            //     ),
+                            //     child: Icon(
+                            //       Icons.remove,
+                            //       size: 20,
+                            //       color: Color(0xffE7C6A0),
+                            //     ),
+                            //   ),
+                            // ),
+                            Text(
+                              "Total Quantity:",
+                              style: TextStyle(
+                                color: Color(0xff181725),
+                                fontFamily: 'RozhaOne',
+                                fontSize: 14,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                            SizedBox(width: 8),
+                            // Display quantity
+                            Text(
+                              cartItem.quantity.toString(),
+                              style: TextStyle(
+                                color: Color(0xffE7C6A0),
+                                fontFamily: 'RozhaOne',
+                                fontSize: 18,
+                                fontWeight: FontWeight.w400,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                            SizedBox(width: 8),
+                            // InkResponse(
+                            //   onTap: () {
+                            //     int newQuantity = (cartItem.quantity ?? 0) + 1;
+                            //     cartProvider.updateQuantity(
+                            //         cartItem.product?.id ?? "", newQuantity);
+                            //     cartProvider.updateCartApi(
+                            //         cartItem.product?.id ?? "",
+                            //         newQuantity.toString());
+                            //   },
+                            //   child: Container(
+                            //     width: 30,
+                            //     height: 30,
+                            //     decoration: BoxDecoration(
+                            //       border: Border.all(
+                            //           color: Color(0xffE7C6A0), width: 1),
+                            //     ),
+                            //     child: Icon(
+                            //       Icons.add,
+                            //       size: 20,
+                            //       color: Color(0xffE7C6A0),
+                            //     ),
+                            //   ),
+                            // ),
+                          ],
+                        ),
                         Row(
                           children: [
                             Text(
@@ -445,18 +520,18 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               ),
                             ),
                             SizedBox(width: 8),
-                            Text(
-                              "M.R.P",
-                              style: TextStyle(
-                                color: Color(0xffCAA16C),
-                                fontFamily: 'RozhaOne',
-                                fontSize: 12,
-                                decoration: TextDecoration.lineThrough,
-                                height: 1.5,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                            SizedBox(width: 4),
+                            // Text(
+                            //   "M.R.P",
+                            //   style: TextStyle(
+                            //     color: Color(0xffCAA16C),
+                            //     fontFamily: 'RozhaOne',
+                            //     fontSize: 12,
+                            //     decoration: TextDecoration.lineThrough,
+                            //     height: 1.5,
+                            //     fontWeight: FontWeight.w400,
+                            //   ),
+                            // ),
+                            // SizedBox(width: 4),
                             Text(
                               cartItem.product?.mrp.toString() ?? "",
                               style: TextStyle(
@@ -465,74 +540,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                 fontSize: 12,
                                 decoration: TextDecoration.lineThrough,
                                 fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 8),
-                        Row(
-                          children: [
-                            InkResponse(
-                              onTap: () {
-                                if ((cartItem.quantity ?? 0) > 0) {
-                                  // Decrease the quantity
-                                  int newQuantity =
-                                      (cartItem.quantity ?? 0) - 1;
-                                  cartProvider.updateQuantity(
-                                      cartItem.product?.id ?? "", newQuantity);
-                                  cartProvider.updateCartApi(
-                                      cartItem.product?.id ?? "",
-                                      newQuantity.toString());
-                                }
-                              },
-                              child: Container(
-                                width: 30,
-                                height: 30,
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                      color: Color(0xffE7C6A0), width: 1),
-                                ),
-                                child: Icon(
-                                  Icons.remove,
-                                  size: 20,
-                                  color: Color(0xffE7C6A0),
-                                ),
-                              ),
-                            ),
-                            SizedBox(width: 8),
-                            // Display quantity
-                            Text(
-                              cartItem.quantity.toString(),
-                              style: TextStyle(
-                                color: Color(0xffE7C6A0),
-                                fontFamily: 'RozhaOne',
-                                fontSize: 16,
-                                fontWeight: FontWeight.w400,
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                            SizedBox(width: 8),
-                            InkResponse(
-                              onTap: () {
-                                int newQuantity = (cartItem.quantity ?? 0) + 1;
-                                cartProvider.updateQuantity(
-                                    cartItem.product?.id ?? "", newQuantity);
-                                cartProvider.updateCartApi(
-                                    cartItem.product?.id ?? "",
-                                    newQuantity.toString());
-                              },
-                              child: Container(
-                                width: 30,
-                                height: 30,
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                      color: Color(0xffE7C6A0), width: 1),
-                                ),
-                                child: Icon(
-                                  Icons.add,
-                                  size: 20,
-                                  color: Color(0xffE7C6A0),
-                                ),
                               ),
                             ),
                           ],

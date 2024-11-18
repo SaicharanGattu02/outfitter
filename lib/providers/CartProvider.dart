@@ -3,12 +3,15 @@ import 'package:flutter/foundation.dart';
 import '../Model/GetCartListModel.dart';
 import '../Model/UserDetailsModel.dart';
 import '../Services/UserApi.dart';
+import 'ShippingDetailsProvider.dart';  // Import your ShippingDetailsProvider
 
 class CartProvider with ChangeNotifier {
   List<CartList> _cartList = [];
-
-  // This will store the total quantity of all products in the cart.
   int _cartCount = 0;
+  ShippingDetailsProvider shippingDetailsProvider; // Add this as a dependency
+
+  // Constructor
+  CartProvider({required this.shippingDetailsProvider});
 
   // Getter for cart list
   List<CartList> get cartList => _cartList;
@@ -34,6 +37,9 @@ class CartProvider with ChangeNotifier {
       var res = await Userapi.addCartQuanitity(productID, quantity, color, size);
       if (res != null && res.settings?.success == 1) {
         fetchCartProducts();  // Re-fetch the cart list after adding
+
+        // Call fetchShippingDetails after adding to cart
+        shippingDetailsProvider.fetchShippingDetails();  // Fetch shipping details every time
         return "Product added to cart successfully!";
       } else {
         return res?.settings?.message;
@@ -49,6 +55,9 @@ class CartProvider with ChangeNotifier {
       var res = await Userapi.updateCartQuanitity(productID, quantity);
       if (res != null && res.settings?.success == 1) {
         fetchCartProducts();  // Re-fetch the cart list after updating
+
+        // Call fetchShippingDetails after adding to cart
+        shippingDetailsProvider.fetchShippingDetails();  // Fetch shipping details every time
       } else {
         throw Exception('Failed to update cart');
       }
@@ -89,5 +98,3 @@ class CartProvider with ChangeNotifier {
     }
   }
 }
-
-

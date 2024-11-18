@@ -21,8 +21,10 @@ class _CartState extends State<Cart> {
   }
 
   Future<void> GetCartList() async {
-    final cart_list_provider = Provider.of<CartProvider>(context, listen: false);
-    final shipping_provider = Provider.of<ShippingDetailsProvider>(context, listen: false);
+    final cart_list_provider =
+        Provider.of<CartProvider>(context, listen: false);
+    final shipping_provider =
+        Provider.of<ShippingDetailsProvider>(context, listen: false);
     cart_list_provider.fetchCartProducts();
     shipping_provider.fetchShippingDetails();
   }
@@ -32,112 +34,116 @@ class _CartState extends State<Cart> {
     var w = MediaQuery.of(context).size.width;
     var h = MediaQuery.of(context).size.height;
     return Scaffold(
-        appBar: CustomApp(title: 'Cart', w: w),
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.only(left: 20, right: 20, top: 8),
-            child: Column(
-              children: [
-                if (selectedIndex == 0) ...[
-                  _buildItemList(w, h),
-                ]
-              ],
-            ),
+      appBar: CustomApp(title: 'Cart', w: w),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.only(left: 20, right: 20, top: 8),
+          child: Column(
+            children: [
+              if (selectedIndex == 0) ...[
+                _buildItemList(w, h),
+              ]
+            ],
           ),
         ),
-        bottomNavigationBar: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              padding: EdgeInsets.only(top: 8, bottom: 8),
-              height: h * 0.04,
-              decoration: BoxDecoration(color: Color(0xff24AA72)),
-              child: Center(
-                child: Text(
-                  "You are shopping at the best prices ",
-                  style: TextStyle(
-                    color: Color(0xffffffff),
-                    fontFamily: 'RozhaOne',
-                    fontSize: 12,
-                    height: 19.36 / 12,
-                    fontWeight: FontWeight.w400,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ),
-            SizedBox(height: h * 0.008),
-            Consumer<ShippingDetailsProvider>(
-                builder: (context, shippingProvider, child) {
-              final shipping_data = shippingProvider.shippingData;
-              return Container(
-                color: Colors.white,
-                padding: const EdgeInsets.only(left: 16, right: 16, bottom: 5),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        Text(
-                          "Total: ",
-                          style: TextStyle(
-                            color: Color(0xff000000),
-                            fontFamily: 'RozhaOne',
-                            fontSize: 20,
-                            height: 24 / 20,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                        Text(
-                          "₹${shipping_data?.totalAmount.toString()??""}",
-                          style: TextStyle(
-                            color: Color(0xff617C9D),
-                            fontFamily: 'RozhaOne',
-                            fontSize: 20,
-                            height: 24 / 20,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                      ],
+      ),
+        bottomNavigationBar: Consumer<ShippingDetailsProvider>(
+          builder: (context, shippingProvider, child) {
+            final shipping_data = shippingProvider.shippingData;
+            // Check if shipping_data is null or empty
+            if (shipping_data == null || shipping_data.totalAmount == null || shipping_data.totalAmount == 0) {
+              return SizedBox.shrink();  // Hide the bottom navigation bar when data is null or empty
+            }
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  padding: EdgeInsets.only(top: 8, bottom: 8),
+                  height: h * 0.04,
+                  decoration: BoxDecoration(color: Color(0xff24AA72)),
+                  child: Center(
+                    child: Text(
+                      "You are shopping at the best prices ",
+                      style: TextStyle(
+                        color: Color(0xffffffff),
+                        fontFamily: 'RozhaOne',
+                        fontSize: 12,
+                        height: 19.36 / 12,
+                        fontWeight: FontWeight.w400,
+                      ),
+                      textAlign: TextAlign.center,
                     ),
-                    InkWell(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => CheckoutScreen()));
-                      },
-                      child: Container(
-                        width: w * 0.45,
-                        height: h * 0.05,
-                        // padding: EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                          color: Color(0xff110B0F),
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                        child: Center(
-                          child: Text(
-                            "CHECK OUT",
+                  ),
+                ),
+                SizedBox(height: h * 0.008),
+                Container(
+                  color: Colors.white,
+                  padding: const EdgeInsets.only(left: 16, right: 16, bottom: 5),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          Text(
+                            "Total: ",
                             style: TextStyle(
-                              color: Color(0xffCAA16C),
+                              color: Color(0xff000000),
                               fontFamily: 'RozhaOne',
-                              fontSize: 16,
-                              height: 21.06 / 16,
+                              fontSize: 20,
+                              height: 24 / 20,
                               fontWeight: FontWeight.w400,
                             ),
-                            textAlign: TextAlign.center,
+                          ),
+                          Text(
+                            "₹${shipping_data?.totalAmount.toString() ?? ""}",
+                            style: TextStyle(
+                              color: Color(0xff617C9D),
+                              fontFamily: 'RozhaOne',
+                              fontSize: 20,
+                              height: 24 / 20,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ],
+                      ),
+                      InkWell(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => CheckoutScreen()),
+                          );
+                        },
+                        child: Container(
+                          width: w * 0.45,
+                          height: h * 0.05,
+                          decoration: BoxDecoration(
+                            color: Color(0xff110B0F),
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: Center(
+                            child: Text(
+                              "CHECK OUT",
+                              style: TextStyle(
+                                color: Color(0xffCAA16C),
+                                fontFamily: 'RozhaOne',
+                                fontSize: 16,
+                                height: 21.06 / 16,
+                                fontWeight: FontWeight.w400,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              );
-            }),
-          ],
+              ],
+            );
+          },
         )
-        // Empty Container for other
-        );
+      // Empty Container for other
+    );
   }
 
   Widget _buildItemList(double w, double h) {

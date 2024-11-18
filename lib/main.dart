@@ -17,6 +17,7 @@ import 'package:outfitter/providers/CategoriesProvider.dart';
 import 'package:outfitter/providers/ProductDetailsProvider.dart';
 import 'package:outfitter/providers/ProductListProvider.dart';
 import 'package:outfitter/providers/ShippingDetailsProvider.dart';
+import 'package:outfitter/providers/UserDetailsProvider.dart';
 import 'package:outfitter/providers/WishlistProvider.dart';
 import 'package:outfitter/utils/Preferances.dart';
 import 'package:provider/provider.dart';
@@ -177,14 +178,16 @@ Future<void> main() async {
           create: (context) => ProductListProvider(),
         ),
         ChangeNotifierProvider(
-          create: (context) => CartProvider(),
-        ),
-        ChangeNotifierProvider(
           create: (context) => ShippingDetailsProvider(),
         ),
-        // ChangeNotifierProvider(
-        //   create: (context) => UserDetailsProvider(),
-        // ),
+        ChangeNotifierProvider(
+          create: (context) => CartProvider(
+            shippingDetailsProvider: Provider.of<ShippingDetailsProvider>(context, listen: false),
+          ),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => UserDetailsProvider(),
+        ),
         ChangeNotifierProvider(
           create: (context) => AddressListProvider(),
         ),
