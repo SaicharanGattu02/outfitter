@@ -11,19 +11,33 @@ import '../Services/UserApi.dart';
 class CategoriesProvider with ChangeNotifier {
   List<Categories>? _categories;
   List<ProductsList> _productlist = [];
+  bool _isLoading = true;  // New loading state
 
-  List<Categories> get categoriesList => _categories??[];
-  List<ProductsList> get bestsellerList => _productlist??[];
+  // Getters
+  List<Categories> get categoriesList => _categories ?? [];
+  List<ProductsList> get bestsellerList => _productlist ?? [];
+  bool get isLoading => _isLoading;  // Expose the loading state
 
-
-  Future<void> fetchCategoriesList() async{
+  // Fetch categories list with loading state
+  Future<void> fetchCategoriesList() async {
     try {
-      var response = await Userapi.getCategories();  // Use the passed productId here
-      _categories = response?.data??[];
-      notifyListeners();
+      var response = await Userapi.getCategories();
+      if(response?.settings?.success==1){
+        _categories = response?.data ?? [];
+        _isLoading=false;
+        notifyListeners();  // Notify listeners that loading has finished
+      }else{
+        _isLoading=false;
+        notifyListeners();  // Notify listeners that loading has finished
+      }
     } catch (e) {
-      throw Exception('Failed to fetch product details: $e');
+      _isLoading=false;
+      notifyListeners();  // Notify listeners that loading has finished
+      throw Exception('Failed to fetch categories: $e');  // Handle any errors
+    } finally {
+      _isLoading = false;  // Set isLoading to false after the fetch is complete
+      notifyListeners();  // Notify listeners that loading has finished
     }
   }
-
 }
+

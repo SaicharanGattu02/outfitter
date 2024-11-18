@@ -13,30 +13,43 @@ class ProductListProvider with ChangeNotifier {
   List<ProductsList> _bestsellerproductlist = [];
   List<ProductsList> get bestsellerList => _bestsellerproductlist ?? [];
 
+  bool _isLoading = false;  // Loading state
+  bool get isLoading => _isLoading;  // Expose isLoading for UI updates
+
   // Fetch Products List
   Future<void> fetchProductsList(id, selectedSort, filterminprice, filtermaxprice) async {
+    _isLoading = true;  // Set loading state to true before fetching data
+    notifyListeners();  // Notify listeners that loading has started
+
     try {
       var response = await Userapi.getProductsList(id, selectedSort, filterminprice, filtermaxprice);
       _productlist = response?.data ?? [];
       print("fetchProductsList>>${_productlist}");
-      notifyListeners();
     } catch (e) {
       throw Exception('Failed to fetch product details: $e');
+    } finally {
+      _isLoading = false;  // Set loading state to false after fetch completes
+      notifyListeners();  // Notify listeners that loading has finished
     }
   }
 
   // Fetch Bestsellers List
   Future<void> fetchBestSellersList() async {
+    _isLoading = true;  // Set loading state to true before fetching data
+    notifyListeners();  // Notify listeners that loading has started
+
     try {
       final res = await Userapi.getBestSellersList();
       if (res != null) {
         if (res.settings?.success == 1) {
           _bestsellerproductlist = res.data ?? [];
-          notifyListeners();
         }
       }
     } catch (e) {
       throw Exception('Failed to fetch list: $e');
+    } finally {
+      _isLoading = false;  // Set loading state to false after fetch completes
+      notifyListeners();  // Notify listeners that loading has finished
     }
   }
 
@@ -68,3 +81,4 @@ class ProductListProvider with ChangeNotifier {
     }
   }
 }
+

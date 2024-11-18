@@ -103,11 +103,11 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
         selectedColor = null;
       } else {
         selectedIndex = index; // Select new color based on index
-        selectedColor = hexColor; // Set the selected color based on the hex value
+        selectedColor =
+            hexColor; // Set the selected color based on the hex value
       }
     });
   }
-
 
 // Toggling the selection
   void _toggleSizeSelection(int index, String sizeItem) {
@@ -182,7 +182,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     final ProductlistProvider =
         Provider.of<ProductListProvider>(context, listen: false);
     ProductdetailsProvider.fetchProductDetails(widget.productid);
-    ProductlistProvider.fetchProductsList(widget.category_id,"","","");
+    ProductlistProvider.fetchProductsList(widget.category_id, "", "", "");
   }
 
   List<Widget> _getProductWidgets(ProductDetails? productData) {
@@ -329,596 +329,475 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           builder: (context, productDetailsProvider, child) {
         final productData = productDetailsProvider.productData;
         print("Image:${productData?.image}");
-        return SingleChildScrollView(
-          child: Column(
-            children: [
-              // Row(children: [
-              //   Container(
-              //       padding: EdgeInsets.only(left: 8, right: 8),
-              //       height: h * 0.03,
-              //       color: _selectedTabIndex == index
-              //           ? Color(0xffE7C6A0)
-              //           : Colors.transparent,
-              //       child: Text("Coller", fontFamily: 'RozhaOne',
-              //         fontWeight: FontWeight.w400,
-              //         fontSize: 15,
-              //         height: 1.6,
-              //         color: Color(0xff110B0F),
-              //         letterSpacing: 0.15,
-              //       ),))
-              //
-              // ],),
-              // Container(
-              //   padding: EdgeInsets.only(top: 8, bottom: 8),
-              //   height: h * 0.04,
-              //   decoration: BoxDecoration(color: Color(0xffE7C6A0)),
-              //   child: Center(
-              //     child: Text(
-              //       "Available until 10hrs 30mins 20secs",
-              //       style: TextStyle(
-              //         color: Color(0xff110B0F),
-              //         fontFamily: 'RozhaOne',
-              //         fontSize: 16,
-              //         height: 20 / 16,
-              //         fontWeight: FontWeight.w400,
-              //       ),
-              //       textAlign: TextAlign.center,
-              //     ),
-              //   ),
-              // ),
-              Container(
-                padding: EdgeInsets.all(16),
-                decoration: BoxDecoration(color: Color(0xffFCFCFD)),
-                child: Column(
-                  children: [
-                    Container(
-                      width: w,
-                      child: Text(
-                        productData?.title ?? "",
-                        style: TextStyle(
-                          color: Color(0xff110B0F),
-                          fontFamily: 'RozhaOne',
-                          fontSize: 22,
-                          height: 32 / 24,
-                          fontWeight: FontWeight.w400,
-                        ),
-                        textAlign: TextAlign.start,
-                      ),
-                    ),
-                    Row(
-                      children: [
-                        Text(
-                          "₹${productData?.salePrice}",
+        if (productDetailsProvider.isLoading) {
+          return Center(
+              child: CircularProgressIndicator(
+            color: Color(0xffE7C6A0),
+          ));
+        } else {
+          return SingleChildScrollView(
+            child: Column(
+              children: [
+                // Row(children: [
+                //   Container(
+                //       padding: EdgeInsets.only(left: 8, right: 8),
+                //       height: h * 0.03,
+                //       color: _selectedTabIndex == index
+                //           ? Color(0xffE7C6A0)
+                //           : Colors.transparent,
+                //       child: Text("Coller", fontFamily: 'RozhaOne',
+                //         fontWeight: FontWeight.w400,
+                //         fontSize: 15,
+                //         height: 1.6,
+                //         color: Color(0xff110B0F),
+                //         letterSpacing: 0.15,
+                //       ),))
+                //
+                // ],),
+                // Container(
+                //   padding: EdgeInsets.only(top: 8, bottom: 8),
+                //   height: h * 0.04,
+                //   decoration: BoxDecoration(color: Color(0xffE7C6A0)),
+                //   child: Center(
+                //     child: Text(
+                //       "Available until 10hrs 30mins 20secs",
+                //       style: TextStyle(
+                //         color: Color(0xff110B0F),
+                //         fontFamily: 'RozhaOne',
+                //         fontSize: 16,
+                //         height: 20 / 16,
+                //         fontWeight: FontWeight.w400,
+                //       ),
+                //       textAlign: TextAlign.center,
+                //     ),
+                //   ),
+                // ),
+                Container(
+                  padding: EdgeInsets.all(16),
+                  decoration: BoxDecoration(color: Color(0xffFCFCFD)),
+                  child: Column(
+                    children: [
+                      Container(
+                        width: w,
+                        child: Text(
+                          productData?.title ?? "",
                           style: TextStyle(
-                            color: Color(0xff4B5565),
+                            color: Color(0xff110B0F),
                             fontFamily: 'RozhaOne',
-                            fontSize: 24,
-                            height: 28 / 24,
-                            letterSpacing: 1,
-                            fontWeight: FontWeight.w500,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                        SizedBox(width: w * 0.01),
-                        Text(
-                          "₹${productData?.mrp}",
-                          style: TextStyle(
-                            color: Color(0xffF04438),
-                            fontFamily: 'RozhaOne',
-                            fontSize: 16,
-                            height: 24 / 16,
-                            decoration: TextDecoration.lineThrough,
-                            decorationColor: Color(0xffF04438),
+                            fontSize: 22,
+                            height: 32 / 24,
                             fontWeight: FontWeight.w400,
                           ),
-                          textAlign: TextAlign.center,
-                        ),
-                        Spacer(),
-                        if (productData?.ratingStats.averageRating != 0.0) ...[
-                          Row(
-                            children: List.generate(5, (starIndex) {
-                              int ratingValue = int.tryParse(productData
-                                          ?.ratingStats.averageRating
-                                          .toString() ??
-                                      "") ??
-                                  0;
-                              return Icon(
-                                starIndex < ratingValue
-                                    ? Icons.star
-                                    : Icons.star_border,
-                                color: Color(0xffF79009),
-                                size: 14,
-                              );
-                            }),
-                          ),
-                        ]
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: tabItems.asMap().entries.map((entry) {
-                  int index = entry.key;
-                  String label = entry.value;
-                  return GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        _selectedTabIndex = index; // Update selected tab
-                      });
-                    },
-                    child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 8),
-                      height: h * 0.03, // Set height based on screen height
-                      color: _selectedTabIndex == index
-                          ? Color(0xffE7C6A0) // Selected color
-                          : Colors.transparent,
-                      child: Center(
-                        child: Text(label,
-                            style: TextStyle(
-                              fontWeight: FontWeight.w400,
-                              fontFamily: 'RozhaOne',
-                              fontSize: 15,
-                              height: 1.6,
-                              color: Color(0xff110B0F),
-                              letterSpacing: 0.15,
-                            )),
-                      ),
-                    ),
-                  );
-                }).toList(),
-              ),
-
-              Stack(
-                children: [
-                  InkResponse(
-                    onTap: () {
-                      // Handle tap event
-                    },
-                    child: Container(
-                      height: h * 0.3,
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-                      decoration: BoxDecoration(color: Color(0xffEDF4FB)),
-                      child: Center(
-                        child: Image.network(
-                          productData?.image ?? "",
-                          fit: BoxFit.contain,
-                          height: h * 0.25,
-                          width: w * 0.8,
+                          textAlign: TextAlign.start,
                         ),
                       ),
-                    ),
-                  ),
-                  // Positioned(
-                  //   top: h * 0.15,
-                  //   left: 8,
-                  //   child: IconButton(
-                  //     icon: Icon(Icons.arrow_back_ios),
-                  //     onPressed: () {
-                  //       // Handle left arrow tap
-                  //     },
-                  //   ),
-                  // ),
-                  // Positioned(
-                  //   top: h * 0.15,
-                  //   right: 8,
-                  //   child: IconButton(
-                  //     icon: Icon(Icons.arrow_forward_ios),
-                  //     onPressed: () {
-                  //       // Handle right arrow tap
-                  //     },
-                  //   ),
-                  // ),
-                  Positioned(
-                    top: 8,
-                    right: 8,
-                    child: Column(
-                      children: [
-                        InkResponse(
-                          onTap: () {
-                            if (productData?.isInWishlist ?? false) {
-                              // Remove from wishlist
-                              context
-                                  .read<WishlistProvider>()
-                                  .removeFromWishlist(widget.productid);
-                              productDetailsProvider.toggleWishlistStatus(
-                                  context.read<ProductListProvider>());
-                            } else {
-                              // Add to wishlist
-                              context
-                                  .read<WishlistProvider>()
-                                  .addToWishlist(widget.productid);
-
-                              productDetailsProvider.toggleWishlistStatus(
-                                  context.read<ProductListProvider>());
-                            }
-                          },
-                          child:
-                          Container(
-                            padding: const EdgeInsets.all(8),
-                            decoration: BoxDecoration(
-                              color: Colors.grey[200],
-                              borderRadius: BorderRadius.circular(100),
-                            ),
-                            child: productDetailsProvider.isInWishlist == true
-                                ? Icon(
-                                    Icons
-                                        .favorite, // Filled heart icon when item is in wishlist
-                                    size: 18,
-                                    color:
-                                        Colors.red, // Red color for filled icon
-                                  )
-                                : Icon(
-                                    Icons
-                                        .favorite_border, // Outline heart icon when item is NOT in wishlist
-                                    size: 18,
-                                    color: Colors
-                                        .black, // Black color for outline icon
-                                  ),
-                          ),
-                        ),
-                        // SizedBox(height: h * 0.01),
-                        // Container(
-                        //   padding: EdgeInsets.all(8),
-                        //   decoration: BoxDecoration(
-                        //     color: Color(0xffFCFCFD),
-                        //     borderRadius: BorderRadius.circular(100),
-                        //   ),
-                        //   child: Image.asset(
-                        //     "assets/share.png",
-                        //     width: 18,
-                        //     height: 18,
-                        //     fit: BoxFit.contain,
-                        //   ),
-                        // ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: h * 0.01),
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: _getProductWidgets(productData),
-                ),
-              ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Row(
-                    //   children: [
-                    //     Text(
-                    //       "POSTED BY",
-                    //       style: TextStyle(
-                    //         color: Color(0xff121926),
-                    //         fontFamily: 'RozhaOne',
-                    //         fontSize: 14,
-                    //         height: 19.36 / 14,
-                    //         fontWeight: FontWeight.w400,
-                    //       ),
-                    //     ),
-                    //     Spacer(),
-                    //     InkWell(
-                    //       onTap: () {
-                    //         Navigator.push(
-                    //             context,
-                    //             MaterialPageRoute(
-                    //                 builder: (context) => UploaderProfile()));
-                    //       },
-                    //       child: CircleAvatar(
-                    //         radius: 12,
-                    //         child: ClipOval(
-                    //           child: Image.asset(
-                    //             "assets/postedBY.png",
-                    //             fit: BoxFit.contain,
-                    //           ),
-                    //         ),
-                    //       ),
-                    //     ),
-                    //   ],
-                    // ),
-                    // SizedBox(height: h * 0.01),
-                    Divider(
-                      thickness: 1,
-                      height: 1,
-                      color: Color(0xffEEF2F6),
-                    ),
-                    if (productData?.colors.isNotEmpty ?? false) ...[
-                      SizedBox(height: h * 0.01),
-                      Text(
-                        "COLORS",
-                        style: TextStyle(
-                          color: Color(0xff121926),
-                          fontFamily: 'RozhaOne',
-                          fontSize: 14,
-                          height: 19.36 / 14,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                      GridView.builder(
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 6,
-                          childAspectRatio: 1,
-                        ),
-                        itemCount: productData?.colors.length ?? 0,
-                        physics: NeverScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                        itemBuilder: (context, index) {
-                          final colorHex = productData?.colors[index];
-                          Color color = hexToColor(colorHex ?? "");
-                          // Set default selection if the list is not empty
-                          if (productData?.colors.isNotEmpty ?? false) {
-                            if (selectedIndex == null) {
-                              selectedIndex = 0; // Default to the first color if no selection
-                              selectedColor = productData?.colors[selectedIndex??0]; // Set the default color
-                            }
-                          }
-                          return GestureDetector(
-                            onTap: () => _toggleColorSelection(index, colorHex ?? ""),
-                            child: Padding(
-                              padding: EdgeInsets.all(10),
-                              child: Container(
-                                padding: EdgeInsets.all(2),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(100),
-                                  border: Border.all(
-                                    color: selectedIndex == index
-                                        ? Color(0xffCAA16C) // Highlight selected color with a border
-                                        : Colors.transparent,
-                                    width: 1,
-                                  ),
-                                ),
-                                child: Container(
-                                  width: 24,
-                                  height: 24,
-                                  decoration: BoxDecoration(
-                                    color: color, // Set the color of the container
-                                    borderRadius: BorderRadius.circular(100),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    ],
-
-                    if (productData?.size.isNotEmpty ?? false) ...[
-                      SizedBox(height: h * 0.01),
                       Row(
                         children: [
                           Text(
-                            "SIZE",
+                            "₹${productData?.salePrice}",
                             style: TextStyle(
-                              color: Color(0xff121926),
+                              color: Color(0xff4B5565),
                               fontFamily: 'RozhaOne',
-                              fontSize: 14,
-                              height: 19.36 / 14,
+                              fontSize: 24,
+                              height: 28 / 24,
+                              letterSpacing: 1,
+                              fontWeight: FontWeight.w500,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                          SizedBox(width: w * 0.01),
+                          Text(
+                            "₹${productData?.mrp}",
+                            style: TextStyle(
+                              color: Color(0xffF04438),
+                              fontFamily: 'RozhaOne',
+                              fontSize: 16,
+                              height: 24 / 16,
+                              decoration: TextDecoration.lineThrough,
+                              decorationColor: Color(0xffF04438),
                               fontWeight: FontWeight.w400,
                             ),
+                            textAlign: TextAlign.center,
                           ),
-                          // Optionally show "Size Chart" link here if needed.
+                          Spacer(),
+                          if (productData?.ratingStats.averageRating !=
+                              0.0) ...[
+                            Row(
+                              children: List.generate(5, (starIndex) {
+                                int ratingValue = int.tryParse(productData
+                                            ?.ratingStats.averageRating
+                                            .toString() ??
+                                        "") ??
+                                    0;
+                                return Icon(
+                                  starIndex < ratingValue
+                                      ? Icons.star
+                                      : Icons.star_border,
+                                  color: Color(0xffF79009),
+                                  size: 14,
+                                );
+                              }),
+                            ),
+                          ]
                         ],
                       ),
-                      SizedBox(height: h * 0.01),
-                      GridView.builder(
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 6,
-                          childAspectRatio: 1,
+                    ],
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: tabItems.asMap().entries.map((entry) {
+                    int index = entry.key;
+                    String label = entry.value;
+                    return GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          _selectedTabIndex = index; // Update selected tab
+                        });
+                      },
+                      child: Container(
+                        padding: EdgeInsets.symmetric(horizontal: 8),
+                        height: h * 0.03, // Set height based on screen height
+                        color: _selectedTabIndex == index
+                            ? Color(0xffE7C6A0) // Selected color
+                            : Colors.transparent,
+                        child: Center(
+                          child: Text(label,
+                              style: TextStyle(
+                                fontWeight: FontWeight.w400,
+                                fontFamily: 'RozhaOne',
+                                fontSize: 15,
+                                height: 1.6,
+                                color: Color(0xff110B0F),
+                                letterSpacing: 0.15,
+                              )),
                         ),
-                        itemCount: productData?.size.length ?? 0,
-                        physics: NeverScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                        itemBuilder: (context, index) {
-                          final sizeItem = productData?.size[index];
+                      ),
+                    );
+                  }).toList(),
+                ),
 
-                          // Default selection to the first index if no size is selected
-                          if (productData?.size.isNotEmpty ?? false) {
-                            if (selectedSizeIndex == null) {
-                              selectedSizeIndex = 0; // Default to the first index
-                              selectedSizeItem = productData?.size[selectedSizeIndex??0]; // Select default size
-                            }
-                          }
-
-                          return GestureDetector(
+                Stack(
+                  children: [
+                    InkResponse(
+                      onTap: () {
+                        // Handle tap event
+                      },
+                      child: Container(
+                        height: h * 0.3,
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+                        decoration: BoxDecoration(color: Color(0xffEDF4FB)),
+                        child: Center(
+                          child: Image.network(
+                            productData?.image ?? "",
+                            fit: BoxFit.contain,
+                            height: h * 0.25,
+                            width: w * 0.8,
+                          ),
+                        ),
+                      ),
+                    ),
+                    // Positioned(
+                    //   top: h * 0.15,
+                    //   left: 8,
+                    //   child: IconButton(
+                    //     icon: Icon(Icons.arrow_back_ios),
+                    //     onPressed: () {
+                    //       // Handle left arrow tap
+                    //     },
+                    //   ),
+                    // ),
+                    // Positioned(
+                    //   top: h * 0.15,
+                    //   right: 8,
+                    //   child: IconButton(
+                    //     icon: Icon(Icons.arrow_forward_ios),
+                    //     onPressed: () {
+                    //       // Handle right arrow tap
+                    //     },
+                    //   ),
+                    // ),
+                    Positioned(
+                      top: 8,
+                      right: 8,
+                      child: Column(
+                        children: [
+                          InkResponse(
                             onTap: () {
-                              _toggleSizeSelection(index, sizeItem ?? ""); // Pass index and size value
+                              if (productData?.isInWishlist ?? false) {
+                                // Remove from wishlist
+                                context
+                                    .read<WishlistProvider>()
+                                    .removeFromWishlist(widget.productid);
+                                productDetailsProvider.toggleWishlistStatus(
+                                    context.read<ProductListProvider>());
+                              } else {
+                                // Add to wishlist
+                                context
+                                    .read<WishlistProvider>()
+                                    .addToWishlist(widget.productid);
+
+                                productDetailsProvider.toggleWishlistStatus(
+                                    context.read<ProductListProvider>());
+                              }
                             },
-                            child: Padding(
-                              padding: EdgeInsets.all(6),
-                              child: Container(
-                                padding: EdgeInsets.all(2),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(100),
-                                  border: Border.all(
-                                    color: selectedSizeIndex == index
-                                        ? Color(0xffCAA16C) // Selected item color
-                                        : Colors.transparent,
-                                    width: 1,
-                                  ),
-                                ),
+                            child: Container(
+                              padding: const EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                color: Colors.grey[200],
+                                borderRadius: BorderRadius.circular(100),
+                              ),
+                              child: productDetailsProvider.isInWishlist == true
+                                  ? Icon(
+                                      Icons
+                                          .favorite, // Filled heart icon when item is in wishlist
+                                      size: 18,
+                                      color: Colors
+                                          .red, // Red color for filled icon
+                                    )
+                                  : Icon(
+                                      Icons
+                                          .favorite_border, // Outline heart icon when item is NOT in wishlist
+                                      size: 18,
+                                      color: Colors
+                                          .black, // Black color for outline icon
+                                    ),
+                            ),
+                          ),
+                          // SizedBox(height: h * 0.01),
+                          // Container(
+                          //   padding: EdgeInsets.all(8),
+                          //   decoration: BoxDecoration(
+                          //     color: Color(0xffFCFCFD),
+                          //     borderRadius: BorderRadius.circular(100),
+                          //   ),
+                          //   child: Image.asset(
+                          //     "assets/share.png",
+                          //     width: 18,
+                          //     height: 18,
+                          //     fit: BoxFit.contain,
+                          //   ),
+                          // ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: h * 0.01),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: _getProductWidgets(productData),
+                  ),
+                ),
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Row(
+                      //   children: [
+                      //     Text(
+                      //       "POSTED BY",
+                      //       style: TextStyle(
+                      //         color: Color(0xff121926),
+                      //         fontFamily: 'RozhaOne',
+                      //         fontSize: 14,
+                      //         height: 19.36 / 14,
+                      //         fontWeight: FontWeight.w400,
+                      //       ),
+                      //     ),
+                      //     Spacer(),
+                      //     InkWell(
+                      //       onTap: () {
+                      //         Navigator.push(
+                      //             context,
+                      //             MaterialPageRoute(
+                      //                 builder: (context) => UploaderProfile()));
+                      //       },
+                      //       child: CircleAvatar(
+                      //         radius: 12,
+                      //         child: ClipOval(
+                      //           child: Image.asset(
+                      //             "assets/postedBY.png",
+                      //             fit: BoxFit.contain,
+                      //           ),
+                      //         ),
+                      //       ),
+                      //     ),
+                      //   ],
+                      // ),
+                      // SizedBox(height: h * 0.01),
+                      Divider(
+                        thickness: 1,
+                        height: 1,
+                        color: Color(0xffEEF2F6),
+                      ),
+                      if (productData?.colors.isNotEmpty ?? false) ...[
+                        SizedBox(height: h * 0.01),
+                        Text(
+                          "COLORS",
+                          style: TextStyle(
+                            color: Color(0xff121926),
+                            fontFamily: 'RozhaOne',
+                            fontSize: 14,
+                            height: 19.36 / 14,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                        GridView.builder(
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 6,
+                            childAspectRatio: 1,
+                          ),
+                          itemCount: productData?.colors.length ?? 0,
+                          physics: NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemBuilder: (context, index) {
+                            final colorHex = productData?.colors[index];
+                            Color color = hexToColor(colorHex ?? "");
+                            // Set default selection if the list is not empty
+                            if (productData?.colors.isNotEmpty ?? false) {
+                              if (selectedIndex == null) {
+                                selectedIndex =
+                                    0; // Default to the first color if no selection
+                                selectedColor = productData?.colors[
+                                    selectedIndex ??
+                                        0]; // Set the default color
+                              }
+                            }
+                            return GestureDetector(
+                              onTap: () =>
+                                  _toggleColorSelection(index, colorHex ?? ""),
+                              child: Padding(
+                                padding: EdgeInsets.all(10),
                                 child: Container(
-                                  width: 48,
-                                  height: 48,
+                                  padding: EdgeInsets.all(2),
                                   decoration: BoxDecoration(
-                                    color: Color(0xffFCFCFD),
                                     borderRadius: BorderRadius.circular(100),
                                     border: Border.all(
-                                        color: Color(0xffEEF2F6), width: 1),
+                                      color: selectedIndex == index
+                                          ? Color(
+                                              0xffCAA16C) // Highlight selected color with a border
+                                          : Colors.transparent,
+                                      width: 1,
+                                    ),
                                   ),
-                                  child: Center(
-                                    child: Text(
-                                      sizeItem ?? "",
-                                      style: TextStyle(
-                                        color: Color(0xff000000),
-                                        fontFamily: 'RozhaOne',
-                                        fontSize: 16,
-                                        height: 19.36 / 16,
-                                        fontWeight: FontWeight.w400,
+                                  child: Container(
+                                    width: 24,
+                                    height: 24,
+                                    decoration: BoxDecoration(
+                                      color:
+                                          color, // Set the color of the container
+                                      borderRadius: BorderRadius.circular(100),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ],
+
+                      if (productData?.size.isNotEmpty ?? false) ...[
+                        SizedBox(height: h * 0.01),
+                        Row(
+                          children: [
+                            Text(
+                              "SIZE",
+                              style: TextStyle(
+                                color: Color(0xff121926),
+                                fontFamily: 'RozhaOne',
+                                fontSize: 14,
+                                height: 19.36 / 14,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                            // Optionally show "Size Chart" link here if needed.
+                          ],
+                        ),
+                        SizedBox(height: h * 0.01),
+                        GridView.builder(
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 6,
+                            childAspectRatio: 1,
+                          ),
+                          itemCount: productData?.size.length ?? 0,
+                          physics: NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemBuilder: (context, index) {
+                            final sizeItem = productData?.size[index];
+
+                            // Default selection to the first index if no size is selected
+                            if (productData?.size.isNotEmpty ?? false) {
+                              if (selectedSizeIndex == null) {
+                                selectedSizeIndex =
+                                    0; // Default to the first index
+                                selectedSizeItem = productData?.size[
+                                    selectedSizeIndex ??
+                                        0]; // Select default size
+                              }
+                            }
+
+                            return GestureDetector(
+                              onTap: () {
+                                _toggleSizeSelection(
+                                    index,
+                                    sizeItem ??
+                                        ""); // Pass index and size value
+                              },
+                              child: Padding(
+                                padding: EdgeInsets.all(6),
+                                child: Container(
+                                  padding: EdgeInsets.all(2),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(100),
+                                    border: Border.all(
+                                      color: selectedSizeIndex == index
+                                          ? Color(
+                                              0xffCAA16C) // Selected item color
+                                          : Colors.transparent,
+                                      width: 1,
+                                    ),
+                                  ),
+                                  child: Container(
+                                    width: 48,
+                                    height: 48,
+                                    decoration: BoxDecoration(
+                                      color: Color(0xffFCFCFD),
+                                      borderRadius: BorderRadius.circular(100),
+                                      border: Border.all(
+                                          color: Color(0xffEEF2F6), width: 1),
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        sizeItem ?? "",
+                                        style: TextStyle(
+                                          color: Color(0xff000000),
+                                          fontFamily: 'RozhaOne',
+                                          fontSize: 16,
+                                          height: 19.36 / 16,
+                                          fontWeight: FontWeight.w400,
+                                        ),
                                       ),
                                     ),
                                   ),
                                 ),
                               ),
-                            ),
-                          );
-                        },
-                      ),
-                    ],
+                            );
+                          },
+                        ),
+                      ],
 
-                    SizedBox(height: h * 0.01),
-                    Row(
-                      children: [
-                        Text(
-                          "DESCRIPTION",
-                          style: TextStyle(
-                            color: Color(0xff121926),
-                            fontFamily: 'RozhaOne',
-                            fontSize: 14,
-                            height: 19.36 / 14,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                        Spacer(),
-                        GestureDetector(
-                          onTap: _toggleDescriptionVisibility,
-                          child: Container(
-                              padding: EdgeInsets.all(8),
-                              decoration: BoxDecoration(
-                                color: Color(0xff9AA4B2),
-                                borderRadius: BorderRadius.circular(100),
-                              ),
-                              child: Icon(
-                                _isDescriptionVisible
-                                    ? Icons.keyboard_arrow_up_sharp
-                                    : Icons.keyboard_arrow_down_sharp,
-                                color: Colors.white,
-                                size: 20,
-                              )),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: h * 0.01),
-                    if (_isDescriptionVisible)
-                      Text(
-                        productData?.description ?? "",
-                        style: TextStyle(
-                          color: Color(0xff4B5565),
-                          fontFamily: 'RozhaOne',
-                          fontSize: 14,
-                          height: 19.36 / 14,
-                          fontWeight: FontWeight.w400,
-                        ),
-                        textAlign: TextAlign.left,
-                      ),
-                    SizedBox(height: h * 0.01),
-                    Divider(thickness: 1, height: 1, color: Color(0xffEEF2F6)),
-                    SizedBox(height: h * 0.01),
-                    Row(
-                      children: [
-                        Text(
-                          "PRODUCT DETAILS",
-                          style: TextStyle(
-                            color: Color(0xff121926),
-                            fontFamily: 'RozhaOne',
-                            fontSize: 14,
-                            height: 19.36 / 14,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                        Spacer(),
-                        GestureDetector(
-                          onTap: _toggleProductDetailsVisibility,
-                          child: Container(
-                            padding: EdgeInsets.all(8),
-                            decoration: BoxDecoration(
-                              color: Color(0xff9AA4B2),
-                              borderRadius: BorderRadius.circular(100),
-                            ),
-                            child: Icon(
-                                _isProductDetailsVisible
-                                    ? Icons.keyboard_arrow_up_sharp
-                                    : Icons.keyboard_arrow_down_sharp,
-                                color: Colors.white,
-                                size: 20),
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: h * 0.01),
-                    if (_isProductDetailsVisible)
-                      Text(
-                        productData?.productDetails ?? "",
-                        style: TextStyle(
-                          color: Color(0xff4B5565),
-                          fontFamily: 'RozhaOne',
-                          fontSize: 14,
-                          height: 19.36 / 14,
-                          fontWeight: FontWeight.w400,
-                        ),
-                        textAlign: TextAlign.left,
-                      ),
-                    SizedBox(height: h * 0.01),
-                    Divider(thickness: 1, height: 1, color: Color(0xffEEF2F6)),
-                    SizedBox(height: h * 0.01),
-                    Row(
-                      children: [
-                        Text(
-                          "SHIPPING DETAILS",
-                          style: TextStyle(
-                            color: Color(0xff121926),
-                            fontFamily: 'RozhaOne',
-                            fontSize: 14,
-                            height: 19.36 / 14,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                        Spacer(),
-                        GestureDetector(
-                          onTap: _toggleShippingDetailsVisibility,
-                          child: Container(
-                            padding: EdgeInsets.all(8),
-                            decoration: BoxDecoration(
-                              color: Color(0xff9AA4B2),
-                              borderRadius: BorderRadius.circular(100),
-                            ),
-                            child: Icon(
-                                _isShippingDetailsVisible
-                                    ? Icons.keyboard_arrow_up_sharp
-                                    : Icons.keyboard_arrow_down_sharp,
-                                color: Colors.white,
-                                size: 20),
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: h * 0.01),
-                    if (_isShippingDetailsVisible)
-                      Text(
-                        productData?.shippingDetails ?? "",
-                        style: TextStyle(
-                          color: Color(0xff4B5565),
-                          fontFamily: 'RozhaOne',
-                          fontSize: 14,
-                          height: 19.36 / 14,
-                          fontWeight: FontWeight.w400,
-                        ),
-                        textAlign: TextAlign.left,
-                      ),
-                    SizedBox(height: h * 0.01),
-                    Divider(thickness: 1, height: 1, color: Color(0xffEEF2F6)),
-                    if (productData?.ratingStats.averageRating != 0.0) ...[
                       SizedBox(height: h * 0.01),
                       Row(
                         children: [
                           Text(
-                            "REVIEWS",
+                            "DESCRIPTION",
                             style: TextStyle(
                               color: Color(0xff121926),
                               fontFamily: 'RozhaOne',
@@ -927,10 +806,57 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                               fontWeight: FontWeight.w400,
                             ),
                           ),
-                          SizedBox(width: w * 0.01),
                           Spacer(),
                           GestureDetector(
-                            onTap: _toggleReviewsVisibility,
+                            onTap: _toggleDescriptionVisibility,
+                            child: Container(
+                                padding: EdgeInsets.all(8),
+                                decoration: BoxDecoration(
+                                  color: Color(0xff9AA4B2),
+                                  borderRadius: BorderRadius.circular(100),
+                                ),
+                                child: Icon(
+                                  _isDescriptionVisible
+                                      ? Icons.keyboard_arrow_up_sharp
+                                      : Icons.keyboard_arrow_down_sharp,
+                                  color: Colors.white,
+                                  size: 20,
+                                )),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: h * 0.01),
+                      if (_isDescriptionVisible)
+                        Text(
+                          productData?.description ?? "",
+                          style: TextStyle(
+                            color: Color(0xff4B5565),
+                            fontFamily: 'RozhaOne',
+                            fontSize: 14,
+                            height: 19.36 / 14,
+                            fontWeight: FontWeight.w400,
+                          ),
+                          textAlign: TextAlign.left,
+                        ),
+                      SizedBox(height: h * 0.01),
+                      Divider(
+                          thickness: 1, height: 1, color: Color(0xffEEF2F6)),
+                      SizedBox(height: h * 0.01),
+                      Row(
+                        children: [
+                          Text(
+                            "PRODUCT DETAILS",
+                            style: TextStyle(
+                              color: Color(0xff121926),
+                              fontFamily: 'RozhaOne',
+                              fontSize: 14,
+                              height: 19.36 / 14,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                          Spacer(),
+                          GestureDetector(
+                            onTap: _toggleProductDetailsVisibility,
                             child: Container(
                               padding: EdgeInsets.all(8),
                               decoration: BoxDecoration(
@@ -938,7 +864,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                 borderRadius: BorderRadius.circular(100),
                               ),
                               child: Icon(
-                                  _isReviewsVisible
+                                  _isProductDetailsVisible
                                       ? Icons.keyboard_arrow_up_sharp
                                       : Icons.keyboard_arrow_down_sharp,
                                   color: Colors.white,
@@ -948,328 +874,438 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                         ],
                       ),
                       SizedBox(height: h * 0.01),
-                      if (_isReviewsVisible) ...[
+                      if (_isProductDetailsVisible)
+                        Text(
+                          productData?.productDetails ?? "",
+                          style: TextStyle(
+                            color: Color(0xff4B5565),
+                            fontFamily: 'RozhaOne',
+                            fontSize: 14,
+                            height: 19.36 / 14,
+                            fontWeight: FontWeight.w400,
+                          ),
+                          textAlign: TextAlign.left,
+                        ),
+                      SizedBox(height: h * 0.01),
+                      Divider(
+                          thickness: 1, height: 1, color: Color(0xffEEF2F6)),
+                      SizedBox(height: h * 0.01),
+                      Row(
+                        children: [
+                          Text(
+                            "SHIPPING DETAILS",
+                            style: TextStyle(
+                              color: Color(0xff121926),
+                              fontFamily: 'RozhaOne',
+                              fontSize: 14,
+                              height: 19.36 / 14,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                          Spacer(),
+                          GestureDetector(
+                            onTap: _toggleShippingDetailsVisibility,
+                            child: Container(
+                              padding: EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                color: Color(0xff9AA4B2),
+                                borderRadius: BorderRadius.circular(100),
+                              ),
+                              child: Icon(
+                                  _isShippingDetailsVisible
+                                      ? Icons.keyboard_arrow_up_sharp
+                                      : Icons.keyboard_arrow_down_sharp,
+                                  color: Colors.white,
+                                  size: 20),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: h * 0.01),
+                      if (_isShippingDetailsVisible)
+                        Text(
+                          productData?.shippingDetails ?? "",
+                          style: TextStyle(
+                            color: Color(0xff4B5565),
+                            fontFamily: 'RozhaOne',
+                            fontSize: 14,
+                            height: 19.36 / 14,
+                            fontWeight: FontWeight.w400,
+                          ),
+                          textAlign: TextAlign.left,
+                        ),
+                      SizedBox(height: h * 0.01),
+                      Divider(
+                          thickness: 1, height: 1, color: Color(0xffEEF2F6)),
+                      if (productData?.ratingStats.averageRating != 0.0) ...[
+                        SizedBox(height: h * 0.01),
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              "Reviews",
+                              "REVIEWS",
                               style: TextStyle(
                                 color: Color(0xff121926),
-                                fontFamily: 'Inter',
+                                fontFamily: 'RozhaOne',
                                 fontSize: 14,
                                 height: 19.36 / 14,
-                                fontWeight: FontWeight.w500,
+                                fontWeight: FontWeight.w400,
                               ),
                             ),
-                            InkResponse(
-                              onTap: (){
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => AddProductRating(id: productData?.id),));
-                              },
-                              child: Text(
-                                "Write review",
+                            SizedBox(width: w * 0.01),
+                            Spacer(),
+                            GestureDetector(
+                              onTap: _toggleReviewsVisibility,
+                              child: Container(
+                                padding: EdgeInsets.all(8),
+                                decoration: BoxDecoration(
+                                  color: Color(0xff9AA4B2),
+                                  borderRadius: BorderRadius.circular(100),
+                                ),
+                                child: Icon(
+                                    _isReviewsVisible
+                                        ? Icons.keyboard_arrow_up_sharp
+                                        : Icons.keyboard_arrow_down_sharp,
+                                    color: Colors.white,
+                                    size: 20),
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: h * 0.01),
+                        if (_isReviewsVisible) ...[
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Reviews",
                                 style: TextStyle(
-                                  color: Color(0xff088AB2),
+                                  color: Color(0xff121926),
                                   fontFamily: 'Inter',
                                   fontSize: 14,
                                   height: 19.36 / 14,
                                   fontWeight: FontWeight.w500,
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        Row(
-                          children: [
-                            Container(
-                              width: w * 0.4,
-                              decoration: BoxDecoration(),
-                              child: Center(
+                              InkResponse(
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => AddProductRating(
+                                            id: productData?.id),
+                                      ));
+                                },
+                                child: Text(
+                                  "Write review",
+                                  style: TextStyle(
+                                    color: Color(0xff088AB2),
+                                    fontFamily: 'Inter',
+                                    fontSize: 14,
+                                    height: 19.36 / 14,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 15,
+                          ),
+                          Row(
+                            children: [
+                              Container(
+                                width: w * 0.4,
+                                decoration: BoxDecoration(),
+                                child: Center(
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Column(
+                                        children: [
+                                          Text(
+                                            productData
+                                                    ?.ratingStats.averageRating
+                                                    .toString() ??
+                                                '',
+                                            style: TextStyle(
+                                              color: Color(0xff110B0F),
+                                              fontFamily: 'RozhaOne',
+                                              fontSize: 70,
+                                              fontWeight: FontWeight.w400,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(top: 10),
+                                        child: Icon(
+                                          size: 22,
+                                          Icons.star_rate_rounded,
+                                          color: Colors.orangeAccent,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              Spacer(),
+                              Container(
+                                height: 115,
+                                width: w * 0.001,
+                                color: Color(0xff000000),
+                              ),
+                              Spacer(),
+                              Container(
+                                width: w * 0.5,
+                                padding: const EdgeInsets.only(left: 10.0),
                                 child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
                                     Column(
                                       children: [
-                                        Text(
-                                          productData?.ratingStats.averageRating.toString() ?? '',
-                                          style: TextStyle(
-                                            color: Color(0xff110B0F),
-                                            fontFamily: 'RozhaOne',
-                                            fontSize: 70,
-                                            fontWeight: FontWeight.w400,
-                                          ),
-                                        ),
+                                        for (int i = 5; i > 0; i--) ...[
+                                          Container(
+                                              margin:
+                                                  EdgeInsets.only(bottom: 2),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                children: [
+                                                  Text("$i",
+                                                      style: TextStyle(
+                                                          fontFamily: "Inter",
+                                                          fontSize: 14.5)),
+                                                  Icon(
+                                                    size: 12,
+                                                    Icons.star_rate_rounded,
+                                                    color: Colors.orangeAccent,
+                                                  ),
+                                                ],
+                                              ))
+                                        ],
                                       ],
                                     ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(top: 10),
-                                      child: Icon(
-                                        size: 22,
-                                        Icons.star_rate_rounded,
-                                        color: Colors.orangeAccent,
+                                    // Assuming this is part of your widget where you want to display the ratings
+                                    SizedBox(
+                                      width: w * 0.4,
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          // Iterate over the ratingsGroup map to generate the progress bars
+                                          for (int i = 1; i <= 5; i++)
+                                            _buildRatingRow(
+                                              index: i
+                                                  .toString(), // Rating group '1', '2', ..., '5'
+                                              percentage: productData
+                                                          ?.ratingStats
+                                                          .ratingsGroup[
+                                                      i.toString()] ??
+                                                  0.0,
+                                              width:
+                                                  w, // Assuming you have a 'w' width variable for scaling
+                                            ),
+                                        ],
                                       ),
                                     ),
                                   ],
                                 ),
                               ),
-                            ),
-                            Spacer(),
-                            Container(
-                              height: 115,
-                              width: w * 0.001,
-                              color: Color(0xff000000),
-                            ),
-                            Spacer(),
-                            Container(
-                              width: w * 0.5,
-                              padding: const EdgeInsets.only(left: 10.0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Column(
-                                    children: [
-                                      for (int i = 5; i > 0; i--) ...[
-                                        Container(
-                                            margin: EdgeInsets.only(bottom: 2),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              children: [
-                                                Text("$i",
-                                                    style: TextStyle(
-                                                        fontFamily: "Inter",
-                                                        fontSize: 14.5)),
-                                                Icon(
-                                                  size: 12,
-                                                  Icons.star_rate_rounded,
-                                                  color: Colors.orangeAccent,
-                                                ),
-                                              ],
-                                            ))
-                                      ],
-                                    ],
-                                  ),
-                                  // Assuming this is part of your widget where you want to display the ratings
-                                  SizedBox(
-                                    width: w * 0.4,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        // Iterate over the ratingsGroup map to generate the progress bars
-                                        for (int i = 1; i <= 5; i++)
-                                          _buildRatingRow(
-                                            index: i
-                                                .toString(), // Rating group '1', '2', ..., '5'
-                                            percentage: productData?.ratingStats
-                                                        .ratingsGroup[
-                                                    i.toString()] ??
-                                                0.0,
-                                            width:
-                                                w, // Assuming you have a 'w' width variable for scaling
-                                          ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        // ListView.builder(
-                        //   itemCount: productData?.recentReviews.length,
-                        //   physics: NeverScrollableScrollPhysics(),
-                        //   itemBuilder: (context, index) {
-                        //     var data= productData?.recentReviews[index];
-                        //     return Padding(
-                        //       padding: const EdgeInsets.all(8.0),
-                        //       child: Row(
-                        //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        //         children: [
-                        //           Text(
-                        //             data?.customer ?? '',
-                        //             style: TextStyle(
-                        //               color: Color(0xff121926),
-                        //               fontFamily: 'Inter',
-                        //               fontSize: 14,
-                        //               height: 19.36 / 14,
-                        //               fontWeight: FontWeight.w500,
-                        //             ),
-                        //           ),
-                        //           Text(
-                        //             "Posted on ${data?.createdAt ?? ''}",
-                        //             style: TextStyle(
-                        //               color: Color(0xff617C9D),
-                        //               fontFamily: 'Inter',
-                        //               fontSize: 12,
-                        //               height: 19.36 / 12,
-                        //               fontWeight: FontWeight.w500,
-                        //             ),
-                        //           ),
-                        //         ],
-                        //       ),
-                        //     );
-                        //   },
-                        // ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          // ListView.builder(
+                          //   itemCount: productData?.recentReviews.length,
+                          //   physics: NeverScrollableScrollPhysics(),
+                          //   itemBuilder: (context, index) {
+                          //     var data= productData?.recentReviews[index];
+                          //     return Padding(
+                          //       padding: const EdgeInsets.all(8.0),
+                          //       child: Row(
+                          //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          //         children: [
+                          //           Text(
+                          //             data?.customer ?? '',
+                          //             style: TextStyle(
+                          //               color: Color(0xff121926),
+                          //               fontFamily: 'Inter',
+                          //               fontSize: 14,
+                          //               height: 19.36 / 14,
+                          //               fontWeight: FontWeight.w500,
+                          //             ),
+                          //           ),
+                          //           Text(
+                          //             "Posted on ${data?.createdAt ?? ''}",
+                          //             style: TextStyle(
+                          //               color: Color(0xff617C9D),
+                          //               fontFamily: 'Inter',
+                          //               fontSize: 12,
+                          //               height: 19.36 / 12,
+                          //               fontWeight: FontWeight.w500,
+                          //             ),
+                          //           ),
+                          //         ],
+                          //       ),
+                          //     );
+                          //   },
+                          // ),
+                        ],
+                        SizedBox(height: h * 0.01),
+                        Divider(
+                            thickness: 1, height: 1, color: Color(0xffEEF2F6)),
                       ],
-                      SizedBox(height: h * 0.01),
-                      Divider(
-                          thickness: 1, height: 1, color: Color(0xffEEF2F6)),
-                    ],
-                    SizedBox(height: h * 0.03),
-                    Consumer<ProductListProvider>(
-                        builder: (context, profileProvider, child) {
-                      final products_list = profileProvider.productList;
-                     return  Column(
-                        children: [
-                          if(products_list.length!=0)...[
-                            Text(
-                              "YOU MAY ALSO LIKE",
-                              style: TextStyle(
-                                color: Color(0xff121926),
-                                fontFamily: 'RozhaOne',
-                                fontSize: 22,
-                                height: 19.36 / 14,
-                                fontWeight: FontWeight.w400,
+                      SizedBox(height: h * 0.03),
+                      Consumer<ProductListProvider>(
+                          builder: (context, profileProvider, child) {
+                        final products_list = profileProvider.productList;
+                        return Column(
+                          children: [
+                            if (products_list.length != 0) ...[
+                              Text(
+                                "YOU MAY ALSO LIKE",
+                                style: TextStyle(
+                                  color: Color(0xff121926),
+                                  fontFamily: 'RozhaOne',
+                                  fontSize: 22,
+                                  height: 19.36 / 14,
+                                  fontWeight: FontWeight.w400,
+                                ),
                               ),
-                            ),
-                            SizedBox(height: h * 0.02),
-                            SingleChildScrollView(
-                              scrollDirection:
-                              Axis.horizontal, // Enables horizontal scrolling
-                              child: Row(
-                                children:
-                                List.generate(products_list.length, (index) {
-                                  var data = products_list[index];
-                                  return InkWell(
-                                    onTap: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                ProductDetailsScreen(
-                                                    productid: data.id ?? "",
-                                                    category_id: widget.category_id),
-                                          ));
-                                    },
-                                    child:
-                                    Stack(
-                                      children: [
+                              SizedBox(height: h * 0.02),
+                              SingleChildScrollView(
+                                scrollDirection: Axis
+                                    .horizontal, // Enables horizontal scrolling
+                                child: Row(
+                                  children: List.generate(products_list.length,
+                                      (index) {
+                                    var data = products_list[index];
+                                    return InkWell(
+                                      onTap: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  ProductDetailsScreen(
+                                                      productid: data.id ?? "",
+                                                      category_id:
+                                                          widget.category_id),
+                                            ));
+                                      },
+                                      child: Stack(children: [
                                         Container(
-                                        width: w * 0.45,
-                                        padding:EdgeInsets.all(8.0),
-                                        margin:EdgeInsets.only(left: 10, right: 8.0),
-                                        decoration: BoxDecoration(
-                                          border: Border.all(
-                                            color: Color(0xffEEF2F6),
-                                            width: 1,
+                                          width: w * 0.45,
+                                          padding: EdgeInsets.all(8.0),
+                                          margin: EdgeInsets.only(
+                                              left: 10, right: 8.0),
+                                          decoration: BoxDecoration(
+                                            border: Border.all(
+                                              color: Color(0xffEEF2F6),
+                                              width: 1,
+                                            ),
+                                          ),
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Center(
+                                                child: Image.network(
+                                                  data.image ?? "",
+                                                  height: h * 0.2,
+                                                  width: w * 0.45,
+                                                  fit: BoxFit.contain,
+                                                ),
+                                              ),
+                                              SizedBox(height: 15),
+                                              // Row(
+                                              //   children: [
+                                              //     InkWell(
+                                              //       onTap: () {
+                                              //         Navigator.push(
+                                              //           context,
+                                              //           MaterialPageRoute(
+                                              //             builder: (context) => UploaderProfile(),
+                                              //           ),
+                                              //         );
+                                              //       },
+                                              //       child: CircleAvatar(
+                                              //         radius: 12,
+                                              //         child: ClipOval(
+                                              //           child: Image.asset(
+                                              //             "assets/postedBY.png",
+                                              //             fit: BoxFit.contain,
+                                              //           ),
+                                              //         ),
+                                              //       ),
+                                              //     ),
+                                              //     SizedBox(width: w * 0.03),
+                                              //     Text(
+                                              //       "POSTED BY",
+                                              //       style: TextStyle(
+                                              //         color: Color(0xff617C9D),
+                                              //         fontFamily: 'RozhaOne',
+                                              //         fontSize: 14,
+                                              //         height: 19.36 / 14,
+                                              //         fontWeight: FontWeight.w400,
+                                              //       ),
+                                              //     )
+                                              //   ],
+                                              // ),
+                                              SizedBox(height: 10),
+                                              Text(
+                                                data.title ?? "",
+                                                style: TextStyle(
+                                                  color: Color(0xff121926),
+                                                  fontFamily: 'RozhaOne',
+                                                  fontSize: 16,
+                                                  height: 24 / 16,
+                                                  fontWeight: FontWeight.w400,
+                                                ),
+                                                maxLines:
+                                                    2, // Limits the number of lines to 2
+                                                overflow: TextOverflow
+                                                    .ellipsis, // Adds ellipsis when text overflows
+                                              ),
+                                              SizedBox(height: 10),
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    "₹${data.salePrice ?? ""}",
+                                                    style: TextStyle(
+                                                      color: Color(0xff121926),
+                                                      fontFamily: 'RozhaOne',
+                                                      fontSize: 18,
+                                                      height: 24 / 16,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                    ),
+                                                  ),
+                                                  SizedBox(width: w * 0.03),
+                                                  Text(
+                                                    "₹${data.mrp ?? ""}",
+                                                    style: TextStyle(
+                                                      color: Color(0xff617C9D),
+                                                      fontFamily: 'RozhaOne',
+                                                      fontSize: 15,
+                                                      height: 24 / 16,
+                                                      fontWeight:
+                                                          FontWeight.w400,
+                                                      decoration: TextDecoration
+                                                          .lineThrough,
+                                                      decorationColor:
+                                                          Color(0xff617C9D),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
                                           ),
                                         ),
-                                        child: Column(
-                                          mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                          crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                          children: [
-                                            Center(
-                                              child: Image.network(
-                                                data.image ?? "",
-                                                height: h * 0.2,
-                                                width: w * 0.45,
-                                                fit: BoxFit.contain,
-                                              ),
-                                            ),
-                                            SizedBox(height: 15),
-                                            // Row(
-                                            //   children: [
-                                            //     InkWell(
-                                            //       onTap: () {
-                                            //         Navigator.push(
-                                            //           context,
-                                            //           MaterialPageRoute(
-                                            //             builder: (context) => UploaderProfile(),
-                                            //           ),
-                                            //         );
-                                            //       },
-                                            //       child: CircleAvatar(
-                                            //         radius: 12,
-                                            //         child: ClipOval(
-                                            //           child: Image.asset(
-                                            //             "assets/postedBY.png",
-                                            //             fit: BoxFit.contain,
-                                            //           ),
-                                            //         ),
-                                            //       ),
-                                            //     ),
-                                            //     SizedBox(width: w * 0.03),
-                                            //     Text(
-                                            //       "POSTED BY",
-                                            //       style: TextStyle(
-                                            //         color: Color(0xff617C9D),
-                                            //         fontFamily: 'RozhaOne',
-                                            //         fontSize: 14,
-                                            //         height: 19.36 / 14,
-                                            //         fontWeight: FontWeight.w400,
-                                            //       ),
-                                            //     )
-                                            //   ],
-                                            // ),
-                                            SizedBox(height: 10),
-                                            Text(
-                                              data.title ?? "",
-                                              style: TextStyle(
-                                                color: Color(0xff121926),
-                                                fontFamily: 'RozhaOne',
-                                                fontSize: 16,
-                                                height: 24 / 16,
-                                                fontWeight: FontWeight.w400,
-                                              ),
-                                              maxLines:
-                                              2, // Limits the number of lines to 2
-                                              overflow: TextOverflow
-                                                  .ellipsis, // Adds ellipsis when text overflows
-                                            ),
-                                            SizedBox(height: 10),
-                                            Row(
-                                              mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  "₹${data.salePrice ?? ""}",
-                                                  style: TextStyle(
-                                                    color: Color(0xff121926),
-                                                    fontFamily: 'RozhaOne',
-                                                    fontSize: 18,
-                                                    height: 24 / 16,
-                                                    fontWeight: FontWeight.w500,
-                                                  ),
-                                                ),
-                                                SizedBox(width: w * 0.03),
-                                                Text(
-                                                  "₹${data.mrp ?? ""}",
-                                                  style: TextStyle(
-                                                    color: Color(0xff617C9D),
-                                                    fontFamily: 'RozhaOne',
-                                                    fontSize: 15,
-                                                    height: 24 / 16,
-                                                    fontWeight: FontWeight.w400,
-                                                    decoration:
-                                                    TextDecoration.lineThrough,
-                                                    decorationColor:
-                                                    Color(0xff617C9D),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      ),
                                         Positioned(
                                           top: 8,
                                           right: 8,
@@ -1280,167 +1316,179 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                                 context
                                                     .read<WishlistProvider>()
                                                     .removeFromWishlist(
-                                                    data.id ?? "");
+                                                        data.id ?? "");
                                               } else {
                                                 // Add to wishlist
                                                 context
                                                     .read<WishlistProvider>()
-                                                    .addToWishlist(data.id ?? "");
+                                                    .addToWishlist(
+                                                        data.id ?? "");
                                               }
                                             },
                                             child: Container(
                                               padding: const EdgeInsets.all(8),
                                               decoration: BoxDecoration(
                                                 color: Colors.grey[200],
-                                                borderRadius: BorderRadius.circular(100),
+                                                borderRadius:
+                                                    BorderRadius.circular(100),
                                               ),
                                               child: data.isInWishlist ?? false
                                                   ? Icon(
-                                                Icons
-                                                    .favorite, // Filled heart icon when item is in wishlist
-                                                size: 18,
-                                                color: Colors
-                                                    .red, // Red color for filled icon
-                                              )
+                                                      Icons
+                                                          .favorite, // Filled heart icon when item is in wishlist
+                                                      size: 18,
+                                                      color: Colors
+                                                          .red, // Red color for filled icon
+                                                    )
                                                   : Icon(
-                                                Icons
-                                                    .favorite_border, // Outline heart icon when item is NOT in wishlist
-                                                size: 18,
-                                                color: Colors
-                                                    .black, // Black color for outline icon
-                                              ),
+                                                      Icons
+                                                          .favorite_border, // Outline heart icon when item is NOT in wishlist
+                                                      size: 18,
+                                                      color: Colors
+                                                          .black, // Black color for outline icon
+                                                    ),
                                             ),
                                           ),
                                         ),
-
-                                      ]
-
-                                    ),
-                                  );
-                                }),
+                                      ]),
+                                    );
+                                  }),
+                                ),
                               ),
-                            ),
-                          ]
-                        ],
-                      );
-                    }),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        );
-      }),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(10),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            InkWell(
-              onTap: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context) => Cart(),));
-              },
-              child: Container(
-                width: w * 0.45,
-                height: h * 0.06,
-                padding: EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                    border: Border.all(color: Color(0xffCAA16C), width: 1),
-                    borderRadius: BorderRadius.circular(6)),
-                child: Center(
-                  child: Text(
-                    "VIEW CART",
-                    style: TextStyle(
-                      color: Color(0xffCAA16C),
-                      fontFamily: 'RozhaOne',
-                      fontSize: 16,
-                      height: 21.06 / 16,
-                      fontWeight: FontWeight.w400,
-                    ),
-                    textAlign: TextAlign.center,
+                            ]
+                          ],
+                        );
+                      }),
+                    ],
                   ),
                 ),
-              ),
+              ],
             ),
-            InkResponse(
-                onTap: () {
-                  AddToCartApi(widget.productid, "1");
-                },
-                child: Container(
+          );
+        }
+      }),
+      bottomNavigationBar: Consumer<ProductDetailsProvider>(
+          builder: (context, productDetailsProvider, child) {
+        if (productDetailsProvider.isLoading) {
+          return SizedBox
+              .shrink(); // Hide the bottom navigation bar when data is null or empty
+        } else {
+          return Padding(
+            padding: const EdgeInsets.all(10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                InkWell(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => Cart(),
+                        ));
+                  },
+                  child: Container(
                     width: w * 0.45,
                     height: h * 0.06,
                     padding: EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: Color(0xff110B0F),
-                      borderRadius: BorderRadius.circular(6),
-                    ),
+                        border: Border.all(color: Color(0xffCAA16C), width: 1),
+                        borderRadius: BorderRadius.circular(6)),
                     child: Center(
-                        child: Text(
-                      "ADD TO CART",
-                      style: TextStyle(
-                        color: Color(0xffE7C6A0),
-                        fontFamily: 'RozhaOne',
-                        fontSize: 16,
-                        height: 21.06 / 16,
-                        fontWeight: FontWeight.w400,
+                      child: Text(
+                        "VIEW CART",
+                        style: TextStyle(
+                          color: Color(0xffCAA16C),
+                          fontFamily: 'RozhaOne',
+                          fontSize: 16,
+                          height: 21.06 / 16,
+                          fontWeight: FontWeight.w400,
+                        ),
+                        textAlign: TextAlign.center,
                       ),
-                      textAlign: TextAlign.center,
-                    )
-                        //     :
-                        // Row(
-                        //         mainAxisAlignment: MainAxisAlignment.center,
-                        //         children: [
-                        //           Container(width:w*0.06,height: h*0.03,
-                        //             decoration: BoxDecoration(
-                        //                 border: Border.all(
-                        //                     color: Color(0xffffffff), width: 1)),
-                        //             child: IconButton( padding: EdgeInsets.all(0),
-                        //               icon: Icon(Icons.remove,
-                        //                   size: 20,    color: Color(0xffE7C6A0),), // color11
-                        //               onPressed: () {
-                        //                 setState(() {
-                        //                   if (quantity > 0) quantity--;
-                        //                 });
-                        //                 AddToCartApi(quantity.toString());
-                        //               },
-                        //             ),
-                        //           ),
-                        //           SizedBox(
-                        //               width:
-                        //                   8), // Space between the icon and quantity
-                        //           Text(
-                        //             "$quantity", // Show the quantity next to the cart icon
-                        //             style: TextStyle(
-                        //               color: Color(0xffE7C6A0),
-                        //               fontFamily: 'RozhaOne',
-                        //               fontSize: 16,
-                        //               height: 21.06 / 16,
-                        //               fontWeight: FontWeight.w400,
-                        //             ),
-                        //             textAlign: TextAlign.center,
-                        //           ),
-                        //           SizedBox(width: 8),
-                        //           Container(width:w*0.06,height: h*0.03,
-                        //             decoration: BoxDecoration(
-                        //                 border: Border.all(
-                        //                     color: Color(0xffffffff), width: 1)),
-                        //             child: IconButton( padding: EdgeInsets.all(0),
-                        //               icon: Icon(Icons.add,
-                        //                 size: 20,    color: Color(0xffE7C6A0),), // color11
-                        //               onPressed: () {
-                        //                 setState(() {
-                        //                   if (quantity > 0) quantity++;
-                        //                 });
-                        //                 AddToCartApi(quantity.toString());
-                        //               },
-                        //             ),
-                        //           ),
-                        //         ],
-                        //       ),
-                        )))
-          ],
-        ),
-      ),
+                    ),
+                  ),
+                ),
+                InkResponse(
+                    onTap: () {
+                      AddToCartApi(widget.productid, "1");
+                    },
+                    child: Container(
+                        width: w * 0.45,
+                        height: h * 0.06,
+                        padding: EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: Color(0xff110B0F),
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        child: Center(
+                            child: Text(
+                          "ADD TO CART",
+                          style: TextStyle(
+                            color: Color(0xffE7C6A0),
+                            fontFamily: 'RozhaOne',
+                            fontSize: 16,
+                            height: 21.06 / 16,
+                            fontWeight: FontWeight.w400,
+                          ),
+                          textAlign: TextAlign.center,
+                        )
+                            //     :
+                            // Row(
+                            //         mainAxisAlignment: MainAxisAlignment.center,
+                            //         children: [
+                            //           Container(width:w*0.06,height: h*0.03,
+                            //             decoration: BoxDecoration(
+                            //                 border: Border.all(
+                            //                     color: Color(0xffffffff), width: 1)),
+                            //             child: IconButton( padding: EdgeInsets.all(0),
+                            //               icon: Icon(Icons.remove,
+                            //                   size: 20,    color: Color(0xffE7C6A0),), // color11
+                            //               onPressed: () {
+                            //                 setState(() {
+                            //                   if (quantity > 0) quantity--;
+                            //                 });
+                            //                 AddToCartApi(quantity.toString());
+                            //               },
+                            //             ),
+                            //           ),
+                            //           SizedBox(
+                            //               width:
+                            //                   8), // Space between the icon and quantity
+                            //           Text(
+                            //             "$quantity", // Show the quantity next to the cart icon
+                            //             style: TextStyle(
+                            //               color: Color(0xffE7C6A0),
+                            //               fontFamily: 'RozhaOne',
+                            //               fontSize: 16,
+                            //               height: 21.06 / 16,
+                            //               fontWeight: FontWeight.w400,
+                            //             ),
+                            //             textAlign: TextAlign.center,
+                            //           ),
+                            //           SizedBox(width: 8),
+                            //           Container(width:w*0.06,height: h*0.03,
+                            //             decoration: BoxDecoration(
+                            //                 border: Border.all(
+                            //                     color: Color(0xffffffff), width: 1)),
+                            //             child: IconButton( padding: EdgeInsets.all(0),
+                            //               icon: Icon(Icons.add,
+                            //                 size: 20,    color: Color(0xffE7C6A0),), // color11
+                            //               onPressed: () {
+                            //                 setState(() {
+                            //                   if (quantity > 0) quantity++;
+                            //                 });
+                            //                 AddToCartApi(quantity.toString());
+                            //               },
+                            //             ),
+                            //           ),
+                            //         ],
+                            //       ),
+                            )))
+              ],
+            ),
+          );
+        }
+      }),
     );
   }
 

@@ -55,7 +55,7 @@ class _OrderListScreenState extends State<OrderListScreen> {
             isLoading = false; // Hide loader if error occurs
           } else {
             CustomSnackBar.show(context, res.settings?.message ?? "");
-            isLoading = false; // Hide loader if error occurs
+            isLoading = false;
           }
         });
       }

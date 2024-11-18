@@ -40,93 +40,104 @@ class _CartState extends State<Cart> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     var w = MediaQuery.of(context).size.width;
     var h = MediaQuery.of(context).size.height;
     return Scaffold(
         appBar: CustomApp(title: 'Cart', w: w),
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.only(left: 20, right: 20, top: 8),
-            child: Column(
-              children: [
-                Consumer<CartProvider>(
-                  builder: (context, cartProvider, child) {
-                    final cart_list = cartProvider.cartList;
-                    if (cart_list.isEmpty) {
-                      return Center(
-                        child: Column(
-                          children: [
-                            SizedBox(height: w*0.4,),
-                            Image.asset(
-                              alignment: Alignment.center,
-                              'assets/no_cart.png', // Your "no items" image
-                              width: 160,
-                              height: 160,
-                              fit: BoxFit.cover,
-                            ),
-                            SizedBox(height: 30,),
-                            Text("Cart is Empty",
-                              style: TextStyle(
-                                color: Color(0xffCAA16C),
-                                fontFamily: 'RozhaOne',
-                                fontSize: 22,
-                                height: 18 / 16,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                            SizedBox(height: 10,),
-                            Text("It Seems like you haven’t added anything to Your Cart yet!",
-                              style: TextStyle(
-                                color: Color(0xff000000),
-                                fontFamily: 'RozhaOne',
-                                fontSize: 16,
-                                height: 18 / 16,
-                                fontWeight: FontWeight.w400,
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                            SizedBox(height: w*0.2,),
-                            InkWell(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => Dashbord()),
-                                );
-                              },
-                              child: Container(
-                                width: w*0.5,
-                                padding:
-                                EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                                decoration: BoxDecoration(
-                                  color: Color(0xff110B0F),
-                                  borderRadius: BorderRadius.circular(6),
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    "Shop Now",
-                                    style: TextStyle(
-                                      color: Color(0xffCAA16C),
-                                      fontFamily: 'RozhaOne',
-                                      fontSize: 16,
-                                      height: 21.06 / 16,
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ),
-                              ),
-                            ),
-
-                          ],
-                        ),
+        body: Consumer<CartProvider>(builder: (context, cartProvider, child) {
+          final cart_list = cartProvider.cartList;
+          if (cartProvider.isLoading) {
+            return Center(
+                child: CircularProgressIndicator(
+                  color: Color(0xffE7C6A0),
+                ));
+          } else if (cart_list.isEmpty) {
+            return Center(
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: w * 0.4,
+                  ),
+                  Image.asset(
+                    alignment: Alignment.center,
+                    'assets/no_cart.png',
+                    // Your "no items" image
+                    width: 160,
+                    height: 160,
+                    fit: BoxFit.cover,
+                  ),
+                  SizedBox(
+                    height: 30,
+                  ),
+                  Text(
+                    "Cart is Empty",
+                    style: TextStyle(
+                      color: Color(0xffCAA16C),
+                      fontFamily: 'RozhaOne',
+                      fontSize: 22,
+                      height: 18 / 16,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    "It Seems like you haven’t added anything to Your Cart yet!",
+                    style: TextStyle(
+                      color: Color(0xff000000),
+                      fontFamily: 'RozhaOne',
+                      fontSize: 16,
+                      height: 18 / 16,
+                      fontWeight: FontWeight.w400,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(
+                    height: w * 0.2,
+                  ),
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Dashbord()),
                       );
-                    }
-
-                    return ListView.builder(
+                    },
+                    child: Container(
+                      width: w * 0.5,
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                      decoration: BoxDecoration(
+                        color: Color(0xff110B0F),
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      child: Center(
+                        child: Text(
+                          "Shop Now",
+                          style: TextStyle(
+                            color: Color(0xffCAA16C),
+                            fontFamily: 'RozhaOne',
+                            fontSize: 16,
+                            height: 21.06 / 16,
+                            fontWeight: FontWeight.w400,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          } else {
+            return SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.only(left: 20, right: 20, top: 8),
+                child: Column(
+                  children: [
+                    ListView.builder(
                       padding: EdgeInsets.all(0),
                       physics: NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
@@ -183,11 +194,13 @@ class _CartState extends State<Cart> {
                                       maxLines: 2,
                                     ),
                                     Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
                                         Row(
                                           children: [
-                                            Text("Color:",
+                                            Text(
+                                              "Color:",
                                               style: TextStyle(
                                                 color: Color(0xff181725),
                                                 fontFamily: 'RozhaOne',
@@ -197,21 +210,25 @@ class _CartState extends State<Cart> {
                                               ),
                                               maxLines: 2,
                                             ),
-                                            SizedBox(width: 10,),
+                                            SizedBox(
+                                              width: 10,
+                                            ),
                                             Container(
                                               width: 18,
                                               height: 18,
                                               decoration: BoxDecoration(
-                                                color: color, // Set the color of the container
-                                                borderRadius: BorderRadius.circular(100),
+                                                color: color,
+                                                // Set the color of the container
+                                                borderRadius:
+                                                    BorderRadius.circular(100),
                                               ),
                                             ),
                                           ],
                                         ),
-
                                         Row(
                                           children: [
-                                            Text("Size:",
+                                            Text(
+                                              "Size:",
                                               style: TextStyle(
                                                 color: Color(0xff181725),
                                                 fontFamily: 'RozhaOne',
@@ -221,8 +238,11 @@ class _CartState extends State<Cart> {
                                               ),
                                               maxLines: 2,
                                             ),
-                                            SizedBox(width: 10,),
-                                            Text(cartItem.size,
+                                            SizedBox(
+                                              width: 10,
+                                            ),
+                                            Text(
+                                              cartItem.size,
                                               style: TextStyle(
                                                 color: Color(0xff181725),
                                                 fontFamily: 'RozhaOne',
@@ -342,18 +362,20 @@ class _CartState extends State<Cart> {
                           ),
                         );
                       },
-                    );
-                  },
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          ),
-        ),
+              ),
+            );
+          }
+        }),
         bottomNavigationBar: Consumer<CartProvider>(
-          builder: (context, shippingProvider, child) {
-            final cart_amount = shippingProvider.cartAmount;
-            // Check if shipping_data is null or empty
-            if (cart_amount == null ||
+          builder: (context, cartProvider, child) {
+            final cart_amount = cartProvider.cartAmount;
+            if (cartProvider.isLoading) {
+              return SizedBox
+                  .shrink(); // Hide the bottom navigation bar when data is null or empty
+            } else if (cart_amount == null ||
                 cart_amount == null ||
                 cart_amount == 0) {
               return SizedBox

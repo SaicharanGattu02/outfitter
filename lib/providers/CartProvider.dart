@@ -8,71 +8,88 @@ import 'ShippingDetailsProvider.dart';  // Import your ShippingDetailsProvider
 class CartProvider with ChangeNotifier {
   List<CartList> _cartList = [];
   int _cartCount = 0;
-  int _cartamount = 0;
-  ShippingDetailsProvider shippingDetailsProvider; // Add this as a dependency
+  int _cartAmount = 0;
+  bool _isLoading = false;  // Loading state
+  ShippingDetailsProvider shippingDetailsProvider;
 
   // Constructor
   CartProvider({required this.shippingDetailsProvider});
 
-  // Getter for cart list
+  // Getters
   List<CartList> get cartList => _cartList;
-
-  // Getter for cart count
   int get cartCount => _cartCount;
-  int get cartAmount => _cartamount;
+  int get cartAmount => _cartAmount;
+  bool get isLoading => _isLoading;  // Expose the loading state
 
   // Method to fetch cart products
   Future<void> fetchCartProducts() async {
+    _isLoading = true;  // Set loading state to true before starting the fetch
+    notifyListeners();  // Notify listeners that loading has started
+
     try {
       var response = await Userapi.GetCartList();
       _cartList = response?.data ?? [];
-      _cartamount = response?.totalCartAmount ?? 0;
-      _updateCartCount(); // Update the cart count after fetching
-      notifyListeners();
+      _cartAmount = response?.totalCartAmount ?? 0;
+      _updateCartCount(); // Update cart count after fetching
     } catch (e) {
       throw Exception('Failed to fetch cart list: $e');
+    } finally {
+      _isLoading = false;  // Set loading state to false after fetch completes
+      notifyListeners();  // Notify listeners that loading has finished
     }
   }
 
   // Method to add a product to the cart
   Future<String?> addToCartApi(String productID, String quantity, String color, String size) async {
+    _isLoading = true;  // Set loading state to true before adding product to cart
+    notifyListeners();  // Notify listeners that loading has started
+
     try {
       var res = await Userapi.addCartQuanitity(productID, quantity, color, size);
       if (res != null && res.settings?.success == 1) {
-        fetchCartProducts();  // Re-fetch the cart list after adding
+        await fetchCartProducts();  // Re-fetch the cart list after adding
 
         // Call fetchShippingDetails after adding to cart
-        shippingDetailsProvider.fetchShippingDetails();  // Fetch shipping details every time
+        await shippingDetailsProvider.fetchShippingDetails();  // Fetch shipping details
         return "Product added to cart successfully!";
       } else {
         return res?.settings?.message;
       }
     } catch (e) {
       throw Exception('Failed to add to cart: $e');
+    } finally {
+      _isLoading = false;  // Set loading state to false after the operation
+      notifyListeners();  // Notify listeners that loading has finished
     }
   }
 
   // Method to update the quantity of a product in the cart
   Future<void> updateCartApi(String productID, String quantity) async {
+    _isLoading = true;  // Set loading state to true before updating cart
+    notifyListeners();  // Notify listeners that loading has started
+
     try {
       var res = await Userapi.updateCartQuanitity(productID, quantity);
       if (res != null && res.settings?.success == 1) {
-        fetchCartProducts();  // Re-fetch the cart list after updating
+        await fetchCartProducts();  // Re-fetch the cart list after updating
 
         // Call fetchShippingDetails after adding to cart
-        shippingDetailsProvider.fetchShippingDetails();  // Fetch shipping details every time
+        await shippingDetailsProvider.fetchShippingDetails();  // Fetch shipping details
       } else {
         throw Exception('Failed to update cart');
       }
     } catch (e) {
       throw Exception('Failed to update cart: $e');
+    } finally {
+      _isLoading = false;  // Set loading state to false after the operation
+      notifyListeners();  // Notify listeners that loading has finished
     }
   }
 
   // Update the cart count whenever the cart changes
   void _updateCartCount() {
     _cartCount = _cartList.fold(0, (total, item) => total + (item.quantity ?? 0));
-    notifyListeners(); // Notify listeners when cart count changes
+    notifyListeners();  // Notify listeners when cart count changes
   }
 
   // Method to update the quantity of an item directly in the cart
@@ -101,3 +118,4 @@ class CartProvider with ChangeNotifier {
     }
   }
 }
+

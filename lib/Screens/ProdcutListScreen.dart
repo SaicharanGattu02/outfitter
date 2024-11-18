@@ -192,11 +192,20 @@ class _ProdcutListScreenState extends State<ProdcutListScreen> {
               ),
               SizedBox(height: h * 0.02),
               Consumer<ProductListProvider>(
-                builder: (context, profileProvider, child) {
-                  final product_list = profileProvider.productList;
+                builder: (context, productListProvider, child) {
+                  final product_list = productListProvider.productList;
                   print("Consumer product list:${product_list}");
-                  // Check if the product list is empty
-                  if (product_list.isEmpty) {
+                  if (productListProvider.isLoading) {
+                    return Center(
+                        child: Column(
+                          children: [
+                            SizedBox(height: w*0.6,),
+                            CircularProgressIndicator(
+                              color: Color(0xffE7C6A0),
+                            ),
+                          ],
+                        ));
+                  } else if (product_list.isEmpty) {
                     return Center(
                       child: Column(
                         children: [
