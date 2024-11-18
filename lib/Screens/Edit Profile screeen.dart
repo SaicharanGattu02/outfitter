@@ -119,21 +119,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Profile Image Selection
-              // Center(
-              //   child: GestureDetector(
-              //     onTap: _pickImage,  // Allow the user to pick a new image
-              //     child: CircleAvatar(
-              //       radius: 50,
-              //       backgroundImage: _image != null
-              //           ? FileImage(_image!) as ImageProvider<Object>  // Cast to ImageProvider<Object>
-              //           : AssetImage('assets/default_profile.jpg') as ImageProvider<Object>,  // Cast to ImageProvider<Object>
-              //       child: _image == null
-              //           ? Icon(Icons.camera_alt, size: 50, color: Colors.white)
-              //           : null,  // Display camera icon if no image
-              //     ),
-              //   ),
-              // ),
               Center(
                 child: Stack(
                   children: [
@@ -142,11 +127,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       backgroundColor: Colors.grey,
                       backgroundImage:
                          profile_image != null && profile_image.isNotEmpty
-                          ? NetworkImage(profile_image)
+                          ? _image != null?
+                         FileImage(_image!) as ImageProvider<Object>:
+                         NetworkImage(profile_image)
                           : AssetImage(
                           'assets/avatar_placeholder.png')
                       as ImageProvider,
-
                     ),
                     Positioned(
                       bottom: 0,
