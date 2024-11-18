@@ -38,6 +38,7 @@ class WishlistProvider with ChangeNotifier {
       if (res != null && res.settings?.success == 1) {
         fetchWishList();
         productListProvider.updateProductWishlistStatus(productId, true);
+        productListProvider.updateBestsellerWishlistStatus(productId, true);
       } else {
         throw Exception('Failed to add product to wishlist');
       }
@@ -52,6 +53,7 @@ class WishlistProvider with ChangeNotifier {
       if (res != null && res.settings?.success == 1) {
         fetchWishList();
         productListProvider.updateProductWishlistStatus(productId, false);
+        productListProvider.updateBestsellerWishlistStatus(productId, false);
       } else {
         throw Exception('Failed to remove product from wishlist');
       }

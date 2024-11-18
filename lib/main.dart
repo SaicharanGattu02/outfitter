@@ -191,7 +191,6 @@ Future<void> main() async {
         ChangeNotifierProvider(
           create: (context) => AddressListProvider(),
         ),
-        // Use ChangeNotifierProxyProvider to pass ProductListProvider to WishlistProvider
         ChangeNotifierProxyProvider<ProductListProvider, WishlistProvider>(
           create: (context) => WishlistProvider(context.read<ProductListProvider>()),
           update: (context, productListProvider, wishlistProvider) =>

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:outfitter/Screens/ProductDetailsScreen.dart';
 import 'package:outfitter/providers/WishlistProvider.dart';
 import 'package:outfitter/utils/CustomAppBar.dart';
 import 'package:outfitter/utils/CustomAppBar1.dart';
@@ -62,131 +63,136 @@ class _WishlistScreenState extends State<WishlistScreen> {
                   itemCount: product_list.length,
                   itemBuilder: (context, index) {
                     final item = product_list[index];
-                    return Container(
-                      width: w,
-                      padding: EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: Color(0xffFFFDF6),
-                        border: Border.all(color: Color(0xffF3EFE1), width: 1),
-                        borderRadius: BorderRadius.circular(7),
-                      ),
-                      margin: EdgeInsets.only(left: 16, right: 16, bottom: 10),
-                      child: Row(
-                        children: [
-                          Stack(
-                            children: [
-                              Container(
-                                decoration: BoxDecoration(
-                                  color: Color(0xffFFFFFF),
-                                  borderRadius: BorderRadius.circular(6),
-                                  border: Border.all(color: Color(0xffE7C6A0), width: 1),
-                                ),
-                                child: Center(
-                                  child: Image.network(
-                                    item.product?.image ?? "",
-                                    width: w * 0.25,
-                                    height: h * 0.13,
-                                  ),
-                                ),
-                              ),
-                              Positioned(
-                                top: 8,
-                                right: 8,
-                                child: InkResponse(
-                                  onTap: () {
-                                    if (item.product?.isInWishlist??false) {
-                                      // Remove from wishlist
-                                      context.read<WishlistProvider>().removeFromWishlist(item.product?.id??"");
-                                    } else {
-                                      // Add to wishlist
-                                      context.read<WishlistProvider>().addToWishlist(item.product?.id??"");
-                                    }
-                                  },
-                                  child: item.product?.isInWishlist?? false
-                                      ? Icon(
-                                    Icons.favorite, // Filled heart icon when item is in wishlist
-                                    size: 18,
-                                    color: Colors.red, // Red color for filled icon
-                                  )
-                                      : Icon(
-                                    Icons.favorite_border, // Outline heart icon when item is NOT in wishlist
-                                    size: 18,
-                                    color: Colors.black, // Black color for outline icon
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(width: w * 0.03),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                    return InkWell(
+                      onTap: (){
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => ProductDetailsScreen(productid: item.product?.id??"", category_id: ""),));
+                      },
+                      child: Container(
+                        width: w,
+                        padding: EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: Color(0xffFFFDF6),
+                          border: Border.all(color: Color(0xffF3EFE1), width: 1),
+                          borderRadius: BorderRadius.circular(7),
+                        ),
+                        margin: EdgeInsets.only(left: 16, right: 16, bottom: 10),
+                        child: Row(
+                          children: [
+                            Stack(
                               children: [
-                                Text(
-                                  item.product?.title ?? "",
-                                  style: TextStyle(
-                                    color: Color(0xff181725),
-                                    fontFamily: 'RozhaOne',
-                                    fontSize: 16,
-                                    height: 18 / 16,
-                                    fontWeight: FontWeight.w400,
+                                Container(
+                                  decoration: BoxDecoration(
+                                    color: Color(0xffFFFFFF),
+                                    borderRadius: BorderRadius.circular(6),
+                                    border: Border.all(color: Color(0xffE7C6A0), width: 1),
+                                  ),
+                                  child: Center(
+                                    child: Image.network(
+                                      item.product?.image ?? "",
+                                      width: w * 0.25,
+                                      height: h * 0.1,
+                                    ),
                                   ),
                                 ),
-                                SizedBox(height: h * 0.008),
-                                Row(
-                                  children: [
-                                    Text(
-                                      item.product?.salePrice.toString() ?? "",
-                                      style: TextStyle(
-                                        color: Color(0xff181725),
-                                        fontFamily: 'RozhaOne',
-                                        fontSize: 18,
-                                        height: 21 / 18,
-                                        fontWeight: FontWeight.w400,
-                                      ),
+                                Positioned(
+                                  top: 8,
+                                  right: 8,
+                                  child: InkResponse(
+                                    onTap: () {
+                                      if (item.product?.isInWishlist??false) {
+                                        // Remove from wishlist
+                                        context.read<WishlistProvider>().removeFromWishlist(item.product?.id??"");
+                                      } else {
+                                        // Add to wishlist
+                                        context.read<WishlistProvider>().addToWishlist(item.product?.id??"");
+                                      }
+                                    },
+                                    child: item.product?.isInWishlist?? false
+                                        ? Icon(
+                                      Icons.favorite, // Filled heart icon when item is in wishlist
+                                      size: 18,
+                                      color: Colors.red, // Red color for filled icon
+                                    )
+                                        : Icon(
+                                      Icons.favorite_border, // Outline heart icon when item is NOT in wishlist
+                                      size: 18,
+                                      color: Colors.black, // Black color for outline icon
                                     ),
-                                    SizedBox(width: w * 0.02),
-                                    Text(
-                                      item.product?.mrp.toString() ?? "",
-                                      style: TextStyle(
-                                        fontFamily: 'RozhaOne',
-                                        fontSize: 12,
-                                        decoration: TextDecoration.lineThrough,
-                                        decorationColor: Color(0xff617C9D),
-                                        height: 18 / 12,
-                                        color: Color(0xff617C9D),
-                                        fontWeight: FontWeight.w400,
-                                      ),
-                                    ),
-                                  ],
+                                  ),
                                 ),
-                                // SizedBox(height: h * 0.006),
-                                // Container(
-                                //   width: w * 0.43,
-                                //   height: h * 0.04,
-                                //   decoration: BoxDecoration(
-                                //     color: Color(0xff110B0F),
-                                //     border: Border.all(color: Color(0xffCAA16C), width: 1),
-                                //     borderRadius: BorderRadius.circular(6),
-                                //   ),
-                                //   child: Center(
-                                //     child: Text(
-                                //       "MOVE TO CART",
-                                //       style: TextStyle(
-                                //         color: Color(0xffCAA16C),
-                                //         fontFamily: 'RozhaOne',
-                                //         fontSize: 16,
-                                //         height: 21.06 / 16,
-                                //         fontWeight: FontWeight.w400,
-                                //       ),
-                                //       textAlign: TextAlign.center,
-                                //     ),
-                                //   ),
-                                // ),
                               ],
                             ),
-                          ),
-                        ],
+                            SizedBox(width: w * 0.03),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    item.product?.title ?? "",
+                                    style: TextStyle(
+                                      color: Color(0xff181725),
+                                      fontFamily: 'RozhaOne',
+                                      fontSize: 16,
+                                      height: 18 / 16,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                  SizedBox(height: h * 0.008),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        item.product?.salePrice.toString() ?? "",
+                                        style: TextStyle(
+                                          color: Color(0xff181725),
+                                          fontFamily: 'RozhaOne',
+                                          fontSize: 18,
+                                          height: 21 / 18,
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                      ),
+                                      SizedBox(width: w * 0.02),
+                                      Text(
+                                        item.product?.mrp.toString() ?? "",
+                                        style: TextStyle(
+                                          fontFamily: 'RozhaOne',
+                                          fontSize: 12,
+                                          decoration: TextDecoration.lineThrough,
+                                          decorationColor: Color(0xff617C9D),
+                                          height: 18 / 12,
+                                          color: Color(0xff617C9D),
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  // SizedBox(height: h * 0.006),
+                                  // Container(
+                                  //   width: w * 0.43,
+                                  //   height: h * 0.04,
+                                  //   decoration: BoxDecoration(
+                                  //     color: Color(0xff110B0F),
+                                  //     border: Border.all(color: Color(0xffCAA16C), width: 1),
+                                  //     borderRadius: BorderRadius.circular(6),
+                                  //   ),
+                                  //   child: Center(
+                                  //     child: Text(
+                                  //       "MOVE TO CART",
+                                  //       style: TextStyle(
+                                  //         color: Color(0xffCAA16C),
+                                  //         fontFamily: 'RozhaOne',
+                                  //         fontSize: 16,
+                                  //         height: 21.06 / 16,
+                                  //         fontWeight: FontWeight.w400,
+                                  //       ),
+                                  //       textAlign: TextAlign.center,
+                                  //     ),
+                                  //   ),
+                                  // ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     );
                   },

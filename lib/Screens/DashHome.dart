@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 import '../Model/ProductsListModel.dart';
 import '../Services/UserApi.dart';
 import '../providers/CartProvider.dart';
+import '../providers/ProductListProvider.dart';
 import '../providers/WishlistProvider.dart';
 import '../utils/CustomSnackBar.dart';
 import 'ProdcutListScreen.dart';
@@ -85,10 +86,10 @@ class _DashHomeState extends State<DashHome> {
   }
 
   Future<void> GetCategoriesList() async {
-    final categories_list_provider =
-        Provider.of<CategoriesProvider>(context, listen: false);
+    final categories_list_provider = Provider.of<CategoriesProvider>(context, listen: false);
+    final bestseller_list_provider = Provider.of<ProductListProvider>(context, listen: false);
     categories_list_provider.fetchCategoriesList();
-    categories_list_provider.fetchBestSellersList();
+    bestseller_list_provider.fetchBestSellersList();
   }
 
   List<ProductsList> productlist = [];
@@ -331,9 +332,9 @@ class _DashHomeState extends State<DashHome> {
             SizedBox(height: h * 0.02),
             SingleChildScrollView(
               scrollDirection: Axis.horizontal, // Enables horizontal scrolling
-              child: Consumer<CategoriesProvider>(
-                  builder: (context, profileProvider, child) {
-                final products_list = profileProvider.bestsellerList;
+              child: Consumer<ProductListProvider>(
+                  builder: (context, bestsellerProvider, child) {
+                final products_list = bestsellerProvider.bestsellerList;
                 return Row(
                   children: List.generate(products_list.length, (index) {
                     var data = products_list[index];

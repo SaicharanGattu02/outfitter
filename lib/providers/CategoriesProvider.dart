@@ -15,10 +15,6 @@ class CategoriesProvider with ChangeNotifier {
   List<Categories> get categoriesList => _categories??[];
   List<ProductsList> get bestsellerList => _productlist??[];
 
-  List<Wishlist>? _wishlistproducts = [];
-
-  List<Wishlist> get wishlistProducts => _wishlistproducts ?? [];
-
 
   Future<void> fetchCategoriesList() async{
     try {
@@ -27,20 +23,6 @@ class CategoriesProvider with ChangeNotifier {
       notifyListeners();
     } catch (e) {
       throw Exception('Failed to fetch product details: $e');
-    }
-  }
-
-  Future<void> fetchBestSellersList() async {
-    try {
-      final res = await Userapi.getBestSellersList();
-      if (res != null) {
-          if (res.settings?.success == 1) {
-            _productlist = res.data ?? [];
-            notifyListeners();
-          }
-      }
-    } catch (e) {
-      throw Exception('Failed to fetch list: $e');
     }
   }
 

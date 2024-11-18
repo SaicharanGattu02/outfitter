@@ -12,6 +12,7 @@ import '../Services/UserApi.dart';
 import '../providers/WishlistProvider.dart';
 import '../utils/CustomAppBar.dart';
 import '../utils/CustomAppBar1.dart';
+import 'Cart.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
   String productid;
@@ -1335,24 +1336,29 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Container(
-              width: w * 0.45,
-              height: h * 0.06,
-              padding: EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                  border: Border.all(color: Color(0xffCAA16C), width: 1),
-                  borderRadius: BorderRadius.circular(6)),
-              child: Center(
-                child: Text(
-                  "BUY NOW",
-                  style: TextStyle(
-                    color: Color(0xffCAA16C),
-                    fontFamily: 'RozhaOne',
-                    fontSize: 16,
-                    height: 21.06 / 16,
-                    fontWeight: FontWeight.w400,
+            InkWell(
+              onTap: (){
+                Navigator.push(context, MaterialPageRoute(builder: (context) => Cart(),));
+              },
+              child: Container(
+                width: w * 0.45,
+                height: h * 0.06,
+                padding: EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                    border: Border.all(color: Color(0xffCAA16C), width: 1),
+                    borderRadius: BorderRadius.circular(6)),
+                child: Center(
+                  child: Text(
+                    "VIEW CART",
+                    style: TextStyle(
+                      color: Color(0xffCAA16C),
+                      fontFamily: 'RozhaOne',
+                      fontSize: 16,
+                      height: 21.06 / 16,
+                      fontWeight: FontWeight.w400,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
-                  textAlign: TextAlign.center,
                 ),
               ),
             ),
