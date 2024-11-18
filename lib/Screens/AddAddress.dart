@@ -79,28 +79,34 @@ class _AddAddressState extends State<AddAddress> {
 
 
   String get address {
-    return "${_HouseNumberController.text},${_AreaController.text}".trim();
+    return "${_HouseNumberController.text},${_cityController.text},${_AreaController.text}".trim();
   }
 
 
   Future<void> GetAddressDetails(id) async{
     final fetch_address_details = Provider.of<AddressListProvider>(context, listen: false);
     fetch_address_details.getaddressDetails(id);
-    setState(() {
-      var address_details= fetch_address_details.addressDetails;
+    setState(() async {
+      var address_details = await fetch_address_details.addressDetails;
       _PhoneController.text=address_details?.mobile??"";
       _pincodeController.text=address_details?.pincode??"";
       _nameController.text=address_details?.fullName??"";
       _AlternatePhoneController.text=address_details?.alternateMobile??"";
       _selectedOption=address_details?.addressType??"";
-      String address = address_details?.address??"";
-      List<String> parts = address.split(" ");
-      String housenumber = parts[0];
-      String city = parts[1];
-      String roadname = parts[2];
-      _HouseNumberController.text=housenumber;
-      _cityController.text=city;
-      _AreaController.text=roadname;
+      if (address_details?.address != "") {
+        String address = address_details?.address ?? "";
+        List<String> parts = address.split(",");
+
+        // Check if there are enough parts, otherwise set default values
+        String housenumber = parts.isNotEmpty ? parts[0] : ""; // Default to empty if not available
+        String city = parts.length > 1 ? parts[1] : ""; // Default to empty if not available
+        String roadname = parts.length > 2 ? parts[2] : ""; // Default to empty if not available
+
+        _HouseNumberController.text = housenumber;
+        _cityController.text = city;
+        _AreaController.text = roadname;
+      }
+
     });
   }
 

@@ -127,6 +127,7 @@ class AddressListProvider with ChangeNotifier {
       var res = await Userapi.getaddressdetails(addressID);
       if (res != null && res.settings?.success == 1) {
         _addressDetails = res.data;
+        notifyListeners();  // Notify listeners to update UI
       } else {
         throw Exception('Failed to fetch address details');
       }
