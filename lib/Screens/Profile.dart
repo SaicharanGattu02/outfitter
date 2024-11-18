@@ -115,7 +115,7 @@ class _ProfileState extends State<Profile> {
                                         ),
                                         overflow: TextOverflow.ellipsis,
                                       ),
-                                      GestureDetector(
+                                      InkWell(
                                         onTap: () {
                                           Navigator.push(
                                             context,
@@ -124,11 +124,15 @@ class _ProfileState extends State<Profile> {
                                                     EditProfileScreen()),
                                           );
                                         },
-                                        child: Image.asset(
-                                          'assets/edit.png',
-                                          width: w * 0.09,
-                                          height: h * 0.02,
-                                          fit: BoxFit.contain,
+                                        child: Container(padding: EdgeInsets.all(5),
+                                          width: w * 0.1,
+                                          height: h * 0.04,
+                                          child: Image.asset(
+                                            'assets/edit.png',
+                                            width: w * 0.1,
+                                            height: h * 0.03,
+                                            fit: BoxFit.contain,
+                                          ),
                                         ),
                                       ),
                                     ],
