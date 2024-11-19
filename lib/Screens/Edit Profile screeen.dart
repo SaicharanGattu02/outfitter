@@ -27,7 +27,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   final FocusNode _focusNodeEmail = FocusNode();
   final FocusNode _focusNodePhone = FocusNode();
   File? _image; // To store the selected image
-  bool isLoading = true; // Loading state
+  bool isLoading = false; // Loading state
   XFile? _pickedFile;
   // CroppedFile? _croppedFile;
   String _validatePhone = "";
@@ -44,16 +44,19 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   void _validateFields() {
     setState(() {
+      isLoading = true;
       _validatePhone =
       mobileController.text.length < 10 ? "Please enter a valid phone number (10 digits)" : "";
       _validateEmail = !RegExp(r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$").hasMatch(emailController.text)
           ? "Please enter a valid email address (e.g. user@domain.com)"
           : "";
-    });
 
     if (_validatePhone.isEmpty && _validateEmail.isEmpty) {
       _updateProfile();
+    }else{
+      isLoading = false;
     }
+    });
   }
 
   String profile_image = "";
@@ -69,12 +72,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           emailController.text = res.email ?? '';
           profile_image = res.image ?? "";
         }
-        isLoading = false;
       });
     } catch (e) {
-      setState(() {
-        isLoading = false;
-      });
       // Handle error appropriately, e.g., show a toast or dialog
       print('Error fetching user profile: $e');
     }
@@ -238,7 +237,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 ),
               SizedBox(height: 40),
               InkResponse(
-                onTap: _validateFields,
+                onTap: (){
+                  if(isLoading){
+
+                  }else{
+                    _validateFields();
+                  }
+                },
                 child: Container(
                   width: w,
                   height: MediaQuery.of(context).size.height * 0.060,

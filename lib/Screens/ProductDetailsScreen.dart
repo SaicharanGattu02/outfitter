@@ -297,6 +297,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
       body: Consumer<ProductDetailsProvider>(
           builder: (context, productDetailsProvider, child) {
         final productData = productDetailsProvider.productData;
+        final wishlist_status= productDetailsProvider.isInWishlist;
         print("Image:${productData?.image}");
         if (productDetailsProvider.isLoading) {
           return Center(
@@ -496,13 +497,15 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                         children: [
                           InkResponse(
                             onTap: () {
-                              if (productData?.isInWishlist ?? false) {
+                              if (wishlist_status ?? false) {
+                                print("wishlist Status:${wishlist_status}");
                                 // Remove from wishlist
                                 context
                                     .read<WishlistProvider>()
                                     .removeFromWishlist(widget.productid);
                                 productDetailsProvider.toggleWishlistStatus();
                               } else {
+                                print("wishlist Status:${wishlist_status}");
                                 // Add to wishlist
                                 context
                                     .read<WishlistProvider>()
@@ -517,7 +520,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                 color: Colors.grey[200],
                                 borderRadius: BorderRadius.circular(100),
                               ),
-                              child: productDetailsProvider.isInWishlist == true
+                              child: wishlist_status == true
                                   ? Icon(
                                       Icons
                                           .favorite, // Filled heart icon when item is in wishlist

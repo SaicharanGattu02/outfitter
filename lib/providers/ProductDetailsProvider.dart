@@ -37,6 +37,7 @@ class ProductDetailsProvider with ChangeNotifier {
   void toggleWishlistStatus() {
     if (_productData == null) return;
     bool newStatus = !(isInWishlist ?? false);  // Toggle wishlist status
+    print("NEW STATUS:${newStatus}");
     // Update local state
     _isInWishlist = newStatus;
     notifyListeners();
