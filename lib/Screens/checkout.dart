@@ -4,7 +4,11 @@ import 'package:outfitter/Screens/OrderListScreen.dart';
 import 'package:outfitter/utils/CustomAppBar1.dart';
 import 'package:outfitter/utils/CustomSnackBar.dart';
 import 'package:provider/provider.dart';
-
+import 'dart:developer' as developer;
+import 'dart:async';
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:flutter/services.dart';
+import '../Services/otherservices.dart';
 import '../Model/ShippingDetailsModel.dart';
 import '../Services/UserApi.dart';
 import '../providers/CartProvider.dart';
@@ -18,6 +22,57 @@ class CheckoutScreen extends StatefulWidget {
 }
 
 class _CheckoutScreenState extends State<CheckoutScreen> {
+
+
+
+  @override
+  void initState() {
+
+    initConnectivity();
+    _connectivitySubscription =
+        _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
+    super.initState();
+  }
+
+
+  late StreamSubscription<List<ConnectivityResult>> _connectivitySubscription;
+
+  var isDeviceConnected = "";
+
+  List<ConnectivityResult> _connectionStatus = [ConnectivityResult.none];
+  final Connectivity _connectivity = Connectivity();
+
+  Future<void> initConnectivity() async {
+    List<ConnectivityResult> result;
+    try {
+
+      result = await _connectivity.checkConnectivity();
+    } on PlatformException catch (e) {
+      developer.log('Couldn\'t check connectivity status', error: e);
+      return;
+    }
+
+    if (!mounted) {
+      return Future.value(null);
+    }
+
+
+    return _updateConnectionStatus(result);
+  }
+
+  Future<void> _updateConnectionStatus(List<ConnectivityResult> result) async {
+    setState(() {
+      _connectionStatus = result;
+      for (int i = 0; i < _connectionStatus.length; i++) {
+        setState(() {
+          isDeviceConnected = _connectionStatus[i].toString();
+          print("isDeviceConnected:${isDeviceConnected}");
+        });
+      }
+    });
+    print('Connectivity changed: $_connectionStatus');
+  }
+
   int order_value = 0;
   String address = "";
   String product = "";
@@ -45,7 +100,12 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   Widget build(BuildContext context) {
     var w = MediaQuery.of(context).size.width;
     var h = MediaQuery.of(context).size.height;
-    return Scaffold(
+    return
+      (isDeviceConnected == "ConnectivityResult.wifi" ||
+          isDeviceConnected == "ConnectivityResult.mobile")
+          ?
+
+      Scaffold(
       appBar: CustomApp(title: "Checkout", w: w),
       body: Consumer<ShippingDetailsProvider>(
           builder: (context, shippingProvider, child) {
@@ -278,74 +338,76 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           Consumer<ShippingDetailsProvider>(
               builder: (context, shippingProvider, child) {
         final shipping_data = shippingProvider.shippingData;
-        return Container(
-          color: Colors.white,
-          padding: const EdgeInsets.only(left: 16, right: 16, bottom: 5),
-          margin: EdgeInsets.symmetric(vertical: 10,),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  Text(
-                    "Total: ",
-                    style: TextStyle(
-                      color: Color(0xff000000),
-                      fontFamily: 'RozhaOne',
-                      fontSize: 20,
-                      height: 24 / 20,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                  Text(
-                    "₹${shipping_data?.totalAmount.toString() ?? ""}",
-                    style: TextStyle(
-                      color: Color(0xff617C9D),
-                      fontFamily: 'RozhaOne',
-                      fontSize: 20,
-                      height: 24 / 20,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                ],
-              ),
-              InkWell(
-                onTap: () {
-                  if (address.isNotEmpty && address != "No address found"){
-                    PlacerOrderApi();
-                  }else{
-                    CustomSnackBar.show(context, "Please Select address!");
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => AddressListScreen(),));
-                  }
-                },
-                child: Container(
-                  width: w * 0.45,
-                  height: h * 0.05,
-                  // padding: EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: Color(0xff110B0F),
-                    borderRadius: BorderRadius.circular(6),
-                  ),
-                  child: Center(
-                    child: Text(
-                      "PLACE ORDER",
+        return SafeArea(
+          child: Container(
+            color: Colors.white,
+            padding: const EdgeInsets.only(left: 16, right: 16, bottom: 5),
+            margin: EdgeInsets.symmetric(vertical: 10,),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    Text(
+                      "Total: ",
                       style: TextStyle(
-                        color: Color(0xffCAA16C),
+                        color: Color(0xff000000),
                         fontFamily: 'RozhaOne',
-                        fontSize: 16,
-                        height: 21.06 / 16,
+                        fontSize: 20,
+                        height: 24 / 20,
                         fontWeight: FontWeight.w400,
                       ),
-                      textAlign: TextAlign.center,
+                    ),
+                    Text(
+                      "₹${shipping_data?.totalAmount.toString() ?? ""}",
+                      style: TextStyle(
+                        color: Color(0xff617C9D),
+                        fontFamily: 'RozhaOne',
+                        fontSize: 20,
+                        height: 24 / 20,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                  ],
+                ),
+                InkWell(
+                  onTap: () {
+                    if (address.isNotEmpty && address != "No address found"){
+                      PlacerOrderApi();
+                    }else{
+                      CustomSnackBar.show(context, "Please Select address!");
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => AddressListScreen(),));
+                    }
+                  },
+                  child: Container(
+                    width: w * 0.45,
+                    height: h * 0.05,
+                    // padding: EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: Color(0xff110B0F),
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                    child: Center(
+                      child: Text(
+                        "PLACE ORDER",
+                        style: TextStyle(
+                          color: Color(0xffCAA16C),
+                          fontFamily: 'RozhaOne',
+                          fontSize: 16,
+                          height: 21.06 / 16,
+                          fontWeight: FontWeight.w400,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         );
       }),
-    );
+    ):NoInternetWidget();
   }
 
   Widget _buildPaymentRow(String label, String amount,

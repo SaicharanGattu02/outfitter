@@ -543,81 +543,83 @@ class _ProdcutListScreenState extends State<ProdcutListScreen> {
           ),
         ),
       ),
-      bottomNavigationBar: Container(
-        padding: EdgeInsets.symmetric(
-            vertical: 10), // Adjusted padding for vertical alignment
-        height: h * 0.06, // Increased height for better visibility
-        decoration: BoxDecoration(
-          color: Color(0xffffffff),
-          border: Border(
-              top: BorderSide(
-                  color: Color(0xffE3E8EF), width: 1)), // Added a top border
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment
-              .spaceAround, // Space between SORT and FILTER evenly
-          children: [
-            InkResponse(
-              onTap: () {
-                _bottomSheet(context);
-              },
-              child: Row(
-                children: [
-                  Image.asset(
-                    "assets/sort.png",
-                  ),
-                  SizedBox(
-                    width: w * 0.02,
-                  ),
-                  Text(
-                    "SORT",
-                    style: TextStyle(
-                      color: Color(0xff110B0F),
-                      fontFamily: 'RozhaOne',
-                      fontSize: 16,
-                      height: 24 / 16,
-                      fontWeight: FontWeight.w400,
+      bottomNavigationBar: SafeArea(
+        child: Container(
+          padding: EdgeInsets.symmetric(
+              vertical: 10), // Adjusted padding for vertical alignment
+          height: h * 0.06, // Increased height for better visibility
+          decoration: BoxDecoration(
+            color: Color(0xffffffff),
+            border: Border(
+                top: BorderSide(
+                    color: Color(0xffE3E8EF), width: 1)), // Added a top border
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment
+                .spaceAround, // Space between SORT and FILTER evenly
+            children: [
+              InkResponse(
+                onTap: () {
+                  _bottomSheet(context);
+                },
+                child: Row(
+                  children: [
+                    Image.asset(
+                      "assets/sort.png",
                     ),
-                  ),
-                ],
-              ),
-            ),
-            // Divider between SORT and FILTER
-            Container(
-              width: 1,
-              height: h * 0.04,
-              color: Color(0xffE3E8EF),
-            ),
-            // FILTER button
-            InkWell(
-              onTap: () {
-                _bottomSheet1(context);
-              },
-              child: Row(
-                children: [
-                  Image.asset(
-                    "assets/filter.png",
-                    color: Color(0xff110B0F),
-                    width: w*0.05,
-                    height: h*0.04,
-                  ),
-                  SizedBox(
-                    width: w * 0.02, // Increased width for spacing
-                  ),
-                  Text(
-                    "FILTER",
-                    style: TextStyle(
-                      color: Color(0xff110B0F),
-                      fontFamily: 'RozhaOne',
-                      fontSize: 16,
-                      height: 24 / 16,
-                      fontWeight: FontWeight.w400,
+                    SizedBox(
+                      width: w * 0.02,
                     ),
-                  ),
-                ],
+                    Text(
+                      "SORT",
+                      style: TextStyle(
+                        color: Color(0xff110B0F),
+                        fontFamily: 'RozhaOne',
+                        fontSize: 16,
+                        height: 24 / 16,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+              // Divider between SORT and FILTER
+              Container(
+                width: 1,
+                height: h * 0.04,
+                color: Color(0xffE3E8EF),
+              ),
+              // FILTER button
+              InkWell(
+                onTap: () {
+                  _bottomSheet1(context);
+                },
+                child: Row(
+                  children: [
+                    Image.asset(
+                      "assets/filter.png",
+                      color: Color(0xff110B0F),
+                      width: w*0.05,
+                      height: h*0.04,
+                    ),
+                    SizedBox(
+                      width: w * 0.02, // Increased width for spacing
+                    ),
+                    Text(
+                      "FILTER",
+                      style: TextStyle(
+                        color: Color(0xff110B0F),
+                        fontFamily: 'RozhaOne',
+                        fontSize: 16,
+                        height: 24 / 16,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     ): NoInternetWidget();
@@ -634,101 +636,103 @@ class _ProdcutListScreenState extends State<ProdcutListScreen> {
         builder: (BuildContext context) {
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter setState) {
-            return Padding(
-                padding: EdgeInsets.only(
-                    bottom: MediaQuery.of(context).viewInsets.bottom),
-                child: Container(
-                    height: h,
-                    padding: EdgeInsets.only(
-                        left: 20, right: 20, top: 10, bottom: 20),
-                    decoration: BoxDecoration(
-                      color: Color(0xffffffff),
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(20),
-                        topRight: Radius.circular(20),
+            return SafeArea(
+              child: Padding(
+                  padding: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).viewInsets.bottom),
+                  child: Container(
+                      height: h,
+                      padding: EdgeInsets.only(
+                          left: 20, right: 20, top: 10, bottom: 20),
+                      decoration: BoxDecoration(
+                        color: Color(0xffffffff),
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(20),
+                          topRight: Radius.circular(20),
+                        ),
                       ),
-                    ),
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Center(
-                            child: Container(
-                              width: w * 0.1,
-                              height: 5,
-                              decoration: BoxDecoration(
-                                color: Colors.grey[300],
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: 20),
-                          Row(
-                            children: [
-                              Text(
-                                'Sort By',
-                                style: TextStyle(
-                                  color: Color(0xff1C1D22),
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 16,
-                                  fontFamily: 'RozhaOne',
-                                  height: 18 / 16,
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Center(
+                              child: Container(
+                                width: w * 0.1,
+                                height: 5,
+                                decoration: BoxDecoration(
+                                  color: Colors.grey[300],
+                                  borderRadius: BorderRadius.circular(10),
                                 ),
                               ),
-                              Spacer(),
-                              InkWell(
-                                onTap: () {
-                                  Navigator.of(context)
-                                      .pop(); // Close the BottomSheet when tapped
-                                },
-                                child: Container(
-                                  padding: EdgeInsets.all(5),
-                                  width: w * 0.06,
-                                  height: w * 0.06,
-                                  decoration: BoxDecoration(
-                                    color: Color(0xffE5E5E5),
-                                    borderRadius: BorderRadius.circular(100),
+                            ),
+                            SizedBox(height: 20),
+                            Row(
+                              children: [
+                                Text(
+                                  'Sort By',
+                                  style: TextStyle(
+                                    color: Color(0xff1C1D22),
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 16,
+                                    fontFamily: 'RozhaOne',
+                                    height: 18 / 16,
                                   ),
-                                  child: Center(
-                                    child: Image.asset(
-                                      "assets/crossblue.png",
-                                      fit: BoxFit.contain,
-                                      width: w * 0.023,
-                                      height: w * 0.023,
-                                      color: Color(0xffCAA16C),
+                                ),
+                                Spacer(),
+                                InkWell(
+                                  onTap: () {
+                                    Navigator.of(context)
+                                        .pop(); // Close the BottomSheet when tapped
+                                  },
+                                  child: Container(
+                                    padding: EdgeInsets.all(5),
+                                    width: w * 0.06,
+                                    height: w * 0.06,
+                                    decoration: BoxDecoration(
+                                      color: Color(0xffE5E5E5),
+                                      borderRadius: BorderRadius.circular(100),
+                                    ),
+                                    child: Center(
+                                      child: Image.asset(
+                                        "assets/crossblue.png",
+                                        fit: BoxFit.contain,
+                                        width: w * 0.023,
+                                        height: w * 0.023,
+                                        color: Color(0xffCAA16C),
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 24,
-                          ),
-                          ListView.builder(
-                            shrinkWrap: true,
-                            itemCount: sortOptions.length,
-                            itemBuilder: (context, index) {
-                              return RadioListTile<String>(
-                                activeColor: Color(0xffCAA16C),
-                                value: sortOptions[index],
-                                groupValue: selectedSort,
-                                onChanged: (value) {
-                                  setState(() {
-                                    selectedSort = value!;
-                                    String sortValue =
-                                        sortOptionToValue[selectedSort]!;
-
-                                    GetProductcategoryList(
-                                        widget.selectid, sortValue,"","");
-                                  });
-                                  Navigator.pop(
-                                      context); // Close the dialog after selection
-                                },
-                                title: Text(sortOptions[index]),
-                              );
-                            },
-                          ),
-                        ])));
+                              ],
+                            ),
+                            SizedBox(
+                              height: 24,
+                            ),
+                            ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: sortOptions.length,
+                              itemBuilder: (context, index) {
+                                return RadioListTile<String>(
+                                  activeColor: Color(0xffCAA16C),
+                                  value: sortOptions[index],
+                                  groupValue: selectedSort,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      selectedSort = value!;
+                                      String sortValue =
+                                          sortOptionToValue[selectedSort]!;
+              
+                                      GetProductcategoryList(
+                                          widget.selectid, sortValue,"","");
+                                    });
+                                    Navigator.pop(
+                                        context); // Close the dialog after selection
+                                  },
+                                  title: Text(sortOptions[index]),
+                                );
+                              },
+                            ),
+                          ]))),
+            );
           });
         });
   }
@@ -745,213 +749,215 @@ class _ProdcutListScreenState extends State<ProdcutListScreen> {
       builder: (BuildContext context) {
         return StatefulBuilder(
           builder: (BuildContext context, StateSetter setState) {
-            return Padding(
-              padding: EdgeInsets.only(
-                bottom: MediaQuery.of(context).viewInsets.bottom,
-              ),
-              child: Container(
-                height: h,
-                padding:
-                    EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 20),
-                decoration: BoxDecoration(
-                  color: Color(0xffffffff),
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    topRight: Radius.circular(20),
-                  ),
+            return SafeArea(
+              child: Padding(
+                padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom,
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Center(
-                      child: Container(
-                        width: w * 0.1,
-                        height: 5,
-                        decoration: BoxDecoration(
-                          color: Colors.grey[300],
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
+                child: Container(
+                  height: h,
+                  padding:
+                      EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 20),
+                  decoration: BoxDecoration(
+                    color: Color(0xffffffff),
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20),
                     ),
-                    SizedBox(height: 20),
-                    Row(
-                      children: [
-                        Text(
-                          'Filter',
-                          style: TextStyle(
-                            color: Color(0xff1C1D22),
-                            fontWeight: FontWeight.w500,
-                            fontSize: 16,
-                            fontFamily: 'RozhaOne',
-                            height: 18 / 16,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Center(
+                        child: Container(
+                          width: w * 0.1,
+                          height: 5,
+                          decoration: BoxDecoration(
+                            color: Colors.grey[300],
+                            borderRadius: BorderRadius.circular(10),
                           ),
                         ),
-                        Spacer(),
-                        InkWell(
-                          onTap: () {
-                            Navigator.of(context)
-                                .pop(); // Close the BottomSheet when tapped
-                          },
-                          child: Container(
-                            padding: EdgeInsets.all(5),
-                            width: w * 0.06,
-                            height: w * 0.06,
-                            decoration: BoxDecoration(
-                              color: Color(0xffE5E5E5),
-                              borderRadius: BorderRadius.circular(100),
-                            ),
-                            child: Center(
-                              child: Image.asset(
-                                "assets/crossblue.png",
-                                fit: BoxFit.contain,
-                                width: w * 0.023,
-                                height: w * 0.023,
-                                color: Color(0xffCAA16C),
-                              ),
+                      ),
+                      SizedBox(height: 20),
+                      Row(
+                        children: [
+                          Text(
+                            'Filter',
+                            style: TextStyle(
+                              color: Color(0xff1C1D22),
+                              fontWeight: FontWeight.w500,
+                              fontSize: 16,
+                              fontFamily: 'RozhaOne',
+                              height: 18 / 16,
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 24),
-                    // Price Range Slider
-                    Text(
-                      'Selected  Price Range',
-                      style: TextStyle(
-                        color: Color(0xff1C1D22),
-                        fontWeight: FontWeight.w500,
-                        fontSize: 16,
-                        fontFamily: 'RozhaOne',
-                        height: 18 / 16,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Min: \₹ ${selectedMinPrice.toStringAsFixed(0)}',
-                          style: TextStyle(fontSize: 14),
-                        ),
-                        Text(
-                          'Max: \₹ ${selectedMaxPrice.toStringAsFixed(0)}',
-                          style: TextStyle(fontSize: 14),
-                        ),
-                      ],
-                    ),
-                    RangeSlider(
-                      inactiveColor: Color(0xffE3E8EF),
-                      activeColor: Color(0xffCAA16C),
-                      min: minPrice,
-                      max: maxPrice,
-                      divisions: 100,
-                      labels: RangeLabels(
-                        '\₹ ${selectedMinPrice.toStringAsFixed(0)}',
-                        '\₹${selectedMaxPrice.toStringAsFixed(0)}',
-                      ),
-                      values: RangeValues(selectedMinPrice, selectedMaxPrice),
-                      onChanged: (RangeValues values) {
-                        setState(() {
-                          selectedMinPrice = values.start;
-                          selectedMaxPrice = values.end;
-                        });
-                      },
-                    ),
-                    Spacer(),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Center(
-                          child: InkResponse(
-                            onTap: () async{
-                             await GetProductcategoryList(
-                                widget.selectid,
-                                "",
-                                "",
-                               "",
-                              );
-
-                              setState(() {
-                                selectedMinPrice = 0;  // or null
-                                selectedMaxPrice = 0;  // or null
-                              });
-                              Navigator.pop(context);  // Close the filter modal
+                          Spacer(),
+                          InkWell(
+                            onTap: () {
+                              Navigator.of(context)
+                                  .pop(); // Close the BottomSheet when tapped
                             },
                             child: Container(
-                              width: w * 0.4,
-                              padding: EdgeInsets.all(12),
+                              padding: EdgeInsets.all(5),
+                              width: w * 0.06,
+                              height: w * 0.06,
                               decoration: BoxDecoration(
-                                color: Color(0xff110B0F),
-                                borderRadius: BorderRadius.circular(6),
+                                color: Color(0xffE5E5E5),
+                                borderRadius: BorderRadius.circular(100),
                               ),
                               child: Center(
-                                child: Text(
-                                  "Clear Filter",
-                                  style: TextStyle(
-                                    color: Color(0xffE7C6A0),
-                                    fontFamily: 'RozhaOne',
-                                    fontSize: 16,
-                                    height: 21.06 / 16,
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                  textAlign: TextAlign.center,
+                                child: Image.asset(
+                                  "assets/crossblue.png",
+                                  fit: BoxFit.contain,
+                                  width: w * 0.023,
+                                  height: w * 0.023,
+                                  color: Color(0xffCAA16C),
                                 ),
                               ),
                             ),
                           ),
+                        ],
+                      ),
+                      SizedBox(height: 24),
+                      // Price Range Slider
+                      Text(
+                        'Selected  Price Range',
+                        style: TextStyle(
+                          color: Color(0xff1C1D22),
+                          fontWeight: FontWeight.w500,
+                          fontSize: 16,
+                          fontFamily: 'RozhaOne',
+                          height: 18 / 16,
                         ),
-                        Center(
-                          child: InkResponse(
-                            onTap: () async {
-                              // Apply the filter and fetch the data
-                              await
-                              GetProductcategoryList(
-                                widget.selectid,
-                                "",
-                                selectedMinPrice.toInt(),
-                                selectedMaxPrice.toInt(),
-                              );
-
-
-
-
-                              // Close the filter modal after applying
-                              Navigator.pop(context);
-
-                              print("Applied Filter: Min Price = $selectedMinPrice, Max Price = $selectedMaxPrice");
-                            },
-                            child: Container(
-                              width: w * 0.4,
-                              padding: EdgeInsets.all(12),
-                              decoration: BoxDecoration(
-                                color: Color(0xff110B0F),
-                                borderRadius: BorderRadius.circular(6),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  "Apply",
-                                  style: TextStyle(
-                                    color: Color(0xffE7C6A0),
-                                    fontFamily: 'RozhaOne',
-                                    fontSize: 16,
-                                    height: 21.06 / 16,
-                                    fontWeight: FontWeight.w400,
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Min: \₹ ${selectedMinPrice.toStringAsFixed(0)}',
+                            style: TextStyle(fontSize: 14),
+                          ),
+                          Text(
+                            'Max: \₹ ${selectedMaxPrice.toStringAsFixed(0)}',
+                            style: TextStyle(fontSize: 14),
+                          ),
+                        ],
+                      ),
+                      RangeSlider(
+                        inactiveColor: Color(0xffE3E8EF),
+                        activeColor: Color(0xffCAA16C),
+                        min: minPrice,
+                        max: maxPrice,
+                        divisions: 100,
+                        labels: RangeLabels(
+                          '\₹ ${selectedMinPrice.toStringAsFixed(0)}',
+                          '\₹${selectedMaxPrice.toStringAsFixed(0)}',
+                        ),
+                        values: RangeValues(selectedMinPrice, selectedMaxPrice),
+                        onChanged: (RangeValues values) {
+                          setState(() {
+                            selectedMinPrice = values.start;
+                            selectedMaxPrice = values.end;
+                          });
+                        },
+                      ),
+                      Spacer(),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Center(
+                            child: InkResponse(
+                              onTap: () async{
+                               await GetProductcategoryList(
+                                  widget.selectid,
+                                  "",
+                                  "",
+                                 "",
+                                );
+              
+                                setState(() {
+                                  selectedMinPrice = 0;  // or null
+                                  selectedMaxPrice = 0;  // or null
+                                });
+                                Navigator.pop(context);  // Close the filter modal
+                              },
+                              child: Container(
+                                width: w * 0.4,
+                                padding: EdgeInsets.all(12),
+                                decoration: BoxDecoration(
+                                  color: Color(0xff110B0F),
+                                  borderRadius: BorderRadius.circular(6),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    "Clear Filter",
+                                    style: TextStyle(
+                                      color: Color(0xffE7C6A0),
+                                      fontFamily: 'RozhaOne',
+                                      fontSize: 16,
+                                      height: 21.06 / 16,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                    textAlign: TextAlign.center,
                                   ),
-                                  textAlign: TextAlign.center,
                                 ),
                               ),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-
-                    SizedBox(
-                      height: 10,
-                    )
-                  ],
+                          Center(
+                            child: InkResponse(
+                              onTap: () async {
+                                // Apply the filter and fetch the data
+                                await
+                                GetProductcategoryList(
+                                  widget.selectid,
+                                  "",
+                                  selectedMinPrice.toInt(),
+                                  selectedMaxPrice.toInt(),
+                                );
+              
+              
+              
+              
+                                // Close the filter modal after applying
+                                Navigator.pop(context);
+              
+                                print("Applied Filter: Min Price = $selectedMinPrice, Max Price = $selectedMaxPrice");
+                              },
+                              child: Container(
+                                width: w * 0.4,
+                                padding: EdgeInsets.all(12),
+                                decoration: BoxDecoration(
+                                  color: Color(0xff110B0F),
+                                  borderRadius: BorderRadius.circular(6),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    "Apply",
+                                    style: TextStyle(
+                                      color: Color(0xffE7C6A0),
+                                      fontFamily: 'RozhaOne',
+                                      fontSize: 16,
+                                      height: 21.06 / 16,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+              
+                      SizedBox(
+                        height: 10,
+                      )
+                    ],
+                  ),
                 ),
               ),
             );

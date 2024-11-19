@@ -46,6 +46,7 @@ class _AddAddressState extends State<AddAddress> {
     if(widget.type=='Edit'){
       GetAddressDetails(widget.productid);
     }
+    initConnectivity();
     _connectivitySubscription =
         _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
     super.initState();

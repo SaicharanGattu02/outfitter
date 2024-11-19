@@ -201,7 +201,8 @@ class _CartState extends State<Cart> {
                         Color color = hexToColor(cartItem.color ?? "");
                         return InkResponse(
                           onTap: (){
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => ProductDetailsScreen(productid: cartItem.id, category_id: ""),));
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => ProductDetailsScreen(productid: cartItem.product?.id??"", category_id: ""),));
+                            print('cartItem.id>>${cartItem.id}');
                           },
                           child: Container(
                             width: double.infinity,
