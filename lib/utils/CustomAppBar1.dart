@@ -21,7 +21,7 @@ class CustomApp extends StatelessWidget implements PreferredSizeWidget {
           children: [
             InkResponse(
               onTap: () {
-                Navigator.pop(context);
+                Navigator.pop(context,true);
               },
               child: Row(
                 children: [

@@ -1029,13 +1029,20 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                 ),
                               ),
                               InkResponse(
-                                onTap: () {
-                                  Navigator.push(
+                                onTap: () async {
+                                  var res= await  Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) => AddProductRating(id: productData?.id),
                                     ),
                                   );
+                                  if(res==true){
+                                    if(res==true){
+                                      final ProductdetailsProvider =
+                                      Provider.of<ProductDetailsProvider>(context, listen: false);
+                                      ProductdetailsProvider.fetchProductDetails(widget.productid);
+                                    }
+                                  }
                                 },
                                 child: Text(
                                   "Write review",
@@ -1055,8 +1062,13 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 InkResponse(
-                                  onTap: () {
-                                   Navigator.push(context, MaterialPageRoute(builder: (context) => AddProductRating(id: productData?.id??""),));
+                                  onTap: () async {
+                                  var res= await Navigator.push(context, MaterialPageRoute(builder: (context) => AddProductRating(id: productData?.id??""),));
+                                  if(res==true){
+                                    final ProductdetailsProvider =
+                                    Provider.of<ProductDetailsProvider>(context, listen: false);
+                                    ProductdetailsProvider.fetchProductDetails(widget.productid);
+                                  }
                                   },
                                   child: Container(
                                       height: 40,
@@ -1131,7 +1143,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                     children: [
                                       Column(
                                         children: [
-                                          for (int i = 1; i < 6; i++) ...[
+                                          for (int i = 5; i >0; i--) ...[
                                             Container(
                                               margin: EdgeInsets.only(bottom: 2),
                                               child: Row(
@@ -1158,12 +1170,13 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
                                             // Generate the rating progress bars
-                                            for (int i = 1; i <= 5; i++)
+                                           for (int i = 5; i >0; i--) ...[
                                               _buildRatingRow(
                                                 index: i.toString(),
                                                 percentage: productData?.ratingStats.ratingsGroup[i.toString()] ?? 0.0,
                                                 width: w,
                                               ),
+                                             ],
                                           ],
                                         ),
                                       ),

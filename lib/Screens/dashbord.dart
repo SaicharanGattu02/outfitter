@@ -104,15 +104,25 @@ class _DashbordState extends State<Dashbord> {
   Widget build(BuildContext context) {
     var w = MediaQuery.of(context).size.width;
     var h = MediaQuery.of(context).size.height;
-    return  WillPopScope(
+
+    return WillPopScope(
       onWillPop: () async {
-        SystemNavigator.pop();
-        return Future.value(false); // Return false to prevent the default back navigation
+        if (_selectedIndex == 0) {
+          // If already at the first page, exit the app
+          SystemNavigator.pop();
+          return Future.value(false); // Prevent the default back navigation
+        } else {
+          // Otherwise, go to the previous page in the PageView
+          _pageController.previousPage(
+            duration: Duration(milliseconds: 300),
+            curve: Curves.ease,
+          );
+          return Future.value(false); // Prevent the default back navigation
+        }
       },
       child: (isDeviceConnected == "ConnectivityResult.wifi" ||
           isDeviceConnected == "ConnectivityResult.mobile")
-          ?
-      Scaffold(
+          ? Scaffold(
         key: _scaffoldKey,
         body: PageView(
           controller: _pageController,
@@ -182,12 +192,13 @@ class _DashbordState extends State<Dashbord> {
                 label: 'CATEGORY',
               ),
               BottomNavigationBarItem(
-                icon:Icon(Icons.person_outline_rounded,
+                icon: Icon(
+                  Icons.person_outline_rounded,
                   size: 25,
-                    color: _selectedIndex == 3
-                        ? const Color(0xFFE7C6A0)
-                        : const Color(0xFF617C9D),),
-
+                  color: _selectedIndex == 3
+                      ? const Color(0xFFE7C6A0)
+                      : const Color(0xFF617C9D),
+                ),
                 label: 'PROFILE',
               ),
             ],
@@ -195,7 +206,9 @@ class _DashbordState extends State<Dashbord> {
             onTap: onTabTapped, // Change the selected tab
           ),
         ),
-      ): NoInternetWidget(),
+      )
+          : NoInternetWidget(),
     );
   }
+
 }
