@@ -9,38 +9,38 @@ import 'ProductListProvider.dart';
 class ProductDetailsProvider with ChangeNotifier {
   ProductDetails? _productData;
   bool? _isInWishlist;
-  bool _isLoading = false;  // Loading state
+  bool _isLoading = false;
 
   // Getters
   ProductDetails? get productData => _productData;
   bool? get isInWishlist => _isInWishlist;
-  bool get isLoading => _isLoading;  // Expose the loading state
+  bool get isLoading => _isLoading;
 
   // Fetch product details from the repository using the productId
   Future<void> fetchProductDetails(String productId) async {
-    _isLoading = true;  // Set isLoading to true before starting the fetch
-    notifyListeners();  // Notify listeners that loading has started
+    _isLoading = true;
+    notifyListeners();
 
     try {
-      var response = await Userapi.getProductDetails(productId);  // Fetch product details
+      var response = await Userapi.getProductDetails(productId);
       _productData = response?.data;
       _isInWishlist = _productData?.isInWishlist ?? false;
     } catch (e) {
-      throw Exception('Failed to fetch product details: $e');  // Handle errors
+      throw Exception('Failed to fetch product details: $e');
     } finally {
-      _isLoading = false;  // Set isLoading to false after the fetch
-      notifyListeners();  // Notify listeners that loading has finished
+      _isLoading = false;
+      notifyListeners();
     }
   }
 
-  // Update the wishlist status of the current product
-  void toggleWishlistStatus(ProductListProvider productListProvider) {
+  // Toggle wishlist status (to be called when user interacts with the UI)
+  void toggleWishlistStatus() {
     if (_productData == null) return;
     bool newStatus = !(isInWishlist ?? false);  // Toggle wishlist status
-    productListProvider.updateProductWishlistStatus(_productData?.id ?? "", newStatus);
-    // Update local state to reflect the change
+    // Update local state
     _isInWishlist = newStatus;
     notifyListeners();
   }
 }
+
 

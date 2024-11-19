@@ -542,16 +542,14 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                 context
                                     .read<WishlistProvider>()
                                     .removeFromWishlist(widget.productid);
-                                productDetailsProvider.toggleWishlistStatus(
-                                    context.read<ProductListProvider>());
+                                productDetailsProvider.toggleWishlistStatus();
                               } else {
                                 // Add to wishlist
                                 context
                                     .read<WishlistProvider>()
                                     .addToWishlist(widget.productid);
 
-                                productDetailsProvider.toggleWishlistStatus(
-                                    context.read<ProductListProvider>());
+                                productDetailsProvider.toggleWishlistStatus();
                               }
                             },
                             child: Container(

@@ -256,7 +256,7 @@ class _ProdcutListScreenState extends State<ProdcutListScreen> {
                       crossAxisCount: 2,
                       crossAxisSpacing: 8.0,
                       mainAxisSpacing: 8.0,
-                      childAspectRatio:h* 0.00082,
+                      childAspectRatio:w* 0.001655,
                     ),
                     itemCount: product_list.length,
                     itemBuilder: (context, index) {
