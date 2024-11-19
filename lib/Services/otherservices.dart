@@ -72,6 +72,7 @@ class NoInternetWidget extends StatelessWidget {
                   fontSize: 16,
                   fontFamily: 'RozhaOne',
                   fontWeight: FontWeight.w400,
+
                 ),
               ),
             ),
