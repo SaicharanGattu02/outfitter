@@ -1,3 +1,4 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:outfitter/Screens/Cart.dart';
@@ -5,8 +6,9 @@ import 'package:outfitter/Screens/Category.dart';
 import 'package:outfitter/Screens/DashHome.dart';
 import 'package:outfitter/Screens/Profile.dart';
 import 'package:outfitter/Screens/WishList.dart';
+import 'dart:developer' as developer;
 
-
+import '../Services/otherservices.dart';
 import 'ProdcutListScreen.dart';
 
 
@@ -46,16 +48,63 @@ class _DashbordState extends State<Dashbord> {
     super.dispose();
   }
 
+ @override
+  void initState() {
+    initConnectivity();
+    super.initState();
+  }
+
+  var isDeviceConnected = "";
+
+  List<ConnectivityResult> _connectionStatus = [ConnectivityResult.none];
+  final Connectivity _connectivity = Connectivity();
+
+  Future<void> initConnectivity() async {
+    List<ConnectivityResult> result;
+    try {
+
+      result = await _connectivity.checkConnectivity();
+    } on PlatformException catch (e) {
+      developer.log('Couldn\'t check connectivity status', error: e);
+      return;
+    }
+
+    if (!mounted) {
+      return Future.value(null);
+    }
+
+
+    return _updateConnectionStatus(result);
+  }
+
+  Future<void> _updateConnectionStatus(List<ConnectivityResult> result) async {
+    setState(() {
+      _connectionStatus = result;
+      for (int i = 0; i < _connectionStatus.length; i++) {
+        setState(() {
+          isDeviceConnected = _connectionStatus[i].toString();
+          print("isDeviceConnected:${isDeviceConnected}");
+        });
+      }
+    });
+    print('Connectivity changed: $_connectionStatus');
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
     var w = MediaQuery.of(context).size.width;
     var h = MediaQuery.of(context).size.height;
-    return WillPopScope(
+    return  WillPopScope(
       onWillPop: () async {
         SystemNavigator.pop();
         return Future.value(false); // Return false to prevent the default back navigation
       },
-      child: Scaffold(
+      child: (isDeviceConnected == "ConnectivityResult.wifi" ||
+          isDeviceConnected == "ConnectivityResult.mobile")
+          ?
+      Scaffold(
         key: _scaffoldKey,
         body: PageView(
           controller: _pageController,
@@ -138,7 +187,7 @@ class _DashbordState extends State<Dashbord> {
             onTap: onTabTapped, // Change the selected tab
           ),
         ),
-      ),
+      ): NoInternetWidget(),
     );
   }
 }

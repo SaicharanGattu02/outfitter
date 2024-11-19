@@ -1,17 +1,18 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:outfitter/Screens/Cart.dart';
 import 'package:outfitter/Screens/CustomizeBar.dart';
 import 'package:outfitter/Screens/ProductDetailsScreen.dart';
 import 'package:outfitter/Screens/UploderProfile.dart';
 import 'package:outfitter/providers/CategoriesProvider.dart';
 import 'package:provider/provider.dart';
-
 import '../Model/ProductsListModel.dart';
 import '../Services/UserApi.dart';
 import '../providers/CartProvider.dart';
 import '../providers/ProductListProvider.dart';
 import '../providers/WishlistProvider.dart';
-import '../utils/CustomSnackBar.dart';
+
 import 'ProdcutListScreen.dart';
 import 'Orders.dart';
 import 'Profile.dart';
@@ -62,11 +63,18 @@ class _DashHomeState extends State<DashHome> {
     });
   }
 
+
+
   @override
   void initState() {
+
     GetCategoriesList();
     super.initState();
   }
+
+
+
+
 
   Future<void> GetCategoriesList() async {
     final categories_list_provider =
