@@ -448,6 +448,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                             fontSize: 16,
                             fontWeight: FontWeight.w400,
                           ),
+                          maxLines: 2,
                         ),
                         Row(
                           children: [

@@ -97,7 +97,7 @@ class _AddAddressState extends State<AddAddress> {
       _validatename =
           _nameController.text.isEmpty ? "Please enter a valid full name" : "";
       _validatephone =
-          _PhoneController.text.isEmpty ? "Please enter a phonenumber" : "";
+          _PhoneController.text.isEmpty || _PhoneController.text.length<10 ? "Please enter a valid phonenumber" : "";
       _validatehouse = _HouseNumberController.text.isEmpty
           ? "Please enter a housenumber"
           : "";

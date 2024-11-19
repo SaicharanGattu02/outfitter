@@ -66,12 +66,38 @@ class CartList {
         product = json['product'] != null ? Product.fromJson(json['product']) : null,
         quantity = json['quantity'] ?? 0,
         amount = json['amount'] ?? 0,
-        sleeve = (json['sleeve'] as List?)?.map((item) => Sleeve.fromJson(item)).toList() ?? [],
-        neck = (json['neck'] as List?)?.map((item) => Neck.fromJson(item)).toList() ?? [],
-        placket = (json['placket'] as List?)?.map((item) => Placket.fromJson(item)).toList() ?? [],
-        pleat = (json['pleat'] as List?)?.map((item) => Pleat.fromJson(item)).toList() ?? [],
+  // Ensure these fields are either null or valid lists
+        sleeve = _parseList<Sleeve>(json['sleeve']),
+        neck = _parseList<Neck>(json['neck']),
+        placket = _parseList<Placket>(json['placket']),
+        pleat = _parseList<Pleat>(json['pleat']),
         size = json['size'] ?? "",
         color = json['color'] ?? "";
+
+  // A helper function to safely parse lists, ensuring the value is either null or a valid list.
+  static List<T> _parseList<T>(dynamic value) {
+    if (value == null) {
+      return [];
+    }
+    if (value is List) {
+      return value.map((item) => _fromJson<T>(item)).toList();
+    }
+    return [];
+  }
+
+  // A helper function to handle parsing of items from JSON for different types
+  static T _fromJson<T>(dynamic json) {
+    if (T == Sleeve) {
+      return Sleeve.fromJson(json) as T;
+    } else if (T == Neck) {
+      return Neck.fromJson(json) as T;
+    } else if (T == Placket) {
+      return Placket.fromJson(json) as T;
+    } else if (T == Pleat) {
+      return Pleat.fromJson(json) as T;
+    }
+    throw Exception('Unknown type: $T');
+  }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
@@ -90,6 +116,8 @@ class CartList {
     return data;
   }
 }
+
+
 class Product {
   String? id;
   String? title;
