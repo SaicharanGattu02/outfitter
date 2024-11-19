@@ -7,6 +7,11 @@ import 'package:provider/provider.dart';
 import '../utils/CustomAppBar1.dart';
 import '../utils/CustomSnackBar.dart';
 import '../utils/ShakeWidget.dart';
+import 'dart:developer' as developer;
+import 'dart:async';
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:flutter/services.dart';
+import '../Services/otherservices.dart';
 
 class AddAddress extends StatefulWidget {
   String type;
@@ -41,7 +46,47 @@ class _AddAddressState extends State<AddAddress> {
     if(widget.type=='Edit'){
       GetAddressDetails(widget.productid);
     }
+    _connectivitySubscription =
+        _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
     super.initState();
+  }
+
+  late StreamSubscription<List<ConnectivityResult>> _connectivitySubscription;
+
+  var isDeviceConnected = "";
+
+  List<ConnectivityResult> _connectionStatus = [ConnectivityResult.none];
+  final Connectivity _connectivity = Connectivity();
+
+  Future<void> initConnectivity() async {
+    List<ConnectivityResult> result;
+    try {
+
+      result = await _connectivity.checkConnectivity();
+    } on PlatformException catch (e) {
+      developer.log('Couldn\'t check connectivity status', error: e);
+      return;
+    }
+
+    if (!mounted) {
+      return Future.value(null);
+    }
+
+
+    return _updateConnectionStatus(result);
+  }
+
+  Future<void> _updateConnectionStatus(List<ConnectivityResult> result) async {
+    setState(() {
+      _connectionStatus = result;
+      for (int i = 0; i < _connectionStatus.length; i++) {
+        setState(() {
+          isDeviceConnected = _connectionStatus[i].toString();
+          print("isDeviceConnected:${isDeviceConnected}");
+        });
+      }
+    });
+    print('Connectivity changed: $_connectionStatus');
   }
 
   void _validateFields() {
@@ -157,7 +202,11 @@ class _AddAddressState extends State<AddAddress> {
   Widget build(BuildContext context) {
     var h = MediaQuery.of(context).size.height;
     var w = MediaQuery.of(context).size.width;
-    return Scaffold(
+    return
+      (isDeviceConnected == "ConnectivityResult.wifi" ||
+          isDeviceConnected == "ConnectivityResult.mobile")
+          ?
+      Scaffold(
       appBar: CustomApp(title: '${widget.type} Address', w: w),
       body: SingleChildScrollView(
         child: Container(
@@ -952,6 +1001,6 @@ class _AddAddressState extends State<AddAddress> {
           ),
         ),
       ),
-    );
+    ):NoInternetWidget();
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:outfitter/AddRating.dart';
 import 'package:outfitter/Screens/ReviewListScreen.dart';
 import 'package:outfitter/Screens/UploderProfile.dart';
@@ -10,9 +11,14 @@ import 'package:provider/provider.dart';
 
 import '../Model/ProductsDetailsModel.dart';
 import '../Services/UserApi.dart';
+import '../Services/otherservices.dart';
 import '../providers/WishlistProvider.dart';
 import '../utils/CustomAppBar1.dart';
 import 'Cart.dart';
+import 'dart:developer' as developer;
+import 'dart:async';
+import 'package:connectivity_plus/connectivity_plus.dart';
+
 
 class ProductDetailsScreen extends StatefulWidget {
   String productid;
@@ -139,7 +145,48 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   void initState() {
     super.initState();
     GetProductDetails();
-    print("ID:${widget.productid}");
+    initConnectivity();
+    _connectivitySubscription =
+        _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
+  }
+
+
+  late StreamSubscription<List<ConnectivityResult>> _connectivitySubscription;
+
+  var isDeviceConnected = "";
+
+  List<ConnectivityResult> _connectionStatus = [ConnectivityResult.none];
+  final Connectivity _connectivity = Connectivity();
+
+  Future<void> initConnectivity() async {
+    List<ConnectivityResult> result;
+    try {
+
+      result = await _connectivity.checkConnectivity();
+    } on PlatformException catch (e) {
+      developer.log('Couldn\'t check connectivity status', error: e);
+      return;
+    }
+
+    if (!mounted) {
+      return Future.value(null);
+    }
+
+
+    return _updateConnectionStatus(result);
+  }
+
+  Future<void> _updateConnectionStatus(List<ConnectivityResult> result) async {
+    setState(() {
+      _connectionStatus = result;
+      for (int i = 0; i < _connectionStatus.length; i++) {
+        setState(() {
+          isDeviceConnected = _connectionStatus[i].toString();
+          print("isDeviceConnected:${isDeviceConnected}");
+        });
+      }
+    });
+    print('Connectivity changed: $_connectionStatus');
   }
 
   Future<void> GetProductDetails() async {
@@ -293,7 +340,12 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   Widget build(BuildContext context) {
     var w = MediaQuery.of(context).size.width;
     var h = MediaQuery.of(context).size.height;
-    return Scaffold(
+    return
+      (isDeviceConnected == "ConnectivityResult.wifi" ||
+          isDeviceConnected == "ConnectivityResult.mobile")
+          ?
+
+      Scaffold(
       appBar: CustomApp(title: 'Product Details', w: w),
       body: Consumer<ProductDetailsProvider>(
           builder: (context, productDetailsProvider, child) {
@@ -1554,7 +1606,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           );
         }
       }),
-    );
+    ): NoInternetWidget();
   }
 
   Widget _buildRatingRow({

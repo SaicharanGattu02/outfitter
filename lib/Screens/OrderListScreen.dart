@@ -5,6 +5,12 @@ import '../Model/OrdersListModel.dart';
 import '../Services/UserApi.dart';
 import '../utils/CustomAppBar1.dart';
 import '../utils/CustomSnackBar.dart';
+import 'dart:developer' as developer;
+import 'dart:async';
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:flutter/services.dart';
+import '../Services/otherservices.dart';
+
 
 class OrderListScreen extends StatefulWidget {
   const OrderListScreen({super.key});
@@ -37,8 +43,52 @@ class _OrderListScreenState extends State<OrderListScreen> {
     filteredOrders = orders_list; // Initially show all orders
     _searchController.addListener(_filterOrders); // Listen to changes in the search bar
     OrdersListApi('last_30_days   '); // Fetch orders list
+    initConnectivity();
+    _connectivitySubscription =
+        _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
     super.initState();
   }
+
+
+  late StreamSubscription<List<ConnectivityResult>> _connectivitySubscription;
+
+  var isDeviceConnected = "";
+
+  List<ConnectivityResult> _connectionStatus = [ConnectivityResult.none];
+  final Connectivity _connectivity = Connectivity();
+
+  Future<void> initConnectivity() async {
+    List<ConnectivityResult> result;
+    try {
+
+      result = await _connectivity.checkConnectivity();
+    } on PlatformException catch (e) {
+      developer.log('Couldn\'t check connectivity status', error: e);
+      return;
+    }
+
+    if (!mounted) {
+      return Future.value(null);
+    }
+
+
+    return _updateConnectionStatus(result);
+  }
+
+  Future<void> _updateConnectionStatus(List<ConnectivityResult> result) async {
+    setState(() {
+      _connectionStatus = result;
+      for (int i = 0; i < _connectionStatus.length; i++) {
+        setState(() {
+          isDeviceConnected = _connectionStatus[i].toString();
+          print("isDeviceConnected:${isDeviceConnected}");
+        });
+      }
+    });
+    print('Connectivity changed: $_connectionStatus');
+  }
+
+
   final spinkits=Spinkits1();
   void _filterOrders() {
     setState(() {
@@ -84,7 +134,11 @@ class _OrderListScreenState extends State<OrderListScreen> {
   Widget build(BuildContext context) {
     var w = MediaQuery.of(context).size.width;
     var h = MediaQuery.of(context).size.height;
-    return Scaffold(
+    return
+      (isDeviceConnected == "ConnectivityResult.wifi" ||
+          isDeviceConnected == "ConnectivityResult.mobile")
+          ?
+      Scaffold(
         appBar: CustomApp(title: 'Order List', w: w),
         body:isLoading?Center(child:CircularProgressIndicator(color: Color(0xffE7C6A0),)):
         SingleChildScrollView(
@@ -357,7 +411,7 @@ class _OrderListScreenState extends State<OrderListScreen> {
                   ]
                 ]),
           ),
-        ));
+        )):NoInternetWidget();
   }  void _bottomSheet(
       BuildContext context,
       ) {

@@ -9,6 +9,11 @@ import '../utils/CustomAppBar1.dart';
 import '../utils/constants.dart';
 import 'AddAddress.dart';
 import 'dashbord.dart';
+import 'dart:developer' as developer;
+import 'dart:async';
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:flutter/services.dart';
+import '../Services/otherservices.dart';
 
 class AddressListScreen extends StatefulWidget {
 
@@ -21,8 +26,51 @@ class _AddressListScreenState extends State<AddressListScreen> {
   @override
   void initState() {
     GetAddressList();
+    initConnectivity();
+    _connectivitySubscription =
+        _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
     super.initState();
   }
+
+
+  late StreamSubscription<List<ConnectivityResult>> _connectivitySubscription;
+
+  var isDeviceConnected = "";
+
+  List<ConnectivityResult> _connectionStatus = [ConnectivityResult.none];
+  final Connectivity _connectivity = Connectivity();
+
+  Future<void> initConnectivity() async {
+    List<ConnectivityResult> result;
+    try {
+
+      result = await _connectivity.checkConnectivity();
+    } on PlatformException catch (e) {
+      developer.log('Couldn\'t check connectivity status', error: e);
+      return;
+    }
+
+    if (!mounted) {
+      return Future.value(null);
+    }
+
+
+    return _updateConnectionStatus(result);
+  }
+
+  Future<void> _updateConnectionStatus(List<ConnectivityResult> result) async {
+    setState(() {
+      _connectionStatus = result;
+      for (int i = 0; i < _connectionStatus.length; i++) {
+        setState(() {
+          isDeviceConnected = _connectionStatus[i].toString();
+          print("isDeviceConnected:${isDeviceConnected}");
+        });
+      }
+    });
+    print('Connectivity changed: $_connectionStatus');
+  }
+
 
   Future<void> GetAddressList() async {
     final address_list_provider =
@@ -48,7 +96,12 @@ class _AddressListScreenState extends State<AddressListScreen> {
   Widget build(BuildContext context) {
     var h = MediaQuery.of(context).size.height;
     var w = MediaQuery.of(context).size.width;
-    return Scaffold(
+    return
+      (isDeviceConnected == "ConnectivityResult.wifi" ||
+          isDeviceConnected == "ConnectivityResult.mobile")
+          ?
+
+      Scaffold(
       appBar: CustomApp(title: 'AddressList', w: w),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -322,7 +375,7 @@ class _AddressListScreenState extends State<AddressListScreen> {
           ],
         ),
       ),
-    );
+    ):NoInternetWidget();
   }
 
 }

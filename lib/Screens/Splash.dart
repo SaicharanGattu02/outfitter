@@ -1,8 +1,13 @@
+import 'dart:async';
+
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:outfitter/Authentication/Login.dart';
 import 'package:outfitter/Authentication/Register.dart';
 import 'package:outfitter/Screens/dashbord.dart';
-
+import 'dart:developer' as developer;
+import '../Services/otherservices.dart';
 import '../utils/Preferances.dart';
 
 
@@ -16,11 +21,52 @@ class Splash extends StatefulWidget {
 class _SplashState extends State<Splash> {
   String token = "";
 
+  List<ConnectivityResult> _connectionStatus = [ConnectivityResult.none];
+  final Connectivity _connectivity = Connectivity();
+  late StreamSubscription<List<ConnectivityResult>> _connectivitySubscription;
+  var isDeviceConnected = "";
+
   @override
   void initState() {
     super.initState();
+    initConnectivity();
+    _connectivitySubscription =
+        _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
     fetchDetails();
   }
+
+  Future<void> initConnectivity() async {
+    List<ConnectivityResult> result;
+    try {
+
+      result = await _connectivity.checkConnectivity();
+    } on PlatformException catch (e) {
+      developer.log('Couldn\'t check connectivity status', error: e);
+      return;
+    }
+
+    if (!mounted) {
+      return Future.value(null);
+    }
+
+
+    return _updateConnectionStatus(result);
+  }
+
+  Future<void> _updateConnectionStatus(List<ConnectivityResult> result) async {
+    setState(() {
+      _connectionStatus = result;
+      for (int i = 0; i < _connectionStatus.length; i++) {
+        setState(() {
+          isDeviceConnected = _connectionStatus[i].toString();
+          print("isDeviceConnected:${isDeviceConnected}");
+        });
+      }
+    });
+    print('Connectivity changed: $_connectionStatus');
+  }
+
+
 
   fetchDetails() async {
     final Token = await PreferenceService().getString("token") ?? "";
@@ -49,7 +95,10 @@ class _SplashState extends State<Splash> {
     var h = MediaQuery.of(context).size.height;
     var w = MediaQuery.of(context).size.width;
 
-    return Scaffold(
+    return (isDeviceConnected == "ConnectivityResult.wifi" ||
+        isDeviceConnected == "ConnectivityResult.mobile")
+        ?
+      Scaffold(
 
       body: Center(
         child: Container(
@@ -69,6 +118,6 @@ class _SplashState extends State<Splash> {
           ),
         ),
       ),
-    );
+    ): NoInternetWidget();
   }
 }

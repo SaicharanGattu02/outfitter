@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -48,11 +50,17 @@ class _DashbordState extends State<Dashbord> {
     super.dispose();
   }
 
+
+
+  late StreamSubscription<List<ConnectivityResult>> _connectivitySubscription;
  @override
   void initState() {
     initConnectivity();
+    _connectivitySubscription =
+        _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
     super.initState();
   }
+
 
   var isDeviceConnected = "";
 
