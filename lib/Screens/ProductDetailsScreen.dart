@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:outfitter/AddRating.dart';
+import 'package:outfitter/Screens/ReviewListScreen.dart';
 import 'package:outfitter/Screens/UploderProfile.dart';
 import 'package:outfitter/providers/CartProvider.dart';
 import 'package:outfitter/providers/ProductDetailsProvider.dart';
@@ -909,7 +910,6 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       SizedBox(height: h * 0.01),
                       Divider(
                           thickness: 1, height: 1, color: Color(0xffEEF2F6)),
-                      if (productData?.ratingStats.averageRating != 0.0) ...[
                         SizedBox(height: h * 0.01),
                         Row(
                           children: [
@@ -945,6 +945,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                         ),
                         SizedBox(height: h * 0.01),
                         if (_isReviewsVisible) ...[
+                    if(productData?.ratingStats.averageRating!=0.0)...[
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -961,11 +962,11 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                               InkResponse(
                                 onTap: () {
                                   Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => AddProductRating(
-                                            id: productData?.id),
-                                      ));
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => AddProductRating(id: productData?.id),
+                                    ),
+                                  );
                                 },
                                 child: Text(
                                   "Write review",
@@ -980,154 +981,246 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                               ),
                             ],
                           ),
-                          SizedBox(
-                            height: 15,
-                          ),
-                          Row(
-                            children: [
-                              Container(
-                                width: w * 0.4,
-                                decoration: BoxDecoration(),
-                                child: Center(
+                          ]else...[
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                InkResponse(
+                                  onTap: () {
+                                   Navigator.push(context, MaterialPageRoute(builder: (context) => AddProductRating(id: productData?.id??""),));
+                                  },
+                                  child: Container(
+                                      height: 40,
+                                      width: w * 0.88,
+                                      margin: EdgeInsets.symmetric(vertical: 10),
+                                      decoration: BoxDecoration(
+                                          color: Color(0xff110B0F),
+                                          borderRadius: BorderRadius.circular(8,)),
+                                      child: Center(
+                                        child:
+                                        Text(
+                                          "Write a Review",
+                                          style: TextStyle(
+                                              fontFamily: "RozhaOne",
+                                              color: Color(0xffCAA16C),
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 18),
+                                        ),
+                                      )),
+                                ),
+                              ],
+                            )
+                            ],
+                          if(productData?.ratingStats.averageRating!=0.0)...[
+                            SizedBox(height: 15),
+                            Row(
+                              children: [
+                                Container(
+                                  width: w * 0.4,
+                                  decoration: BoxDecoration(),
+                                  child: Center(
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Column(
+                                          children: [
+                                            Text(
+                                              productData?.ratingStats.averageRating.toString() ?? '',
+                                              style: TextStyle(
+                                                color: Color(0xff110B0F),
+                                                fontFamily: 'RozhaOne',
+                                                fontSize: 70,
+                                                fontWeight: FontWeight.w400,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.only(top: 10),
+                                          child: Icon(
+                                            size: 22,
+                                            Icons.star_rate_rounded,
+                                            color: Colors.orangeAccent,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                Spacer(),
+                                Container(
+                                  height: 115,
+                                  width: w * 0.001,
+                                  color: Color(0xff000000),
+                                ),
+                                Spacer(),
+                                Container(
+                                  width: w * 0.5,
+                                  padding: const EdgeInsets.only(left: 10.0),
                                   child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
                                       Column(
                                         children: [
-                                          Text(
-                                            productData
-                                                    ?.ratingStats.averageRating
-                                                    .toString() ??
-                                                '',
-                                            style: TextStyle(
-                                              color: Color(0xff110B0F),
-                                              fontFamily: 'RozhaOne',
-                                              fontSize: 70,
-                                              fontWeight: FontWeight.w400,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.only(top: 10),
-                                        child: Icon(
-                                          size: 22,
-                                          Icons.star_rate_rounded,
-                                          color: Colors.orangeAccent,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              Spacer(),
-                              Container(
-                                height: 115,
-                                width: w * 0.001,
-                                color: Color(0xff000000),
-                              ),
-                              Spacer(),
-                              Container(
-                                width: w * 0.5,
-                                padding: const EdgeInsets.only(left: 10.0),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Column(
-                                      children: [
-                                        for (int i = 5; i > 0; i--) ...[
-                                          Container(
-                                              margin:
-                                                  EdgeInsets.only(bottom: 2),
+                                          for (int i = 1; i < 6; i++) ...[
+                                            Container(
+                                              margin: EdgeInsets.only(bottom: 2),
                                               child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.start,
+                                                mainAxisAlignment: MainAxisAlignment.start,
                                                 children: [
-                                                  Text("$i",
-                                                      style: TextStyle(
-                                                          fontFamily: "Inter",
-                                                          fontSize: 14.5)),
+                                                  Text(
+                                                    "$i",
+                                                    style: TextStyle(fontFamily: "Inter", fontSize: 14.5),
+                                                  ),
                                                   Icon(
                                                     size: 12,
                                                     Icons.star_rate_rounded,
                                                     color: Colors.orangeAccent,
                                                   ),
                                                 ],
-                                              ))
-                                        ],
-                                      ],
-                                    ),
-                                    // Assuming this is part of your widget where you want to display the ratings
-                                    SizedBox(
-                                      width: w * 0.4,
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          // Iterate over the ratingsGroup map to generate the progress bars
-                                          for (int i = 1; i <= 5; i++)
-                                            _buildRatingRow(
-                                              index: i
-                                                  .toString(), // Rating group '1', '2', ..., '5'
-                                              percentage: productData
-                                                          ?.ratingStats
-                                                          .ratingsGroup[
-                                                      i.toString()] ??
-                                                  0.0,
-                                              width:
-                                                  w, // Assuming you have a 'w' width variable for scaling
+                                              ),
                                             ),
+                                          ],
                                         ],
                                       ),
-                                    ),
-                                  ],
+                                      SizedBox(
+                                        width: w * 0.4,
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            // Generate the rating progress bars
+                                            for (int i = 1; i <= 5; i++)
+                                              _buildRatingRow(
+                                                index: i.toString(),
+                                                percentage: productData?.ratingStats.ratingsGroup[i.toString()] ?? 0.0,
+                                                width: w,
+                                              ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
+                              ],
+                            ),
+                            SizedBox(height: 10),
+                            InkWell(
+                              onTap: (){
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => ReviewsListScreen(productID: productData?.id??"",),));
+                              },
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Text(
+                                    "See All Reviews",
+                                    style: TextStyle(
+                                      color: Color(0xff088AB2),
+                                      fontFamily: 'Inter',
+                                      fontSize: 14,
+                                      height: 19.36 / 14,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          // ListView.builder(
-                          //   itemCount: productData?.recentReviews.length,
-                          //   physics: NeverScrollableScrollPhysics(),
-                          //   itemBuilder: (context, index) {
-                          //     var data= productData?.recentReviews[index];
-                          //     return Padding(
-                          //       padding: const EdgeInsets.all(8.0),
-                          //       child: Row(
-                          //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          //         children: [
-                          //           Text(
-                          //             data?.customer ?? '',
-                          //             style: TextStyle(
-                          //               color: Color(0xff121926),
-                          //               fontFamily: 'Inter',
-                          //               fontSize: 14,
-                          //               height: 19.36 / 14,
-                          //               fontWeight: FontWeight.w500,
-                          //             ),
-                          //           ),
-                          //           Text(
-                          //             "Posted on ${data?.createdAt ?? ''}",
-                          //             style: TextStyle(
-                          //               color: Color(0xff617C9D),
-                          //               fontFamily: 'Inter',
-                          //               fontSize: 12,
-                          //               height: 19.36 / 12,
-                          //               fontWeight: FontWeight.w500,
-                          //             ),
-                          //           ),
-                          //         ],
-                          //       ),
-                          //     );
-                          //   },
-                          // ),
+                            ),
+                          ],
+
+                          if (productData?.recentReviews != null && productData!.recentReviews.isNotEmpty) ...[
+                            SizedBox(
+                              height: 150, // Set a specific height for the horizontal ListView
+                              child: ListView.builder(
+                                itemCount: productData.recentReviews.length ?? 0,
+                                scrollDirection: Axis.horizontal, // Enable horizontal scrolling
+                                physics: AlwaysScrollableScrollPhysics(),
+                                itemBuilder: (context, index) {
+                                  var data = productData.recentReviews[index];
+                                  return Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Card(
+                                      elevation: 4.0, // Add shadow/elevation to the card
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10.0), // Rounded corners
+                                      ),
+                                      child: Container(
+                                        width: 300, // Adjust width as needed
+                                        padding: EdgeInsets.all(12), // Padding inside the card
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          children: [
+                                            Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              children: [
+                                                // Name wrapped with an Expanded widget to handle overflow
+                                                Expanded(
+                                                  child: Text(
+                                                    "${data.customer ?? ''}",
+                                                    style: TextStyle(
+                                                      color: Color(0xff121926),
+                                                      fontFamily: 'RozhaOne',
+                                                      fontSize: 14,
+                                                      height: 19.36 / 14,
+                                                      fontWeight: FontWeight.w500,
+                                                    ),
+                                                    maxLines: 1, // Allow the text to span multiple lines
+                                                    overflow: TextOverflow.ellipsis, // Ellipsis for overflow text
+                                                    softWrap: true, // Ensure text wraps to the next line
+                                                  ),
+                                                ),
+                                                SizedBox(height: 5), // Space between customer and date
+                                                Text(
+                                                  "Posted on: ${data.createdAt ?? ''}",
+                                                  style: TextStyle(
+                                                    color: Color(0xff617C9D),
+                                                    fontFamily: 'RozhaOne',
+                                                    fontSize: 15,
+                                                    height: 19.36 / 12,
+                                                    fontWeight: FontWeight.w500,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            SizedBox(height: 5,),
+                                            if (data.rating != 0.0) ...[
+                                              Row(
+                                                children: List.generate(5, (starIndex) {
+                                                  int ratingValue = int.tryParse(data.rating
+                                                      .toString() ?? "") ?? 0;
+                                                  return Icon(
+                                                    starIndex < ratingValue
+                                                        ? Icons.star
+                                                        : Icons.star_border,
+                                                    color: Color(0xffF79009),
+                                                    size: 14,
+                                                  );
+                                                }),
+                                              ),
+                                            ],
+                                            SizedBox(height: 5,),
+                                            Text("${data.comment ?? ''}kbm lkg kg lkgnlokgjlkg lkgjre glkrgjreg lkrgnerolgknv ljnfa kjabgf kjbfg kjwefbrfgjbk ",
+                                              style: TextStyle(
+                                                color: Color(0xff121926),
+                                                fontFamily: 'RozhaOne',
+                                                fontSize: 14,
+                                                height: 19.36 / 14,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                              maxLines: 2,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                          ],
+
                         ],
                         SizedBox(height: h * 0.01),
                         Divider(
                             thickness: 1, height: 1, color: Color(0xffEEF2F6)),
-                      ],
                       SizedBox(height: h * 0.03),
                       Consumer<ProductListProvider>(
                           builder: (context, profileProvider, child) {

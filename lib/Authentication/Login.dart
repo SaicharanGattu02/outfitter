@@ -43,14 +43,7 @@ class _LoginState extends State<Login> {
             Navigator.push(context, MaterialPageRoute(builder: (context) => Otp(mobileNumber: _phoneController.text)));
           }else{
             _loading=false;
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text(
-                data.settings?.message??"",
-                style: TextStyle(color: Color(0xff000000)),
-              ),
-              duration: Duration(seconds: 1),
-              backgroundColor: Color(0xFFCDE2FB),
-            ));
+            CustomSnackBar.show(context, "${data.settings?.message??""}");
           }
         })
       }

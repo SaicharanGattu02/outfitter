@@ -59,16 +59,7 @@ class _OtpState extends State<Otp> {
           Navigator.push(context, MaterialPageRoute(builder: (context)=>Dashbord()));
         }else{
           _isLoading=false;
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text(
-              res.settings?.message??"",
-              style: TextStyle(color: Color(0xffffffff),
-                fontFamily: "RozhaOne"
-              ),
-            ),
-            duration: Duration(seconds: 1),
-            backgroundColor: Color(0xFF000000),
-          ));
+          CustomSnackBar.show(context, "${res.settings?.message??""}");
         }
       });
 

@@ -80,8 +80,6 @@ class _DashHomeState extends State<DashHome> {
     cart_list_provider.fetchCartProducts();
   }
 
-  List<ProductsList> productlist = [];
-
   @override
   Widget build(BuildContext context) {
     var w = MediaQuery.of(context).size.width;
@@ -248,264 +246,232 @@ class _DashHomeState extends State<DashHome> {
                       width: w,
                     ),
                   ),
-                  SizedBox(height: h * 0.05),
-                  Center(
-                    child: Text(
-                      "Shop by Categories",
-                      style: TextStyle(
-                        color: Color(0xff110B0F),
-                        fontFamily: 'RozhaOne',
-                        fontSize: 24,
-                        height: 32 / 24,
-                        fontWeight: FontWeight.w400,
+                  if(categories_list.length!=0)...[
+                    SizedBox(height: h * 0.05),
+                    Center(
+                      child: Text(
+                        "Shop by Categories",
+                        style: TextStyle(
+                          color: Color(0xff110B0F),
+                          fontFamily: 'RozhaOne',
+                          fontSize: 24,
+                          height: 32 / 24,
+                          fontWeight: FontWeight.w400,
+                        ),
                       ),
                     ),
-                  ),
-                  SizedBox(height: h * 0.03),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: GridView.builder(
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 4,
-                        crossAxisSpacing: 8.0,
-                        mainAxisSpacing: 8.0,
-                        childAspectRatio: 0.55,
-                      ),
-                      itemCount: categories_list.length,
-                      itemBuilder: (context, index) {
-                        final categorielist = categories_list[index];
-                        return Column(
-                          children: [
-                            InkWell(
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => ProdcutListScreen(
-                                              selectid: categorielist.id ?? "",
-                                              minprice: "",
-                                              maxprice: "",
-                                            )));
-                              },
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: Color(0xff110B0F),
-                                  borderRadius: BorderRadius.circular(7),
-                                ),
-                                padding: const EdgeInsets.all(8.0),
-                                child: Center(
-                                  child: Image.network(
-                                    categorielist?.image ?? '',
-                                    width: 80,
-                                    height: 80,
-                                    fit: BoxFit.contain,
+                    SizedBox(height: h * 0.03),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: GridView.builder(
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 4,
+                          crossAxisSpacing: 8.0,
+                          mainAxisSpacing: 8.0,
+                          childAspectRatio: 0.55,
+                        ),
+                        itemCount: categories_list.length,
+                        itemBuilder: (context, index) {
+                          final categorielist = categories_list[index];
+                          return Column(
+                            children: [
+                              InkWell(
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => ProdcutListScreen(
+                                            selectid: categorielist.id ?? "",
+                                            minprice: "",
+                                            maxprice: "",
+                                          )));
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: Color(0xff110B0F),
+                                    borderRadius: BorderRadius.circular(7),
+                                  ),
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Center(
+                                    child: Image.network(
+                                      categorielist?.image ?? '',
+                                      width: 80,
+                                      height: 80,
+                                      fit: BoxFit.contain,
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                            SizedBox(height: 8),
-                            Center(
-                              child: Text(
-                                categorielist?.categoryName ?? '',
-                                style: TextStyle(
-                                  color: Color(0xff110B0F),
-                                  fontFamily: 'RozhaOne',
-                                  fontSize: 14,
-                                  height: 20 / 14,
-                                  fontWeight: FontWeight.w400,
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                          ],
-                        );
-                      },
-                    ),
-                  ),
-
-                  SizedBox(height: h * 0.02),
-                  Center(
-                    child: Text(
-                      "Best Sellers",
-                      style: TextStyle(
-                        color: Color(0xff110B0F),
-                        fontFamily: 'RozhaOne',
-                        fontSize: 24,
-                        height: 32 / 24,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: h * 0.02),
-                  SingleChildScrollView(
-                    scrollDirection:
-                        Axis.horizontal, // Enables horizontal scrolling
-                    child: Consumer<ProductListProvider>(
-                        builder: (context, bestsellerProvider, child) {
-                      final products_list = bestsellerProvider.bestsellerList;
-                      return Row(
-                        children: List.generate(products_list.length, (index) {
-                          var data = products_list[index];
-                          return InkResponse(
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          ProductDetailsScreen(
-                                              productid: data.id.toString(),
-                                              category_id: "")));
-                            },
-                            child: Stack(children: [
-                              Container(
-                                width: w * 0.45,
-                                // Control the width of each item
-                                padding: EdgeInsets.all(8.0),
-                                margin: EdgeInsets.only(left: 10, right: 8.0),
-                                // Space between items
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                    color: Color(0xffEEF2F6),
-                                    width: 1,
+                              SizedBox(height: 8),
+                              Center(
+                                child: Text(
+                                  categorielist?.categoryName ?? '',
+                                  style: TextStyle(
+                                    color: Color(0xff110B0F),
+                                    fontFamily: 'RozhaOne',
+                                    fontSize: 14,
+                                    height: 20 / 14,
+                                    fontWeight: FontWeight.w400,
                                   ),
-                                ),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Center(
-                                      child: Image.network(
-                                        data.image ?? "",
-                                        height: h * 0.2,
-                                        width: w * 0.45,
-                                        fit: BoxFit.contain,
-                                      ),
-                                    ),
-                                    SizedBox(height: 15),
-                                    // Row(
-                                    //   children: [
-                                    //     InkWell(
-                                    //       onTap: () {
-                                    //         Navigator.push(
-                                    //           context,
-                                    //           MaterialPageRoute(
-                                    //             builder: (context) => UploaderProfile(),
-                                    //           ),
-                                    //         );
-                                    //       },
-                                    //       child: CircleAvatar(
-                                    //         radius: 12,
-                                    //         child: ClipOval(
-                                    //           child: Image.asset(
-                                    //             "assets/postedBY.png",
-                                    //             fit: BoxFit.contain,
-                                    //           ),
-                                    //         ),
-                                    //       ),
-                                    //     ),
-                                    //     SizedBox(width: w * 0.03),
-                                    //     Text(
-                                    //       "POSTED BY",
-                                    //       style: TextStyle(
-                                    //         color: Color(0xff617C9D),
-                                    //         fontFamily: 'RozhaOne',
-                                    //         fontSize: 14,
-                                    //         height: 19.36 / 14,
-                                    //         fontWeight: FontWeight.w400,
-                                    //       ),
-                                    //     )
-                                    //   ],
-                                    // ),
-                                    SizedBox(height: 10),
-                                    Text(
-                                      data.title ?? "",
-                                      style: TextStyle(
-                                        color: Color(0xff121926),
-                                        fontFamily: 'RozhaOne',
-                                        fontSize: 16,
-                                        height: 24 / 16,
-                                        fontWeight: FontWeight.w400,
-                                      ),
-                                      maxLines: 2,
-                                    ),
-                                    SizedBox(height: 10),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          "₹${data.salePrice ?? ""}",
-                                          style: TextStyle(
-                                            color: Color(0xff121926),
-                                            fontFamily: 'RozhaOne',
-                                            fontSize: 16,
-                                            height: 24 / 16,
-                                            fontWeight: FontWeight.w400,
-                                          ),
-                                        ),
-                                        SizedBox(width: w * 0.03),
-                                        Text(
-                                          "₹${data.mrp ?? ""}",
-                                          style: TextStyle(
-                                            color: Color(0xff617C9D),
-                                            fontFamily: 'RozhaOne',
-                                            fontSize: 16,
-                                            height: 24 / 16,
-                                            fontWeight: FontWeight.w400,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
+                                  textAlign: TextAlign.center,
                                 ),
                               ),
-                              Positioned(
-                                top: 8,
-                                right: 10,
-                                child: InkResponse(
-                                  onTap: () {
-                                    if (data.isInWishlist ?? false) {
-                                      context
-                                          .read<WishlistProvider>()
-                                          .removeFromWishlist(data.id ?? "");
-                                    } else {
-                                      // Add to wishlist
-                                      context
-                                          .read<WishlistProvider>()
-                                          .addToWishlist(data.id ?? "");
-                                    }
-                                  },
-                                  child: Container(
-                                    padding: const EdgeInsets.all(8),
-                                    decoration: BoxDecoration(
-                                      color: Colors.grey[200],
-                                      borderRadius: BorderRadius.circular(100),
-                                    ),
-                                    child: data.isInWishlist ?? false
-                                        ? Icon(
-                                            Icons
-                                                .favorite, // Filled heart icon when item is in wishlist
-                                            size: 18,
-                                            color: Colors
-                                                .red, // Red color for filled icon
-                                          )
-                                        : Icon(
-                                            Icons
-                                                .favorite_border, // Outline heart icon when item is NOT in wishlist
-                                            size: 18,
-                                            color: Colors
-                                                .black, // Black color for outline icon
-                                          ),
-                                  ),
-                                ),
-                              ),
-                            ]),
+                            ],
                           );
-                        }),
+                        },
+                      ),
+                    ),
+                  ],
+                  Consumer<ProductListProvider>(
+                    builder: (context, bestsellerProvider, child) {
+                      final products_list = bestsellerProvider.bestsellerList;
+                      // Check if the products_list is empty, if so, return an empty container
+                      if (products_list.isEmpty) {
+                        return Container(); // or you can return SizedBox.shrink() for a non-visual empty widget
+                      }
+                      return Column(
+                        children: [
+                          SizedBox(height: h * 0.02),
+                          Center(
+                            child: Text(
+                              "Best Sellers",
+                              style: TextStyle(
+                                color: Color(0xff110B0F),
+                                fontFamily: 'RozhaOne',
+                                fontSize: 24,
+                                height: 32 / 24,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: h * 0.02),
+                          SingleChildScrollView(
+                            scrollDirection: Axis.horizontal, // Enables horizontal scrolling
+                            child: Row(
+                              children: List.generate(products_list.length, (index) {
+                                var data = products_list[index];
+                                return InkResponse(
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => ProductDetailsScreen(
+                                                productid: data.id.toString(), category_id: "")));
+                                  },
+                                  child: Stack(
+                                    children: [
+                                      Container(
+                                        width: w * 0.45,
+                                        padding: EdgeInsets.all(8.0),
+                                        margin: EdgeInsets.only(left: 10, right: 8.0),
+                                        decoration: BoxDecoration(
+                                          border: Border.all(
+                                            color: Color(0xffEEF2F6),
+                                            width: 1,
+                                          ),
+                                        ),
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Center(
+                                              child: Image.network(
+                                                data.image ?? "",
+                                                height: h * 0.2,
+                                                width: w * 0.45,
+                                                fit: BoxFit.contain,
+                                              ),
+                                            ),
+                                            SizedBox(height: 15),
+                                            SizedBox(height: 10),
+                                            Text(
+                                              data.title ?? "",
+                                              style: TextStyle(
+                                                color: Color(0xff121926),
+                                                fontFamily: 'RozhaOne',
+                                                fontSize: 16,
+                                                height: 24 / 16,
+                                                fontWeight: FontWeight.w400,
+                                              ),
+                                              maxLines: 2,
+                                            ),
+                                            SizedBox(height: 10),
+                                            Row(
+                                              mainAxisAlignment: MainAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  "₹${data.salePrice ?? ""}",
+                                                  style: TextStyle(
+                                                    color: Color(0xff121926),
+                                                    fontFamily: 'RozhaOne',
+                                                    fontSize: 16,
+                                                    height: 24 / 16,
+                                                    fontWeight: FontWeight.w400,
+                                                  ),
+                                                ),
+                                                SizedBox(width: w * 0.03),
+                                                Text(
+                                                  "₹${data.mrp ?? ""}",
+                                                  style: TextStyle(
+                                                    color: Color(0xff617C9D),
+                                                    fontFamily: 'RozhaOne',
+                                                    fontSize: 16,
+                                                    height: 24 / 16,
+                                                    fontWeight: FontWeight.w400,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Positioned(
+                                        top: 8,
+                                        right: 10,
+                                        child: InkResponse(
+                                          onTap: () {
+                                            if (data.isInWishlist ?? false) {
+                                              context
+                                                  .read<WishlistProvider>()
+                                                  .removeFromWishlist(data.id ?? "");
+                                            } else {
+                                              // Add to wishlist
+                                              context
+                                                  .read<WishlistProvider>()
+                                                  .addToWishlist(data.id ?? "");
+                                            }
+                                          },
+                                          child: Container(
+                                            padding: const EdgeInsets.all(8),
+                                            decoration: BoxDecoration(
+                                              color: Colors.grey[200],
+                                              borderRadius: BorderRadius.circular(100),
+                                            ),
+                                            child: data.isInWishlist ?? false
+                                                ? Icon(
+                                              Icons.favorite,
+                                              size: 18,
+                                              color: Colors.red, // Red color for filled icon
+                                            )
+                                                : Icon(
+                                              Icons.favorite_border,
+                                              size: 18,
+                                              color: Colors.black, // Black color for outline icon
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              }),
+                            ),
+                          ),
+                        ],
                       );
-                    }),
+                    },
                   ),
                   // SizedBox(height: h * 0.01),
                   // Center(

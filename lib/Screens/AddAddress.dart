@@ -248,7 +248,7 @@ class _AddAddressState extends State<AddAddress> {
                       Container(
                         alignment: Alignment.topLeft,
                         margin: EdgeInsets.only(left: 8, bottom: 10, top: 5),
-                        width: MediaQuery.of(context).size.width * 0.6,
+                        width: MediaQuery.of(context).size.width * 0.8,
                         child: ShakeWidget(
                           key: Key("value"),
                           duration: Duration(milliseconds: 700),
@@ -349,7 +349,7 @@ class _AddAddressState extends State<AddAddress> {
                       Container(
                         alignment: Alignment.topLeft,
                         margin: EdgeInsets.only(left: 8, bottom: 10, top: 5),
-                        width: MediaQuery.of(context).size.width * 0.6,
+                        width: MediaQuery.of(context).size.width * 0.8,
                         child: ShakeWidget(
                           key: Key("value"),
                           duration: Duration(milliseconds: 700),
@@ -536,7 +536,7 @@ class _AddAddressState extends State<AddAddress> {
                             alignment: Alignment.topLeft,
                             margin: EdgeInsets.only(
                                 left: 8, bottom: 10, top: 5),
-                            width: MediaQuery.of(context).size.width * 0.4,
+                            width: MediaQuery.of(context).size.width * 0.8,
                             child: ShakeWidget(
                               key: Key("value"),
                               duration: Duration(milliseconds: 700),
@@ -638,7 +638,7 @@ class _AddAddressState extends State<AddAddress> {
                       Container(
                         alignment: Alignment.topLeft,
                         margin: EdgeInsets.only(left: 8, bottom: 10, top: 5),
-                        width: MediaQuery.of(context).size.width * 0.6,
+                        width: MediaQuery.of(context).size.width * 0.8,
                         child: ShakeWidget(
                           key: Key("value"),
                           duration: Duration(milliseconds: 700),
@@ -735,7 +735,7 @@ class _AddAddressState extends State<AddAddress> {
                       Container(
                         alignment: Alignment.topLeft,
                         margin: EdgeInsets.only(left: 8, bottom: 10, top: 5),
-                        width: MediaQuery.of(context).size.width * 0.6,
+                        width: MediaQuery.of(context).size.width * 0.8,
                         child: ShakeWidget(
                           key: Key("value"),
                           duration: Duration(milliseconds: 700),
@@ -832,7 +832,7 @@ class _AddAddressState extends State<AddAddress> {
                       Container(
                         alignment: Alignment.topLeft,
                         margin: EdgeInsets.only(left: 8, bottom: 10, top: 5),
-                        width: MediaQuery.of(context).size.width * 0.6,
+                        width: MediaQuery.of(context).size.width * 0.8,
                         child: ShakeWidget(
                           key: Key("value"),
                           duration: Duration(milliseconds: 700),
@@ -931,7 +931,7 @@ class _AddAddressState extends State<AddAddress> {
         },
         child: Container(
           width: w,
-          margin: EdgeInsets.all(6),
+          margin: EdgeInsets.symmetric(horizontal: 10,vertical: 20),
           height: MediaQuery.of(context).size.height * 0.050,
           decoration: BoxDecoration(
             color: const Color(0xff110B0F),

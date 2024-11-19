@@ -97,7 +97,7 @@ class _OrderListScreenState extends State<OrderListScreen> {
                   Row(
                     children: [
                       Container(
-                        width: w * 0.72,
+                        width: w * 0.7,
                         padding: const EdgeInsets.symmetric(
                             horizontal: 14, vertical: 5),
                         decoration: BoxDecoration(

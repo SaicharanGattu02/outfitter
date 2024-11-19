@@ -173,7 +173,7 @@ class Review {
   final int? rating;
   final String? comment;
   final String? customer;
-  final DateTime? createdAt;
+  final String? createdAt;
 
   Review({
     this.id,
@@ -189,9 +189,8 @@ class Review {
       rating: json['rating'],
       comment: json['review_text'],
       customer: json['customer'],
-      createdAt: json['created_at'] != null
-          ? DateTime.parse(json['created_at'])
-          : null,
+      createdAt: json['created_at']
+
     );
   }
 
@@ -201,7 +200,7 @@ class Review {
       'rating': rating,
       'review_text': comment,
       'customer': customer,
-      'created_at': createdAt?.toIso8601String(),
+      'created_at': createdAt,
     };
   }
 }

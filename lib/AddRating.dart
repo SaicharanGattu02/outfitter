@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:outfitter/utils/CustomAppBar1.dart';
 import 'Services/UserApi.dart';
 
 class AddProductRating extends StatefulWidget {
@@ -61,13 +62,11 @@ class _AddProductRatingState extends State<AddProductRating> {
   }
 
   Widget _scaffold(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
+    double w = MediaQuery.of(context).size.width;
+    double h = MediaQuery.of(context).size.height;
     return Scaffold(
         backgroundColor: Color(0xffF4F5FA),
-        appBar: AppBar(
-          title: Text("Write a review"),
-        ),
+        appBar: CustomApp(title: 'Write A Review', w: w),
         body: SingleChildScrollView(
           child: Padding(
               padding: (Platform.isAndroid)
@@ -102,7 +101,7 @@ class _AddProductRatingState extends State<AddProductRating> {
                         children: [
                           Text('Rating',
                               style: TextStyle(
-                                  fontFamily: "Inter",
+                                  fontFamily: "RozhaOne",
                                   color: Colors.black,
                                   fontWeight: FontWeight.w600,
                                   fontSize: 20)),
@@ -149,8 +148,8 @@ class _AddProductRatingState extends State<AddProductRating> {
                             height: 25,
                           ),
                           Container(
-                            width: screenWidth * 0.85,
-                            height: screenHeight * 0.2,
+                            width: w * 0.85,
+                            height: h * 0.2,
                             decoration: BoxDecoration(
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(20),
@@ -162,6 +161,12 @@ class _AddProductRatingState extends State<AddProductRating> {
                               controller: _reviewController,
                               textInputAction: TextInputAction.done,
                               maxLines: 100,
+                              style:TextStyle(
+                                fontSize: 18,
+                                fontFamily: "RozhaOne",
+                                fontWeight: FontWeight.w500,
+                                color: Colors.black,
+                              ),
                               decoration: InputDecoration(
                                   contentPadding:
                                   const EdgeInsets.only(left: 30, top: 10),
@@ -170,7 +175,7 @@ class _AddProductRatingState extends State<AddProductRating> {
                                   hintText: "Write a feedback",
                                   hintStyle: TextStyle(
                                     fontSize: 18,
-                                    fontFamily: "Inter",
+                                    fontFamily: "RozhaOne",
                                     fontWeight: FontWeight.w500,
                                     color: Color(0xffB9BEDA),
                                   )),
@@ -197,18 +202,16 @@ class _AddProductRatingState extends State<AddProductRating> {
                       },
                       child: Container(
                           height: 40,
-                          width: screenWidth * 0.88,
+                          width: w * 0.88,
                           decoration: BoxDecoration(
                               color: (rating == 0)
                                   ? Color(0xffF4F5FA)
-                                  : Color(0xffE7A500),
+                                  :  Color(0xff110B0F),
                               border: Border.all(
                                   color: (rating == 0)
                                       ? Color(0xffE0E3F1)
                                       : Colors.transparent),
-                              borderRadius: BorderRadius.circular(
-                                39,
-                              )),
+                              borderRadius: BorderRadius.circular(8,)),
                           child: Center(
                             child:(isLoading && rating>0)?CircularProgressIndicator(
                               color: Colors.white,
@@ -216,12 +219,12 @@ class _AddProductRatingState extends State<AddProductRating> {
                             Text(
                               "Submit",
                               style: TextStyle(
-                                  fontFamily: "Inter",
+                                  fontFamily: "RozhaOne",
                                   color: (rating == 0)
                                       ? Colors.grey
-                                      : Colors.black,
+                                      : Color(0xffCAA16C),
                                   fontWeight: FontWeight.w600,
-                                  fontSize: 13),
+                                  fontSize: 18),
                             ),
                           )),
                     ),

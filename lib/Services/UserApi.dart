@@ -12,6 +12,7 @@ import '../Model/GetCartListModel.dart';
 import '../Model/ProductListSortBy.dart';
 import '../Model/ProductsDetailsModel.dart';
 import '../Model/RegisterModel.dart';
+import '../Model/ReviewsModel.dart';
 import '../Model/UserDetailsModel.dart';
 import '../Model/ShippingDetailsModel.dart';
 import '../Model/VerifyOtpModel.dart';
@@ -21,7 +22,8 @@ import 'package:http_parser/http_parser.dart';  // Import this for MediaType
 
 
 class Userapi {
-  static String host = "http://192.168.0.169:8000";
+  // static String host = "http://192.168.0.169:8000";
+  static String host = "http://outfiter.pixl.in";
 
   static Future<RegisterModel?> PostRegister(String fullname, String mail,
       String phone, String password, String gender) async {
@@ -798,9 +800,8 @@ class Userapi {
     final body = {
       'product': productid,
       'rating': rating,
-      'reviw text':reviewtext,
+      'review_text':reviewtext,
     };
-
     try {
       final response = await http.post(url, headers: headers, body: body);
       if (response.statusCode == 200) {
@@ -814,25 +815,28 @@ class Userapi {
     } catch (e) {
       print('Error: $e');
     }
+    return null;
   }
 
 
 
-  static Future<RegisterModel?> fetchReview(productid) async {
+  static Future<ReviewsModel?> fetchReviews(productid) async {
     final url = '${host}/api/reviews/${productid}';
     final headers = await getheader1();
     try {
       final response = await http.get(Uri.parse(url), headers: headers);
       if (response.statusCode == 200) {
-        var data = jsonDecode(response.body);
-        print('Response data: $data');
+        final jsonResponse = jsonDecode(response.body);
+        print("fetchReviews response: ${response.body}");
+        return ReviewsModel.fromJson(jsonResponse);
       } else {
-        // If the server does not return a 200 response, throw an exception
-        print('Failed to load review: ${response.statusCode}');
+        print("Request failed with status: ${response.statusCode}");
+        return null;
       }
     } catch (e) {
       print('Error: $e');
     }
+    return null;
   }
 
 

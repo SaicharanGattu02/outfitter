@@ -41,7 +41,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     _fetchUserProfile(); // Fetch user profile data when the screen is initialized
   }
 
-
   void _validateFields() {
     setState(() {
       isLoading = true;
@@ -79,7 +78,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     }
   }
 
-  // Function to pick image from gallery or camera
+// Function to pick image from gallery or camera
   Future<void> _pickImage() async {
     final XFile? pickedFile = await _picker.pickImage(
       source: ImageSource.gallery, // Use ImageSource.camera for camera
@@ -88,10 +87,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
     if (pickedFile != null) {
       setState(() {
-        _image = File(pickedFile.path); // Set the selected image
+        _image = File(pickedFile.path); // Set the selected image file
+        print("Image: ${_image?.path}"); // Print the image path for debugging
       });
+    } else {
+      print("No image selected.");
     }
   }
+
 
   Future<void> _updateProfile() async {
     String fullname = fullnameController.text;
@@ -137,13 +140,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     CircleAvatar(
                       radius: 50,
                       backgroundColor: Colors.grey,
-                      backgroundImage:
-                          profile_image != null && profile_image.isNotEmpty
-                              ? _image != null
-                                  ? FileImage(_image!) as ImageProvider<Object>
-                                  : NetworkImage(profile_image)
-                              : AssetImage('assets/personProfile.png',)
-                                  as ImageProvider,
+                      backgroundImage:_image != null
+                          ? FileImage(_image!) as ImageProvider<Object>:
+                           profile_image != null && profile_image.isNotEmpty
+                          ? NetworkImage(profile_image) as ImageProvider<Object>
+                          : AssetImage('assets/personProfile.png') as ImageProvider<Object>, // Fallback if no image is available
                     ),
                     Positioned(
                       bottom: 0,
