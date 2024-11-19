@@ -278,14 +278,19 @@ class Userapi {
   }
 
   //
-  static Future<RegisterModel?> addCartQuanitity(String productID, String quantity,String color,String size) async {
+  static Future<RegisterModel?> addCartQuanitity(String productID, String quantity,String color,String size,sleeve, neck, pleat, placket) async {
     try {
       Map<String, String> data = {
         "product": productID,
         "quantity": quantity,
         "color": color,
-        "size": size
+        "size": size,
+        "sleeve": sleeve,
+        "neck": neck,
+        "pleat": pleat,
+        "placket": placket,
       };
+      print("DATA:${data}");
       final url = Uri.parse("${host}/api/carts");
       final headers = await getheader2();
 
@@ -786,39 +791,51 @@ class Userapi {
    }
   }
 
-  static Future<RegisterModel?> SubmitReviewApi(String page_source, String rating, String review) async {
-      try {
-        // Prepare the data
-        Map<String, String> data = {
-          "rating": rating,
-          "details": review,
-          "page_source": page_source,
-        };
-        print("SubmitReviewApi: ${data}");
+ static Future<RegisterModel?> sendReview(productid,rating,reviewtext) async {
+    final url = Uri.parse('${host}/api/review');
+    final headers = await getheader1();
+    // Set the body of the request (URL-encoded form data)
+    final body = {
+      'product': productid,
+      'rating': rating,
+      'reviw text':reviewtext,
+    };
 
-        final url = Uri.parse("$host/api/create_review");
-        final headers =
-        await getheader2(); // Assuming this fetches headers with Authorization
-
-        // Send the POST request
-        final response = await http.post(
-          url,
-          headers: headers,
-          body: data, // Use data directly for x-www-form-urlencoded
-        );
-        if (response.statusCode == 200) {
-          final jsonResponse = jsonDecode(response.body);
-          print("SubmitReview Status: ${response.body}");
-          return RegisterModel.fromJson(jsonResponse);
-        } else {
-          print("Error: ${response.statusCode} ${response.body}");
-          return null;
-        }
-      } catch (e) {
-        print("Error occurred: $e");
+    try {
+      final response = await http.post(url, headers: headers, body: body);
+      if (response.statusCode == 200) {
+        final jsonResponse = jsonDecode(response.body);
+        print("sendReview response: ${response.body}");
+        return RegisterModel.fromJson(jsonResponse);
+      } else {
+        print("Request failed with status: ${response.statusCode}");
         return null;
       }
+    } catch (e) {
+      print('Error: $e');
+    }
   }
+
+
+
+  static Future<RegisterModel?> fetchReview(productid) async {
+    final url = '${host}/api/reviews/${productid}';
+    final headers = await getheader1();
+    try {
+      final response = await http.get(Uri.parse(url), headers: headers);
+      if (response.statusCode == 200) {
+        var data = jsonDecode(response.body);
+        print('Response data: $data');
+      } else {
+        // If the server does not return a 200 response, throw an exception
+        print('Failed to load review: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error: $e');
+    }
+  }
+
+
 
 
 

@@ -2,7 +2,7 @@ import 'ProductsDetailsModel.dart';
 
 class GetCartListModel {
   List<CartList>? data;
-  int? totalCartAmount;
+  dynamic totalCartAmount;
   Settings? settings;
 
   GetCartListModel({this.data, this.totalCartAmount, this.settings});
@@ -37,7 +37,7 @@ class CartList {
   String id;
   Product? product;
   int quantity;
-  int amount;
+  dynamic amount;
   List<Sleeve> sleeve;
   List<Neck> neck;
   List<Placket> placket;
@@ -101,7 +101,7 @@ class Product {
   int? salePrice;
   bool? isInWishlist;
   String? image;
-  int? rating;
+  dynamic rating;
 
   Product(
       {this.id,

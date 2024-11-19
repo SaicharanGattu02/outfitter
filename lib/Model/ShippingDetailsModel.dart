@@ -22,7 +22,6 @@ class ShippingDetailsModel {
     return data;
   }
 }
-
 class ShippingData {
   String? id;
   int? handlingCharges;
@@ -31,18 +30,9 @@ class ShippingData {
   int? discount;
   int? amount;
   int? totalAmount;
-  dynamic address; // Change to dynamic to handle both String and Address
+  Address? address;
 
-  ShippingData({
-    this.id,
-    this.handlingCharges,
-    this.shippingFee,
-    this.deliveryCharges,
-    this.discount,
-    this.amount,
-    this.totalAmount,
-    this.address,
-  });
+  ShippingData({this.id, this.handlingCharges, this.shippingFee, this.deliveryCharges, this.discount, this.amount, this.totalAmount, this.address});
 
   ShippingData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -52,16 +42,7 @@ class ShippingData {
     discount = json['discount'];
     amount = json['amount'];
     totalAmount = json['total_amount'];
-
-    // Handle address field
-    if (json['address'] != null) {
-      // Check if the address is a map or a string
-      if (json['address'] is String) {
-        address = json['address']; // Assign the string directly
-      } else {
-        address = Address.fromJson(json['address']); // Deserialize as Address object
-      }
-    }
+    address = json['address'] != null ? new Address.fromJson(json['address']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -73,18 +54,12 @@ class ShippingData {
     data['discount'] = this.discount;
     data['amount'] = this.amount;
     data['total_amount'] = this.totalAmount;
-
-    // If address is an Address object, convert it to JSON
-    if (this.address is Address) {
-      data['address'] = (this.address as Address).toJson();
-    } else {
-      // If address is a string, directly assign it
-      data['address'] = this.address;
+    if (this.address != null) {
+      data['address'] = this.address!.toJson();
     }
-
     return data;
   }
-}
+  }
 class Address {
   String? id;
   String? mobile;

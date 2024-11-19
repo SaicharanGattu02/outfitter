@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:outfitter/Screens/AddressList.dart';
+import 'package:outfitter/Screens/OrderListScreen.dart';
 import 'package:outfitter/utils/CustomAppBar1.dart';
 import 'package:outfitter/utils/CustomSnackBar.dart';
 import 'package:provider/provider.dart';
@@ -29,6 +30,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               setState(() {
                 if (data.settings?.success == 1) {
                   CustomSnackBar.show(context, "Order Placed Successfully!");
+                  final cart_list_provider = Provider.of<CartProvider>(context, listen: false);
+                  cart_list_provider.fetchCartProducts();
+                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => OrderListScreen(),));
                 } else {
                   CustomSnackBar.show(context, data.settings?.message ?? "");
                 }
@@ -47,12 +51,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           builder: (context, shippingProvider, child) {
         final shipping_data = shippingProvider.shippingData;
         if (shipping_data?.address != null) {
-          if (shipping_data?.address is String) {
-            // Handle the case where address is a string (e.g., "No address found")
-            address = shipping_data?.address ?? "No address found";
-          } else if (shipping_data?.address is Address) {
-            // Handle the case where address is an Address object
-            address = (shipping_data?.address as Address).address ?? "No address found";
+          if (shipping_data?.address is Address) {
+            address = shipping_data?.address?.id?? "";
           }
         }
         // Handle null or invalid shipping_data cases

@@ -84,6 +84,12 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   String? selectedSizeItem;
   String? selectedColor;
 
+  String? selectedNeck;
+  String? selectedSleeve;
+  String? selectedPlacket;
+  String? selectedPleat;
+
+
   Color hexToColor(String hexColor) {
     final hex = hexColor.replaceAll('#', '');
     if (hex.length == 6) {
@@ -155,7 +161,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   Future<void> AddToCartApi(String productID, String quantity) async {
     final cart_provider = Provider.of<CartProvider>(context, listen: false);
     var msg = await cart_provider.addToCartApi(
-        productID, quantity, selectedColor ?? "", selectedSizeItem ?? "");
+        productID, quantity, selectedColor ?? "", selectedSizeItem ?? "",selectedSleeve??"",selectedNeck??"",selectedPleat??"",selectedPlacket??"");
     if (msg != "" || msg != null) {
       CustomSnackBar.show(context, msg ?? "");
     }
@@ -189,22 +195,22 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     switch (_selectedTabIndex) {
       case 0:
         // For the "neck" list
-        return _generateWidgetsFromNeck(productData?.neck);
+        return _generateWidgetsFromNeck(productData?.neck,0);
       case 1:
         // For the "sleeve" list
-        return _generateWidgetsFromSleeve(productData?.sleeve);
+        return _generateWidgetsFromSleeve(productData?.sleeve,1);
       case 2:
         // For the "placket" list
-        return _generateWidgetsFromPlacket(productData?.placket);
+        return _generateWidgetsFromPlacket(productData?.placket,2);
       case 3:
         // For the "pleat" list
-        return _generateWidgetsFromPleat(productData?.pleat);
+        return _generateWidgetsFromPleat(productData?.pleat,3);
       default:
         return [];
     }
   }
 
-  List<Widget> _generateWidgetsFromNeck(List<Neck>? neckList) {
+  List<Widget> _generateWidgetsFromNeck(List<Neck>? neckList,int tabIndex) {
     print("_generateWidgetsFromNeck called");
 
     if (neckList == null || neckList.isEmpty) {
@@ -226,44 +232,42 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           print("Data at index $index is null");
         }
 
-        return _buildProductWidget(data.image, data.name, index);
+        return _buildProductWidget(data.id,data.image,data.name, index,tabIndex);
       },
     );
   }
 
-  List<Widget> _generateWidgetsFromSleeve(List<Sleeve>? sleeveList) {
+  List<Widget> _generateWidgetsFromSleeve(List<Sleeve>? sleeveList,int tabIndex) {
     return List.generate(
       sleeveList?.length ?? 0,
       (index) {
         final data = sleeveList?[index];
-        return _buildProductWidget(data?.image, data?.name, index);
+        return _buildProductWidget(data?.id,data?.image, data?.name, index,tabIndex);
       },
     );
   }
 
-  List<Widget> _generateWidgetsFromPlacket(List<Placket>? placketList) {
+  List<Widget> _generateWidgetsFromPlacket(List<Placket>? placketList,int tabIndex) {
     return List.generate(
       placketList?.length ?? 0,
       (index) {
         final data = placketList?[index];
-        return _buildProductWidget(data?.image, data?.name, index);
+        return _buildProductWidget(data?.id,data?.image, data?.name, index,tabIndex);
       },
     );
   }
 
-  List<Widget> _generateWidgetsFromPleat(List<Pleat>? pleatList) {
+  List<Widget> _generateWidgetsFromPleat(List<Pleat>? pleatList,int tabIndex) {
     return List.generate(
       pleatList?.length ?? 0,
       (index) {
         final data = pleatList?[index];
-        return _buildProductWidget(data?.image, data?.name, index);
+        return _buildProductWidget(data?.id,data?.image, data?.name, index,tabIndex);
       },
     );
   }
 
-  Widget _buildProductWidget(String? imageUrl, String? name, int index) {
-    var w = MediaQuery.of(context).size.width;
-    var h = MediaQuery.of(context).size.height;
+  Widget _buildProductWidget(String? id,String? imageUrl, String? name, int index, int tabIndex) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 3),
       child: Column(
@@ -272,35 +276,40 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
             onTap: () {
               setState(() {
                 _selectedIndex = index;
+                // Update the selected string based on the tab index
+                if (tabIndex == 0) {
+                  selectedNeck = id;  // Update neck customization
+                } else if (tabIndex == 1) {
+                  selectedSleeve = id;  // Update sleeve customization
+                } else if (tabIndex == 2) {
+                  selectedPlacket = id;  // Update placket customization
+                } else if (tabIndex == 3) {
+                  selectedPleat = id;  // Update pleat customization
+                }
               });
             },
             child: Container(
               decoration: BoxDecoration(
                 border: Border.all(
                   color: _selectedIndex == index
-                      ? Color(0xffCAA16C)
+                      ? Color(0xffCAA16C)  // Highlight selected item
                       : Colors.transparent,
                   width: 1,
                 ),
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: Container(
-                decoration:
-                    BoxDecoration(borderRadius: BorderRadius.circular(7)),
-                clipBehavior: Clip.hardEdge,
-                child: Image.network(
-                  imageUrl ?? "",
-                  width: 45,
-                  height: 45,
-                  fit: BoxFit.contain,
-                ),
+              child: Image.network(
+                imageUrl ?? "",
+                width: 45,
+                height: 45,
+                fit: BoxFit.contain,
               ),
             ),
           ),
           const SizedBox(height: 8),
           Center(
             child: Container(
-              width: w * 0.18,
+              width: MediaQuery.of(context).size.width * 0.18,
               child: Text(
                 name ?? "",
                 style: TextStyle(
@@ -318,6 +327,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
       ),
     );
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -444,6 +454,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     ],
                   ),
                 ),
+                if(productData?.category=="Shirt")...[
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: tabItems.asMap().entries.map((entry) {
@@ -476,6 +487,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     );
                   }).toList(),
                 ),
+                ],
 
                 Stack(
                   children: [

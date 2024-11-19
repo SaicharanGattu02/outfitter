@@ -5,19 +5,18 @@ class WishlistModel {
   WishlistModel({this.data, this.settings});
 
   WishlistModel.fromJson(Map<String, dynamic> json) {
-    if (json['data'] != null) {
-      data = <Wishlist>[];
-      json['data'].forEach((v) {
-        data!.add(new Wishlist.fromJson(v));
-      });
-    }
+    // Check if 'data' is a valid key and is a List, otherwise initialize as an empty list
+    data = (json['data'] != null && json['data'] is List)
+        ? (json['data'] as List).map((v) => Wishlist.fromJson(v)).toList()
+        : []; // If data is null or not a list, assign an empty list
+
     settings = json['settings'] != null
-        ? new Settings.fromJson(json['settings'])
+        ? Settings.fromJson(json['settings'])
         : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = {};
     if (this.data != null) {
       data['data'] = this.data!.map((v) => v.toJson()).toList();
     }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:outfitter/Screens/ProductDetailsScreen.dart';
 import 'package:outfitter/Screens/checkout.dart';
 import 'package:outfitter/Screens/dashbord.dart';
 import 'package:outfitter/providers/ShippingDetailsProvider.dart';
@@ -22,8 +23,7 @@ class _CartState extends State<Cart> {
   }
 
   Future<void> GetCartList() async {
-    final cart_list_provider =
-        Provider.of<CartProvider>(context, listen: false);
+    final cart_list_provider = Provider.of<CartProvider>(context, listen: false);
     final shipping_provider =
         Provider.of<ShippingDetailsProvider>(context, listen: false);
     cart_list_provider.fetchCartProducts();
@@ -145,220 +145,225 @@ class _CartState extends State<Cart> {
                       itemBuilder: (context, index) {
                         final cartItem = cart_list[index];
                         Color color = hexToColor(cartItem.color ?? "");
-                        return Container(
-                          width: double.infinity,
-                          padding: EdgeInsets.all(16),
-                          decoration: BoxDecoration(
-                            color: Color(0xffFFFDF6),
-                            border:
-                                Border.all(color: Color(0xffF3EFE1), width: 1),
-                            borderRadius: BorderRadius.circular(7),
-                          ),
-                          margin: EdgeInsets.only(bottom: 16),
-                          child: Row(
-                            children: [
-                              Stack(
-                                children: [
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      color: Color(0xffFFFFFF),
-                                      borderRadius: BorderRadius.circular(6),
-                                      border: Border.all(
-                                          color: Color(0xffE7C6A0), width: 1),
-                                    ),
-                                    child: Center(
-                                      child: Image.network(
-                                        cartItem.product?.image ?? "",
-                                        fit: BoxFit.contain,
-                                        width: 100,
-                                        height: 125,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(width: 16),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                        return InkResponse(
+                          onTap: (){
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => ProductDetailsScreen(productid: cartItem.id, category_id: ""),));
+                          },
+                          child: Container(
+                            width: double.infinity,
+                            padding: EdgeInsets.all(16),
+                            decoration: BoxDecoration(
+                              color: Color(0xffFFFDF6),
+                              border:
+                                  Border.all(color: Color(0xffF3EFE1), width: 1),
+                              borderRadius: BorderRadius.circular(7),
+                            ),
+                            margin: EdgeInsets.only(bottom: 16),
+                            child: Row(
+                              children: [
+                                Stack(
                                   children: [
-                                    Text(
-                                      cartItem.product?.title ?? "",
-                                      style: TextStyle(
-                                        color: Color(0xff181725),
-                                        fontFamily: 'RozhaOne',
-                                        overflow: TextOverflow.ellipsis,
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w400,
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        color: Color(0xffFFFFFF),
+                                        borderRadius: BorderRadius.circular(6),
+                                        border: Border.all(
+                                            color: Color(0xffE7C6A0), width: 1),
                                       ),
-                                      maxLines: 2,
+                                      child: Center(
+                                        child: Image.network(
+                                          cartItem.product?.image ?? "",
+                                          fit: BoxFit.contain,
+                                          width: 100,
+                                          height: 125,
+                                        ),
+                                      ),
                                     ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Text(
-                                              "Color:",
-                                              style: TextStyle(
-                                                color: Color(0xff181725),
-                                                fontFamily: 'RozhaOne',
-                                                overflow: TextOverflow.ellipsis,
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.w400,
+                                  ],
+                                ),
+                                SizedBox(width: 16),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        cartItem.product?.title ?? "",
+                                        style: TextStyle(
+                                          color: Color(0xff181725),
+                                          fontFamily: 'RozhaOne',
+                                          overflow: TextOverflow.ellipsis,
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                        maxLines: 2,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Text(
+                                                "Color:",
+                                                style: TextStyle(
+                                                  color: Color(0xff181725),
+                                                  fontFamily: 'RozhaOne',
+                                                  overflow: TextOverflow.ellipsis,
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w400,
+                                                ),
+                                                maxLines: 2,
                                               ),
-                                              maxLines: 2,
+                                              SizedBox(
+                                                width: 10,
+                                              ),
+                                              Container(
+                                                width: 18,
+                                                height: 18,
+                                                decoration: BoxDecoration(
+                                                  color: color,
+                                                  // Set the color of the container
+                                                  borderRadius:
+                                                      BorderRadius.circular(100),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          Row(
+                                            children: [
+                                              Text(
+                                                "Size:",
+                                                style: TextStyle(
+                                                  color: Color(0xff181725),
+                                                  fontFamily: 'RozhaOne',
+                                                  overflow: TextOverflow.ellipsis,
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w400,
+                                                ),
+                                                maxLines: 2,
+                                              ),
+                                              SizedBox(
+                                                width: 10,
+                                              ),
+                                              Text(
+                                                cartItem.size,
+                                                style: TextStyle(
+                                                  color: Color(0xff181725),
+                                                  fontFamily: 'RozhaOne',
+                                                  overflow: TextOverflow.ellipsis,
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w400,
+                                                ),
+                                                maxLines: 2,
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          Text(
+                                            ('₹ ${cartItem.product?.salePrice.toString() ?? ""}'),
+                                            style: TextStyle(
+                                              color: Color(0xff181725),
+                                              fontFamily: 'RozhaOne',
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.w400,
                                             ),
-                                            SizedBox(
-                                              width: 10,
+                                          ),
+                                          SizedBox(width: 4),
+                                          Text(
+                                            ('₹ ${cartItem.product?.mrp.toString() ?? ""}'),
+                                            style: TextStyle(
+                                              color: Color(0xffED1C24),
+                                              fontFamily: 'RozhaOne',
+                                              fontSize: 12,
+                                              decoration:
+                                                  TextDecoration.lineThrough,
+                                              decorationColor: Color(0xffED1C24),
+                                              fontWeight: FontWeight.w400,
                                             ),
-                                            Container(
-                                              width: 18,
-                                              height: 18,
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(height: 8),
+                                      Row(
+                                        children: [
+                                          InkResponse(
+                                            onTap: () {
+                                              if ((cartItem.quantity ?? 0) > 0) {
+                                                // Decrease the quantity
+                                                int newQuantity =
+                                                    (cartItem.quantity ?? 0) - 1;
+                                                cartProvider.updateQuantity(
+                                                    cartItem.product?.id ?? "",
+                                                    newQuantity);
+                                                cartProvider.updateCartApi(
+                                                    cartItem.product?.id ?? "",
+                                                    newQuantity.toString());
+                                              }
+                                            },
+                                            child: Container(
+                                              width: 25,
+                                              height: 25,
                                               decoration: BoxDecoration(
-                                                color: color,
-                                                // Set the color of the container
-                                                borderRadius:
-                                                    BorderRadius.circular(100),
+                                                border: Border.all(
+                                                    color: Color(0xffE7C6A0),
+                                                    width: 1),
+                                              ),
+                                              child: Icon(
+                                                Icons.remove,
+                                                size: 20,
+                                                color: Color(0xffE7C6A0),
                                               ),
                                             ),
-                                          ],
-                                        ),
-                                        Row(
-                                          children: [
-                                            Text(
-                                              "Size:",
-                                              style: TextStyle(
-                                                color: Color(0xff181725),
-                                                fontFamily: 'RozhaOne',
-                                                overflow: TextOverflow.ellipsis,
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.w400,
-                                              ),
-                                              maxLines: 2,
-                                            ),
-                                            SizedBox(
-                                              width: 10,
-                                            ),
-                                            Text(
-                                              cartItem.size,
-                                              style: TextStyle(
-                                                color: Color(0xff181725),
-                                                fontFamily: 'RozhaOne',
-                                                overflow: TextOverflow.ellipsis,
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.w400,
-                                              ),
-                                              maxLines: 2,
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                    Row(
-                                      children: [
-                                        Text(
-                                          ('₹ ${cartItem.product?.salePrice.toString() ?? ""}'),
-                                          style: TextStyle(
-                                            color: Color(0xff181725),
-                                            fontFamily: 'RozhaOne',
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.w400,
                                           ),
-                                        ),
-                                        SizedBox(width: 4),
-                                        Text(
-                                          ('₹ ${cartItem.product?.mrp.toString() ?? ""}'),
-                                          style: TextStyle(
-                                            color: Color(0xffED1C24),
-                                            fontFamily: 'RozhaOne',
-                                            fontSize: 12,
-                                            decoration:
-                                                TextDecoration.lineThrough,
-                                            decorationColor: Color(0xffED1C24),
-                                            fontWeight: FontWeight.w400,
+                                          SizedBox(width: 8),
+                                          // Display quantity
+                                          Text(
+                                            cartItem.quantity.toString(),
+                                            style: TextStyle(
+                                              color: Color(0xffE7C6A0),
+                                              fontFamily: 'RozhaOne',
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w400,
+                                            ),
+                                            textAlign: TextAlign.center,
                                           ),
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(height: 8),
-                                    Row(
-                                      children: [
-                                        InkResponse(
-                                          onTap: () {
-                                            if ((cartItem.quantity ?? 0) > 0) {
-                                              // Decrease the quantity
+                                          SizedBox(width: 8),
+                                          InkResponse(
+                                            onTap: () {
                                               int newQuantity =
-                                                  (cartItem.quantity ?? 0) - 1;
+                                                  (cartItem.quantity ?? 0) + 1;
                                               cartProvider.updateQuantity(
                                                   cartItem.product?.id ?? "",
                                                   newQuantity);
                                               cartProvider.updateCartApi(
                                                   cartItem.product?.id ?? "",
                                                   newQuantity.toString());
-                                            }
-                                          },
-                                          child: Container(
-                                            width: 25,
-                                            height: 25,
-                                            decoration: BoxDecoration(
-                                              border: Border.all(
-                                                  color: Color(0xffE7C6A0),
-                                                  width: 1),
-                                            ),
-                                            child: Icon(
-                                              Icons.remove,
-                                              size: 20,
-                                              color: Color(0xffE7C6A0),
-                                            ),
-                                          ),
-                                        ),
-                                        SizedBox(width: 8),
-                                        // Display quantity
-                                        Text(
-                                          cartItem.quantity.toString(),
-                                          style: TextStyle(
-                                            color: Color(0xffE7C6A0),
-                                            fontFamily: 'RozhaOne',
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w400,
-                                          ),
-                                          textAlign: TextAlign.center,
-                                        ),
-                                        SizedBox(width: 8),
-                                        InkResponse(
-                                          onTap: () {
-                                            int newQuantity =
-                                                (cartItem.quantity ?? 0) + 1;
-                                            cartProvider.updateQuantity(
-                                                cartItem.product?.id ?? "",
-                                                newQuantity);
-                                            cartProvider.updateCartApi(
-                                                cartItem.product?.id ?? "",
-                                                newQuantity.toString());
-                                          },
-                                          child: Container(
-                                            width: 25,
-                                            height: 25,
-                                            decoration: BoxDecoration(
-                                              border: Border.all(
-                                                  color: Color(0xffE7C6A0),
-                                                  width: 1),
-                                            ),
-                                            child: Icon(
-                                              Icons.add,
-                                              size: 20,
-                                              color: Color(0xffE7C6A0),
+                                            },
+                                            child: Container(
+                                              width: 25,
+                                              height: 25,
+                                              decoration: BoxDecoration(
+                                                border: Border.all(
+                                                    color: Color(0xffE7C6A0),
+                                                    width: 1),
+                                              ),
+                                              child: Icon(
+                                                Icons.add,
+                                                size: 20,
+                                                color: Color(0xffE7C6A0),
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
+                                        ],
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         );
                       },

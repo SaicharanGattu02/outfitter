@@ -24,14 +24,14 @@ class _LoginState extends State<Login> {
 
   void _validateFields() {
     setState(() {
-      _validatePhone =
-      _phoneController.text.isEmpty ? "Please enter a phone number" : "";
-    });
-
+      _loading=true;
+      _validatePhone = _phoneController.text.isEmpty || _phoneController.text.length<10 ? "Please enter a valid phone number" : "";
     if (_validatePhone.isEmpty) {
       LoginOtp();
-
+    }else{
+      _loading=false;
     }
+    });
   }
 
   Future<void> LoginOtp() async {
@@ -41,7 +41,6 @@ class _LoginState extends State<Login> {
           if (data.settings?.success ==1) {
             _loading=false;
             Navigator.push(context, MaterialPageRoute(builder: (context) => Otp(mobileNumber: _phoneController.text)));
-
           }else{
             _loading=false;
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -197,7 +196,7 @@ class _LoginState extends State<Login> {
                               Container(
                                 alignment: Alignment.topLeft,
                                 margin: EdgeInsets.only(left: 8, bottom: 10, top: 5),
-                                width: w * 0.6,
+                                width: w * 0.8,
                                 child: ShakeWidget(
                                   key: Key("value"),
                                   duration: Duration(milliseconds: 700),
@@ -219,7 +218,11 @@ class _LoginState extends State<Login> {
                         const SizedBox(height: 16),
                         InkResponse(
                           onTap: () {
-                            _validateFields();
+                            if(_loading){
+
+                            }else{
+                              _validateFields();
+                            }
                           },
                           child: Container(
                             width: w,

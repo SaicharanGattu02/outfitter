@@ -30,6 +30,8 @@ class WishlistProvider with ChangeNotifier {
         notifyListeners();
         return response?.settings?.success;
       }else{
+        _wishlistproducts = response?.data ?? [];
+        notifyListeners();
         return response?.settings?.success;
       }
     } catch (e) {

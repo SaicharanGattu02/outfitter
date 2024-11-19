@@ -33,7 +33,8 @@ class _AddAddressState extends State<AddAddress> {
   String _validatecity = "";
   String _validatearea = "";
   String? _selectedOption = 'Home';
-  bool isLoading =true;
+  bool isLoading =false;
+  final spinkits=Spinkits();
 
   @override
   void initState() {
@@ -45,8 +46,9 @@ class _AddAddressState extends State<AddAddress> {
 
   void _validateFields() {
     setState(() {
+      isLoading=true;
       _validatePincode =
-          _pincodeController.text.isEmpty ? "Please enter a pincode" : "";
+          _pincodeController.text.isEmpty || _pincodeController.text.length<6  ? "Please enter a valid pincode" : "";
       _validatename =
           _nameController.text.isEmpty ? "Please enter a valid full name" : "";
       _validatephone =
@@ -57,7 +59,6 @@ class _AddAddressState extends State<AddAddress> {
       _validatecity = _cityController.text.isEmpty ? "Please enter a city" : "";
       _validatearea =
           _AreaController.text.isEmpty ? "Please enter a area " : "";
-    });
 
     if (_validatePincode.isEmpty &&
         _validatename.isEmpty &&
@@ -65,15 +66,16 @@ class _AddAddressState extends State<AddAddress> {
         _validatehouse.isEmpty &&
         _validatearea.isEmpty &&
         _validatecity.isEmpty) {
-
-
       if (widget.type == "Edit") {
         print("id>>${widget.productid}");
         UpdateAddressApi(widget.productid);
       } else {
         addAddressApi();
       }
+    }else{
+      isLoading=false;
     }
+    });
   }
 
 
@@ -96,7 +98,6 @@ class _AddAddressState extends State<AddAddress> {
       if (address_details?.address != "") {
         String address = address_details?.address ?? "";
         List<String> parts = address.split(",");
-
         // Check if there are enough parts, otherwise set default values
         String housenumber = parts.isNotEmpty ? parts[0] : ""; // Default to empty if not available
         String city = parts.length > 1 ? parts[1] : ""; // Default to empty if not available
@@ -106,7 +107,6 @@ class _AddAddressState extends State<AddAddress> {
         _cityController.text = city;
         _AreaController.text = roadname;
       }
-
     });
   }
 
@@ -117,26 +117,34 @@ class _AddAddressState extends State<AddAddress> {
         Provider.of<AddressListProvider>(context, listen: false);
     var status = await address_list_provider.AddAddress(_pincodeController.text,
         _PhoneController.text, address, _selectedOption, _nameController.text,_AlternatePhoneController.text);
-    if (status == 1) {
-      Navigator.pop(context);
-      CustomSnackBar.show(context, "Added Address Successfully");
-    } else {}
+    setState(() {
+      if (status == 1) {
+        isLoading=false;
+        Navigator.pop(context);
+        CustomSnackBar.show(context, "Added Address Successfully");
+      } else {
+        isLoading=false;
+      }
+    });
   }
 
   Future<void> UpdateAddressApi(id) async {
-    final address_list_provider =
-        Provider.of<AddressListProvider>(context, listen: false);
+    final address_list_provider = Provider.of<AddressListProvider>(context, listen: false);
     var status = await address_list_provider.UpdateFromAddressList(
         id,
         _pincodeController.text,
         _PhoneController.text,
         address,
         _selectedOption,_nameController.text,_AlternatePhoneController.text);
-    if (status == 1) {
-      isLoading=false;
-      Navigator.pop(context);
-      CustomSnackBar.show(context, " Address  Updated Successfully");
-    } else {}
+    setState(() {
+      if (status == 1) {
+        isLoading=false;
+        Navigator.pop(context);
+        CustomSnackBar.show(context, " Address  Updated Successfully");
+      } else {
+        isLoading=false;
+      }
+    });
   }
 
   void _handleRadioValueChanged(String? value) {
@@ -915,7 +923,11 @@ class _AddAddressState extends State<AddAddress> {
       ),
       bottomNavigationBar: InkResponse(
         onTap: () {
-          _validateFields();
+          if(isLoading){
+
+          }else{
+            _validateFields();
+          }
         },
         child: Container(
           width: w,
@@ -926,7 +938,7 @@ class _AddAddressState extends State<AddAddress> {
             borderRadius: BorderRadius.circular(7),
           ),
           child: Center(
-            child:
+            child:isLoading ?spinkits.getFadingCircleSpinner(color: Color(0xffE7C6A0)):
             Text(
               "SAVE ADDRESS",
               style: TextStyle(

@@ -37,25 +37,27 @@ class _RegisterState extends State<Register> {
 
   void _validateFields() {
     setState(() {
+      _loading=true;
       _validateFullName =
           _fullNameController.text.isEmpty ? "Please enter a fullName" : "";
       _validateemail =
-          _emailController.text.isEmpty ? "Please enter a valid email" : "";
+      !RegExp(r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$").hasMatch(_emailController.text) ? "Please enter a valid email" : "";
       _validatePhone =
-          _phoneController.text.isEmpty ? "Please enter a phonenumber" : "";
+          _phoneController.text.isEmpty || _phoneController.text.length<10 ? "Please enter a valid phonenumber" : "";
       _validatePwd =
           _pwdController.text.isEmpty ? "Please enter a password" : "";
       _validateGender =
       _gender.isEmpty ? "Please select a gender" : "";
-    });
-
     if (_validateFullName.isEmpty &&
         _validateemail.isEmpty &&
         _validatePhone.isEmpty &&
         _validatePwd.isEmpty &&
         _validateGender.isEmpty) {
       RegisterApi();
+    }else{
+      _loading=false;
     }
+    });
   }
 
   Future<void> RegisterApi() async {
@@ -652,7 +654,11 @@ class _RegisterState extends State<Register> {
               const SizedBox(height: 12),
               InkResponse(
                 onTap: () {
-                  _validateFields();
+                  if(_loading){
+
+                  }else{
+                    _validateFields();
+                  }
                 },
                 child: Container(
                   width: w,

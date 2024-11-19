@@ -6,6 +6,7 @@ import 'package:outfitter/Screens/dashbord.dart';
 import 'package:outfitter/Services/UserApi.dart';
 import 'package:outfitter/utils/Preferances.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
+import '../utils/CustomSnackBar.dart';
 import '../utils/ShakeWidget.dart';
 
 class Otp extends StatefulWidget {
@@ -22,6 +23,7 @@ class _OtpState extends State<Otp> {
   bool _isLoading = false;
   String _verifyMessage = "";
   bool recieving = false;
+  final spinkits=Spinkits();
 
   void _validateFields() {
     setState(() {
@@ -33,7 +35,6 @@ class _OtpState extends State<Otp> {
     });
     if (_verifyMessage == "") {
       VerifyOtp();
-
     } else {
       setState(() {
         _isLoading = false;
@@ -61,10 +62,12 @@ class _OtpState extends State<Otp> {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(
               res.settings?.message??"",
-              style: TextStyle(color: Color(0xff000000)),
+              style: TextStyle(color: Color(0xffffffff),
+                fontFamily: "RozhaOne"
+              ),
             ),
             duration: Duration(seconds: 1),
-            backgroundColor: Color(0xFFCDE2FB),
+            backgroundColor: Color(0xFF000000),
           ));
         }
       });
@@ -370,8 +373,9 @@ class _OtpState extends State<Otp> {
                                       borderRadius: BorderRadius.circular(7),
                                     ),
                                     child: Center(
-                                      child: Text(
-                                        "ENTER OTP",
+                                      child:_isLoading ?spinkits.getFadingCircleSpinner(color: Color(0xffE7C6A0)):
+                                      Text(
+                                        "SUBMIT",
                                         style: TextStyle(
                                             color: Color(0xffD0A85C),
                                             fontFamily: 'RozhaOne',
