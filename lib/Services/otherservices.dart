@@ -58,6 +58,7 @@ class NoInternetWidget extends StatelessWidget {
                 style: TextStyle(
                   color: Color(0xFF000000),
                   fontSize: 20,
+                  fontFamily: 'RozhaOne',
                   fontWeight: FontWeight.w600,
                 ),
               ),
@@ -69,6 +70,7 @@ class NoInternetWidget extends StatelessWidget {
                 style: TextStyle(
                   color: Color(0xFF000000),
                   fontSize: 16,
+                  fontFamily: 'RozhaOne',
                   fontWeight: FontWeight.w400,
                 ),
               ),
@@ -94,7 +96,7 @@ class NoInternetWidget extends StatelessWidget {
                   height: 46,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(7),
-                    color: const Color(0xFF8856F4),
+                    color: const Color(0xff000000),
                   ),
                   child: const Center(
                     child: Text(
@@ -102,7 +104,7 @@ class NoInternetWidget extends StatelessWidget {
                       style: TextStyle(
                         color: Color(0xFFFFFFFF),
                         fontSize: 20,
-                        fontFamily: "Inter",
+                        fontFamily: 'RozhaOne',
                         fontWeight: FontWeight.w500,
                       ),
                     ),
