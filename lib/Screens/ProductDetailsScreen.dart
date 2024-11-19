@@ -274,7 +274,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     );
   }
 
-  Widget _buildProductWidget(String? id,String? imageUrl, String? name, int index, int tabIndex) {
+  Widget _buildProductWidget(String? id, String? imageUrl, String? name, int index, int tabIndex) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 3),
       child: Column(
@@ -316,16 +316,17 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           const SizedBox(height: 8),
           Center(
             child: Container(
-              width: MediaQuery.of(context).size.width * 0.18,
-              child: Text(
-                name ?? "",
+              width: MediaQuery.of(context).size.width * 0.25,
+              height: MediaQuery.of(context).size.width * 0.15,
+              child: Text("${name ?? ""}",
                 style: TextStyle(
                   color: Color(0xff4B5565),
                   fontFamily: 'RozhaOne',
-                  fontSize: 14,
+                  fontSize: 12,
                   height: 20 / 14,
                   fontWeight: FontWeight.w400,
                 ),
+                maxLines: 2,
                 textAlign: TextAlign.center,
               ),
             ),
@@ -334,6 +335,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
       ),
     );
   }
+
 
 
   @override
@@ -352,6 +354,21 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
         final productData = productDetailsProvider.productData;
         final wishlist_status= productDetailsProvider.isInWishlist;
         print("Image:${productData?.image}");
+
+        // Helper function to check if a list is not empty
+        bool _isListNotEmpty(List? list) {
+          return list != null && list.isNotEmpty;
+        }
+        // Helper function to return only visible tabs
+        List<String> _getVisibleTabItems() {
+          List<String> visibleTabs = [];
+          if (_isListNotEmpty(productData?.neck??[])) visibleTabs.add('Collar');
+          if (_isListNotEmpty(productData?.sleeve??[])) visibleTabs.add('CuffType');
+          if (_isListNotEmpty(productData?.placket??[])) visibleTabs.add('PlacketType');
+          if (_isListNotEmpty(productData?.pleat??[])) visibleTabs.add('BackBody');
+          return visibleTabs;
+        }
+
         if (productDetailsProvider.isLoading) {
           return Center(
               child: CircularProgressIndicator(
@@ -467,39 +484,39 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     ],
                   ),
                 ),
-                if(productData?.category=="Shirt")...[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: tabItems.asMap().entries.map((entry) {
-                    int index = entry.key;
-                    String label = entry.value;
-                    return GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          _selectedTabIndex = index; // Update selected tab
-                        });
-                      },
-                      child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 8),
-                        height: h * 0.03, // Set height based on screen height
-                        color: _selectedTabIndex == index
-                            ? Color(0xffE7C6A0) // Selected color
-                            : Colors.transparent,
-                        child: Center(
-                          child: Text(label,
-                              style: TextStyle(
-                                fontWeight: FontWeight.w400,
-                                fontFamily: 'RozhaOne',
-                                fontSize: 15,
-                                height: 1.6,
-                                color: Color(0xff110B0F),
-                                letterSpacing: 0.15,
-                              )),
+                if(productData?.category=="shirts")...[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: _getVisibleTabItems().asMap().entries.map((entry) {
+                      int index = entry.key;
+                      String label = entry.value;
+                      return GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _selectedTabIndex = index; // Update selected tab
+                          });
+                        },
+                        child: Container(
+                          padding: EdgeInsets.symmetric(horizontal: 8),
+                          height: h * 0.03, // Set height based on screen height
+                          color: _selectedTabIndex == index
+                              ? Color(0xffE7C6A0) // Selected color
+                              : Colors.transparent,
+                          child: Center(
+                            child: Text(label,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  fontFamily: 'RozhaOne',
+                                  fontSize: 15,
+                                  height: 1.6,
+                                  color: Color(0xff110B0F),
+                                  letterSpacing: 0.15,
+                                )),
+                          ),
                         ),
-                      ),
-                    );
-                  }).toList(),
-                ),
+                      );
+                    }).toList(),
+                  ),
                 ],
 
                 Stack(
@@ -1180,25 +1197,26 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
 
                           if (productData?.recentReviews != null && productData!.recentReviews.isNotEmpty) ...[
                             SizedBox(
-                              height: 150, // Set a specific height for the horizontal ListView
+                              height: 150,
                               child: ListView.builder(
                                 itemCount: productData.recentReviews.length ?? 0,
-                                scrollDirection: Axis.horizontal, // Enable horizontal scrolling
+                                scrollDirection: Axis.horizontal,
                                 physics: AlwaysScrollableScrollPhysics(),
                                 itemBuilder: (context, index) {
                                   var data = productData.recentReviews[index];
                                   return Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: Card(
-                                      elevation: 4.0, // Add shadow/elevation to the card
+                                      elevation: 4.0,
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(10.0), // Rounded corners
                                       ),
                                       child: Container(
-                                        width: 300, // Adjust width as needed
+                                        width: 300,
                                         padding: EdgeInsets.all(12), // Padding inside the card
                                         child: Column(
                                           mainAxisAlignment: MainAxisAlignment.start,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
                                             Row(
                                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1249,7 +1267,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                               ),
                                             ],
                                             SizedBox(height: 5,),
-                                            Text("${data.comment ?? ''}kbm lkg kg lkgnlokgjlkg lkgjre glkrgjreg lkrgnerolgknv ljnfa kjabgf kjbfg kjwefbrfgjbk ",
+                                            Text("${data.comment ?? ''}",
                                               style: TextStyle(
                                                 color: Color(0xff121926),
                                                 fontFamily: 'RozhaOne',
