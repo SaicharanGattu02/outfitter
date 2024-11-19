@@ -61,6 +61,7 @@ class _DashbordState extends State<Dashbord> {
           controller: _pageController,
           onPageChanged: onPageChanged,
           children: _screens,
+          physics: NeverScrollableScrollPhysics(),
         ),
         bottomNavigationBar: Container(
           decoration: BoxDecoration(

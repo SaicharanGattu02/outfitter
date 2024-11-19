@@ -10,7 +10,6 @@ import 'package:provider/provider.dart';
 import '../Model/ProductsDetailsModel.dart';
 import '../Services/UserApi.dart';
 import '../providers/WishlistProvider.dart';
-import '../utils/CustomAppBar.dart';
 import '../utils/CustomAppBar1.dart';
 import 'Cart.dart';
 
@@ -27,50 +26,10 @@ class ProductDetailsScreen extends StatefulWidget {
 class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   int quantity = 0;
   int rating = 0;
-  final List<Map<String, String>> grid = [
-    {"image": 'assets/c1.png', 'name': 'Peaked Collar'},
-    {"image": 'assets/c2.png', 'name': 'Spread Collar'},
-    {"image": 'assets/c3.png', 'name': 'Small Peaked'},
-    {"image": 'assets/c4.png', 'name': 'Button Down'},
-    {"image": 'assets/c4.png', 'name': 'Pin Collar'},
-  ];
-  final List<Map<String, String>> grid1 = [
-    {"image": 'assets/cuff1.png', 'name': 'Large Round '},
-    {"image": 'assets/cuff2.png', 'name': 'Are-Shape'},
-    {"image": 'assets/cuff3.png', 'name': 'Double Button '},
-    {"image": 'assets/cuff4.png', 'name': 'Cham Fering '},
-  ];
-  final List<Map<String, String>> grid2 = [
-    {"image": 'assets/planket1.png', 'name': 'Bow Pleat'},
-    {"image": 'assets/planket2.png', 'name': 'Hidden Placket'},
-  ];
-  final List<Map<String, String>> grid3 = [
-    {"image": 'assets/backbody1.png', 'name': 'Bow Pleat'},
-    {"image": 'assets/backbody2.png', 'name': 'Both Sides'},
-    {"image": 'assets/backbody3.png', 'name': 'Waist Pleat'},
-  ];
+
   bool _isDescriptionVisible = false;
-  final List<Map<String, String>> size = [
-    {'name': 'XS'},
-    {'name': 'S'},
-    {'name': 'M'},
-    {'name': 'L'},
-    {'name': 'XL'},
-    {'name': '2XL'},
-    {'name': '3XL'},
-    {'name': '4XL'},
-    {'name': '5XL'},
-  ];
-  final List<Map<String, String>> grids = [
-    {"image": 'assets/hoodie.png', 'name': 'HOODIE'},
-    {"image": 'assets/jeans.png', 'name': 'JEANS'},
-    {"image": 'assets/sleaves.png', 'name': 'HALF SLEEVES'},
-    {"image": 'assets/cargo.png', 'name': 'CARGO'},
-    {"image": 'assets/shirt.png', 'name': 'SHIRT'},
-    {"image": 'assets/formals.png', 'name': 'FORMALS'},
-    {"image": 'assets/polo.png', 'name': 'POLO'},
-    {"image": 'assets/trousar.png', 'name': 'TROUSERS'},
-  ];
+
+
   int _selectedIndex = 0;
 
   List<Color> colorss = [
@@ -92,7 +51,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
 
   Color hexToColor(String hexColor) {
     final hex = hexColor.replaceAll('#', '');
-    if (hex.length == 6) {
+    if (hex.length == 6){
       return Color(
           int.parse('FF$hex', radix: 16)); // Adding FF for full opacity
     } else {

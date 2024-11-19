@@ -117,7 +117,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     });
   }
 
-  final spinkits = Spinkits();
+  final spinkits=Spinkits();
 
   @override
   Widget build(BuildContext context) {
@@ -248,7 +248,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   ),
                   child: Center(
                     child: isLoading
-                        ? CircularProgressIndicator(color: Color(0xffE7C6A0))
+                        ?spinkits.getFadingCircleSpinner(color: Color(0xffE7C6A0))
                         : Text(
                       "SAVE",
                       style: TextStyle(

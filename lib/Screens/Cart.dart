@@ -84,16 +84,19 @@ class _CartState extends State<Cart> {
                   SizedBox(
                     height: 10,
                   ),
-                  Text(
-                    "It Seems like you haven’t added anything to Your Cart yet!",
-                    style: TextStyle(
-                      color: Color(0xff000000),
-                      fontFamily: 'RozhaOne',
-                      fontSize: 16,
-                      height: 18 / 16,
-                      fontWeight: FontWeight.w400,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10 ),
+                    child: Text(
+                      "It Seems like you haven’t added anything to Your Cart yet!",
+                      style: TextStyle(
+                        color: Color(0xff000000),
+                        fontFamily: 'RozhaOne',
+                        fontSize: 16,
+                        height: 18 / 16,
+                        fontWeight: FontWeight.w400,
+                      ),
+                      textAlign: TextAlign.center,
                     ),
-                    textAlign: TextAlign.center,
                   ),
                   SizedBox(
                     height: w * 0.2,
