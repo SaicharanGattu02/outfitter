@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -13,6 +14,7 @@ import '../providers/CartProvider.dart';
 import '../providers/ProductListProvider.dart';
 import '../providers/WishlistProvider.dart';
 
+import '../utils/CustomSnackBar.dart';
 import 'ProdcutListScreen.dart';
 import 'Orders.dart';
 import 'Profile.dart';
@@ -63,18 +65,13 @@ class _DashHomeState extends State<DashHome> {
     });
   }
 
-
+  final spinkits = Spinkits3();
 
   @override
   void initState() {
-
     GetCategoriesList();
     super.initState();
   }
-
-
-
-
 
   Future<void> GetCategoriesList() async {
     final categories_list_provider =
@@ -303,11 +300,26 @@ class _DashHomeState extends State<DashHome> {
                                   ),
                                   padding: const EdgeInsets.all(8.0),
                                   child: Center(
-                                    child: Image.network(
-                                      categorielist?.image ?? '',
+                                    child: CachedNetworkImage(
+                                      imageUrl:  categorielist.image ?? '',
                                       width: 80,
                                       height: 80,
-                                      fit: BoxFit.contain,
+                                      fit: BoxFit.cover,
+                                      placeholder:
+                                          (BuildContext context,
+                                          String url) {
+                                        return Center(
+                                          child: spinkits
+                                              .getSpinningLinespinkit(),
+                                        );
+                                      },
+                                      errorWidget:
+                                          (BuildContext context,
+                                          String url,
+                                          dynamic error) {
+                                        // Handle error in case the image fails to load
+                                        return Icon(Icons.error);
+                                      },
                                     ),
                                   ),
                                 ),
@@ -315,7 +327,7 @@ class _DashHomeState extends State<DashHome> {
                               SizedBox(height: 8),
                               Center(
                                 child: Text(
-                                  categorielist?.categoryName ?? '',
+                                  categorielist.categoryName ?? '',
                                   style: TextStyle(
                                     color: Color(0xff110B0F),
                                     fontFamily: 'RozhaOne',
@@ -385,11 +397,26 @@ class _DashHomeState extends State<DashHome> {
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
                                             Center(
-                                              child: Image.network(
-                                                data.image ?? "",
+                                              child: CachedNetworkImage(
+                                                imageUrl: data.image ?? "",
                                                 height: h * 0.2,
                                                 width: w * 0.45,
                                                 fit: BoxFit.contain,
+                                                placeholder:
+                                                    (BuildContext context,
+                                                    String url) {
+                                                  return Center(
+                                                    child: spinkits
+                                                        .getSpinningLinespinkit(),
+                                                  );
+                                                },
+                                                errorWidget:
+                                                    (BuildContext context,
+                                                    String url,
+                                                    dynamic error) {
+                                                  // Handle error in case the image fails to load
+                                                  return Icon(Icons.error);
+                                                },
                                               ),
                                             ),
                                             SizedBox(height: 15),

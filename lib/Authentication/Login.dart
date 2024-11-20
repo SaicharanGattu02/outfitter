@@ -29,7 +29,7 @@ class _LoginState extends State<Login> {
   String _validatePhone = "";
   bool _loading = false;
   final spinkits=Spinkits();
-  late ConnectivityService _connectivityService;
+
 
   void _validateFields() {
     setState(() {

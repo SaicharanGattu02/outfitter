@@ -47,3 +47,28 @@ class Spinkits1 {
     );
   }
 }
+
+
+class Spinkits2 {
+  Widget getSpinningLinespinkit() {
+    return SizedBox(
+      height: 20,
+      width: 55,
+      child: SpinKitSpinningLines(
+        color: Color(0xffE7C6A0),
+      ),
+    );
+  }
+}
+
+class Spinkits3 {
+  Widget getSpinningLinespinkit() {
+    return SizedBox(
+      height: 20,
+      width: 55,
+      child: SpinKitSpinningLines(
+        color: Color(0xffE7C6A0),
+      ),
+    );
+  }
+}

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:outfitter/Screens/ProductDetailsScreen.dart';
@@ -13,6 +14,8 @@ import '../Services/UserApi.dart';
 import 'dart:developer' as developer;
 import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
+
+import '../utils/CustomSnackBar.dart';
 
 class ProdcutListScreen extends StatefulWidget {
   final String selectid;
@@ -49,6 +52,7 @@ class _ProdcutListScreenState extends State<ProdcutListScreen> {
   List<Color> selectedColors = [];
   String _selectedIndex = "";
   String category_id = "";
+  final spinkits = Spinkits3();
 
   void _toggleColorSelection(Color color) {
     setState(() {
@@ -188,7 +192,6 @@ class _ProdcutListScreenState extends State<ProdcutListScreen> {
                                     _selectedIndex = data.id ?? "";
                                     category_id = data.id ?? "";
                                     GetProductcategoryList(data.id ?? "", "","","");
-
                                       selectedMinPrice = 0;
                                       selectedMaxPrice = 0;
 
@@ -212,12 +215,26 @@ class _ProdcutListScreenState extends State<ProdcutListScreen> {
                                     ),
                                     padding: const EdgeInsets.all(8.0),
                                     child: Center(
-                                      child: Image.network(
-                                        data.image ?? '',
-                                        // Default to an empty string if image is null
+                                      child: CachedNetworkImage(
+                                        imageUrl: data.image ?? "",
                                         width: 64,
                                         height: 64,
                                         fit: BoxFit.contain,
+                                        placeholder:
+                                            (BuildContext context,
+                                            String url) {
+                                          return Center(
+                                            child: spinkits
+                                                .getSpinningLinespinkit(),
+                                          );
+                                        },
+                                        errorWidget:
+                                            (BuildContext context,
+                                            String url,
+                                            dynamic error) {
+                                          // Handle error in case the image fails to load
+                                          return Icon(Icons.error);
+                                        },
                                       ),
                                     ),
                                   ),
@@ -346,11 +363,26 @@ class _ProdcutListScreenState extends State<ProdcutListScreen> {
                                     children: [
                                       Center(
                                         child: Container(
-                                          child: Image.network(
-                                            productData.image ?? "",
-                                            fit: BoxFit.contain,
+                                          child:CachedNetworkImage(
+                                            imageUrl: productData.image ?? "",
                                             width: w * 0.3,
                                             height: h * 0.2,
+                                            fit: BoxFit.contain,
+                                            placeholder:
+                                                (BuildContext context,
+                                                String url) {
+                                              return Center(
+                                                child: spinkits
+                                                    .getSpinningLinespinkit(),
+                                              );
+                                            },
+                                            errorWidget:
+                                                (BuildContext context,
+                                                String url,
+                                                dynamic error) {
+                                              // Handle error in case the image fails to load
+                                              return Icon(Icons.error);
+                                            },
                                           ),
                                         ),
                                       ),

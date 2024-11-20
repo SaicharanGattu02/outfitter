@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:outfitter/Screens/ProductDetailsScreen.dart';
 import 'package:outfitter/Screens/checkout.dart';
@@ -12,6 +13,7 @@ import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/services.dart';
 import '../Services/otherservices.dart';
+import '../utils/CustomSnackBar.dart';
 
 class Cart extends StatefulWidget {
   const Cart({super.key});
@@ -22,6 +24,7 @@ class Cart extends StatefulWidget {
 
 class _CartState extends State<Cart> {
   int selectedIndex = 0;
+  final spinkits = Spinkits3();
   @override
   void initState() {
     GetCartList();
@@ -32,16 +35,13 @@ class _CartState extends State<Cart> {
   }
 
   late StreamSubscription<List<ConnectivityResult>> _connectivitySubscription;
-
   var isDeviceConnected = "";
-
   List<ConnectivityResult> _connectionStatus = [ConnectivityResult.none];
   final Connectivity _connectivity = Connectivity();
 
   Future<void> initConnectivity() async {
     List<ConnectivityResult> result;
     try {
-
       result = await _connectivity.checkConnectivity();
     } on PlatformException catch (e) {
       developer.log('Couldn\'t check connectivity status', error: e);
@@ -226,12 +226,22 @@ class _CartState extends State<Cart> {
                                             color: Color(0xffE7C6A0), width: 1),
                                       ),
                                       child: Center(
-                                        child: Image.network(
-                                          cartItem.product?.image ?? "",
-                                          fit: BoxFit.contain,
+                                        child: CachedNetworkImage(
+                                          imageUrl: cartItem.product?.image ?? "",
                                           width: 100,
                                           height: 125,
-                                        ),
+                                          fit: BoxFit.contain,
+                                          placeholder: (BuildContext context, String url) {
+                                            return Center(
+                                              child: spinkits.getSpinningLinespinkit(),
+                                            );
+                                          },
+                                          errorWidget: (BuildContext context, String url,
+                                              dynamic error) {
+                                            // Handle error in case the image fails to load
+                                            return Icon(Icons.error);
+                                          },
+                                        )
                                       ),
                                     ),
                                   ],

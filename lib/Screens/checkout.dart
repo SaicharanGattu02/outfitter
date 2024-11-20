@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:outfitter/Screens/AddressList.dart';
 import 'package:outfitter/Screens/OrderListScreen.dart';
@@ -22,18 +23,15 @@ class CheckoutScreen extends StatefulWidget {
 }
 
 class _CheckoutScreenState extends State<CheckoutScreen> {
-
-
+  final spinkits = Spinkits3();
 
   @override
   void initState() {
-
     initConnectivity();
     _connectivitySubscription =
         _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
     super.initState();
   }
-
 
   late StreamSubscription<List<ConnectivityResult>> _connectivitySubscription;
 
@@ -45,7 +43,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   Future<void> initConnectivity() async {
     List<ConnectivityResult> result;
     try {
-
       result = await _connectivity.checkConnectivity();
     } on PlatformException catch (e) {
       developer.log('Couldn\'t check connectivity status', error: e);
@@ -55,7 +52,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     if (!mounted) {
       return Future.value(null);
     }
-
 
     return _updateConnectionStatus(result);
   }
@@ -85,9 +81,14 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               setState(() {
                 if (data.settings?.success == 1) {
                   CustomSnackBar.show(context, "Order Placed Successfully!");
-                  final cart_list_provider = Provider.of<CartProvider>(context, listen: false);
+                  final cart_list_provider =
+                      Provider.of<CartProvider>(context, listen: false);
                   cart_list_provider.fetchCartProducts();
-                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => OrderListScreen(),));
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => OrderListScreen(),
+                      ));
                 } else {
                   CustomSnackBar.show(context, data.settings?.message ?? "");
                 }
@@ -100,90 +101,158 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   Widget build(BuildContext context) {
     var w = MediaQuery.of(context).size.width;
     var h = MediaQuery.of(context).size.height;
-    return
-      (isDeviceConnected == "ConnectivityResult.wifi" ||
-          isDeviceConnected == "ConnectivityResult.mobile")
-          ?
-
-      Scaffold(
-      appBar: CustomApp(title: "Checkout", w: w),
-      body: Consumer<ShippingDetailsProvider>(
-          builder: (context, shippingProvider, child) {
-        final shipping_data = shippingProvider.shippingData;
-        if (shipping_data?.address != null) {
-          if (shipping_data?.address is Address) {
-            address = shipping_data?.address?.id?? "";
-          }
-        }
-        // Handle null or invalid shipping_data cases
-        order_value = shipping_data?.totalAmount ?? 0;
-        return SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              children: [
-                if (address.isNotEmpty && address != "No address found") ...[
-                  Row(
+    return (isDeviceConnected == "ConnectivityResult.wifi" ||
+            isDeviceConnected == "ConnectivityResult.mobile")
+        ? Scaffold(
+            appBar: CustomApp(title: "Checkout", w: w),
+            body: Consumer<ShippingDetailsProvider>(
+                builder: (context, shippingProvider, child) {
+              final shipping_data = shippingProvider.shippingData;
+              if (shipping_data?.address != null) {
+                if (shipping_data?.address is Address) {
+                  address = shipping_data?.address?.id ?? "";
+                }
+              }
+              // Handle null or invalid shipping_data cases
+              order_value = shipping_data?.totalAmount ?? 0;
+              return SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
                     children: [
-                      Text(
-                        "Delivery To",
-                        style: TextStyle(
-                          color: Color(0xff110B0F),
-                          fontFamily: 'RozhaOne',
-                          fontSize: 20,
-                          height: 28 / 20,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                      Spacer(),
-                      InkResponse(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => AddressListScreen(),
-                              ));
-                        },
-                        child: Container(
-                          padding:
-                          EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(4),
-                            border:
-                            Border.all(color: Color(0xff0AA44F), width: 1),
-                          ),
-                          child: Text(
-                            "Change",
-                            style: TextStyle(
-                              color: Color(0xff0AA44F),
-                              fontFamily: 'RozhaOne',
-                              fontSize: 16,
-                              height: 28 / 16,
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: h * 0.01),
-                  Container(
-                    padding: EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: Color(0xffFFFDF6),
-                      border: Border.all(color: Color(0xffF3EFE1), width: 1),
-                      borderRadius: BorderRadius.circular(7),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
+                      if (address.isNotEmpty &&
+                          address != "No address found") ...[
                         Row(
                           children: [
-                            Icon(Icons.person_outline_rounded,
-                                color: Color(0xffCAA16C), size: 18),
-                            SizedBox(width: w * 0.02),
                             Text(
-                              shipping_data?.address?.fullName ?? "",
+                              "Delivery To",
+                              style: TextStyle(
+                                color: Color(0xff110B0F),
+                                fontFamily: 'RozhaOne',
+                                fontSize: 20,
+                                height: 28 / 20,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                            Spacer(),
+                            InkResponse(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => AddressListScreen(),
+                                    ));
+                              },
+                              child: Container(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 4),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(4),
+                                  border: Border.all(
+                                      color: Color(0xff0AA44F), width: 1),
+                                ),
+                                child: Text(
+                                  "Change",
+                                  style: TextStyle(
+                                    color: Color(0xff0AA44F),
+                                    fontFamily: 'RozhaOne',
+                                    fontSize: 16,
+                                    height: 28 / 16,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: h * 0.01),
+                        Container(
+                          padding: EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            color: Color(0xffFFFDF6),
+                            border:
+                                Border.all(color: Color(0xffF3EFE1), width: 1),
+                            borderRadius: BorderRadius.circular(7),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Icon(Icons.person_outline_rounded,
+                                      color: Color(0xffCAA16C), size: 18),
+                                  SizedBox(width: w * 0.02),
+                                  Text(
+                                    shipping_data?.address?.fullName ?? "",
+                                    style: TextStyle(
+                                      color: Color(0xff110B0F),
+                                      fontFamily: 'RozhaOne',
+                                      fontSize: 18,
+                                      height: 28 / 18,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                  SizedBox(width: w * 0.04),
+                                  Container(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 6, vertical: 2),
+                                    decoration: BoxDecoration(
+                                      color: Color(0xffE8EFFB),
+                                      borderRadius: BorderRadius.circular(4),
+                                    ),
+                                    child: Text(
+                                      shipping_data?.address?.addressType ?? "",
+                                      style: TextStyle(
+                                        color: Color(0xff110B0F),
+                                        fontFamily: 'RozhaOne',
+                                        fontSize: 12,
+                                        height: 18 / 12,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: h * 0.01),
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Icon(Icons.location_on_rounded,
+                                      color: Color(0xffCAA16C), size: 18),
+                                  SizedBox(width: w * 0.02),
+                                  Flexible(
+                                    child: Text(
+                                      "Address\n ${shipping_data?.address?.address}",
+                                      style: TextStyle(
+                                        color: Color(0xff110B0F),
+                                        fontFamily: 'RozhaOne',
+                                        fontSize: 14,
+                                        height: 21 / 14,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                      SizedBox(height: h * 0.008),
+                      Container(
+                        width: w,
+                        padding: EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: Color(0xffFFFDF6),
+                          border:
+                              Border.all(color: Color(0xffF3EFE1), width: 1),
+                          borderRadius: BorderRadius.circular(7),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Payment Details",
                               style: TextStyle(
                                 color: Color(0xff110B0F),
                                 fontFamily: 'RozhaOne',
@@ -192,104 +261,109 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                 fontWeight: FontWeight.w400,
                               ),
                             ),
-                            SizedBox(width: w * 0.04),
-                            Container(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 6, vertical: 2),
-                              decoration: BoxDecoration(
-                                color: Color(0xffE8EFFB),
-                                borderRadius: BorderRadius.circular(4),
-                              ),
-                              child: Text(
-                                shipping_data?.address?.addressType ?? "",
-                                style: TextStyle(
-                                  color: Color(0xff110B0F),
-                                  fontFamily: 'RozhaOne',
-                                  fontSize: 12,
-                                  height: 18 / 12,
-                                  fontWeight: FontWeight.w400,
+                            SizedBox(height: h * 0.008),
+                            _buildPaymentRow("Total Cost:",
+                                "₹${shipping_data?.totalAmount.toString() ?? ""}"),
+                            _buildPaymentRow("Shipping Fee",
+                                "₹${shipping_data?.shippingFee.toString() ?? ""}"),
+                            _buildPaymentRow("Delivery Charges",
+                                "₹${shipping_data?.deliveryCharges.toString() ?? ""}"),
+                            _buildPaymentRow("Handling Charges",
+                                "₹${shipping_data?.handlingCharges.toString() ?? ""}"),
+                            // _buildPaymentRow("GST", "₹80"),
+                            _buildPaymentRow("Additional Discount",
+                                "₹${shipping_data?.discount.toString() ?? ""}",
+                                isDiscount: true),
+                            SizedBox(height: h * 0.01),
+                            Divider(
+                                thickness: 1,
+                                height: 1,
+                                color: Color(0xffF3EFE1)),
+                            SizedBox(height: h * 0.01),
+                            Row(
+                              children: [
+                                Text(
+                                  "Total Amount",
+                                  style: TextStyle(
+                                    color: Color(0xff617C9D),
+                                    fontFamily: 'RozhaOne',
+                                    fontSize: 20,
+                                    height: 24 / 20,
+                                    fontWeight: FontWeight.w400,
+                                  ),
                                 ),
-                              ),
+                                Spacer(),
+                                Text(
+                                  "₹${shipping_data?.totalAmount.toString() ?? ""}",
+                                  style: TextStyle(
+                                    color: Color(0xff617C9D),
+                                    fontFamily: 'RozhaOne',
+                                    fontSize: 20,
+                                    height: 24 / 20,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
-                        ),
-                        SizedBox(height: h * 0.01),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Icon(Icons.location_on_rounded,
-                                color: Color(0xffCAA16C), size: 18),
-                            SizedBox(width: w * 0.02),
-                            Flexible(
-                              child: Text(
-                                "Address\n ${shipping_data?.address?.address}",
-                                style: TextStyle(
-                                  color: Color(0xff110B0F),
-                                  fontFamily: 'RozhaOne',
-                                  fontSize: 14,
-                                  height: 21 / 14,
-                                  fontWeight: FontWeight.w400,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-                SizedBox(height: h * 0.008),
-                Container(
-                  width: w,
-                  padding: EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: Color(0xffFFFDF6),
-                    border: Border.all(color: Color(0xffF3EFE1), width: 1),
-                    borderRadius: BorderRadius.circular(7),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Payment Details",
-                        style: TextStyle(
-                          color: Color(0xff110B0F),
-                          fontFamily: 'RozhaOne',
-                          fontSize: 18,
-                          height: 28 / 18,
-                          fontWeight: FontWeight.w400,
                         ),
                       ),
                       SizedBox(height: h * 0.008),
-                      _buildPaymentRow("Total Cost:",
-                          "₹${shipping_data?.totalAmount.toString() ?? ""}"),
-                      _buildPaymentRow("Shipping Fee",
-                          "₹${shipping_data?.shippingFee.toString() ?? ""}"),
-                      _buildPaymentRow("Delivery Charges",
-                          "₹${shipping_data?.deliveryCharges.toString() ?? ""}"),
-                      _buildPaymentRow("Handling Charges",
-                          "₹${shipping_data?.handlingCharges.toString() ?? ""}"),
-                      // _buildPaymentRow("GST", "₹80"),
-                      _buildPaymentRow("Additional Discount",
-                          "₹${shipping_data?.discount.toString() ?? ""}",
-                          isDiscount: true),
-                      SizedBox(height: h * 0.01),
-                      Divider(
-                          thickness: 1, height: 1, color: Color(0xffF3EFE1)),
-                      SizedBox(height: h * 0.01),
+                      _buildItemList(w, h),
+                      SizedBox(height: h * 0.008),
+                    ],
+                  ),
+                ),
+              );
+            }),
+            bottomNavigationBar:
+                // Container(
+                //   padding: EdgeInsets.only(top: 8, bottom: 8),
+                //   height: h * 0.04,
+                //   decoration: BoxDecoration(color: Color(0xffE7C6A0)),
+                //   child: Center(
+                //     child: Text(
+                //       "Available until 10hrs 30mins 20secs",
+                //       style: TextStyle(
+                //         color: Color(0xff110B0F),
+                //         fontFamily: 'RozhaOne',
+                //         fontSize: 16,
+                //         height: 20 / 16,
+                //         fontWeight: FontWeight.w400,
+                //       ),
+                //       textAlign: TextAlign.center,
+                //     ),
+                //   ),
+                //
+                //
+                // ),
+
+                Consumer<ShippingDetailsProvider>(
+                    builder: (context, shippingProvider, child) {
+              final shipping_data = shippingProvider.shippingData;
+              return SafeArea(
+                child: Container(
+                  color: Colors.white,
+                  padding:
+                      const EdgeInsets.only(left: 16, right: 16, bottom: 5),
+                  margin: EdgeInsets.symmetric(
+                    vertical: 10,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
                       Row(
                         children: [
                           Text(
-                            "Total Amount",
+                            "Total: ",
                             style: TextStyle(
-                              color: Color(0xff617C9D),
+                              color: Color(0xff000000),
                               fontFamily: 'RozhaOne',
                               fontSize: 20,
                               height: 24 / 20,
                               fontWeight: FontWeight.w400,
                             ),
                           ),
-                          Spacer(),
                           Text(
                             "₹${shipping_data?.totalAmount.toString() ?? ""}",
                             style: TextStyle(
@@ -302,112 +376,51 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                           ),
                         ],
                       ),
+                      InkWell(
+                        onTap: () {
+                          if (address.isNotEmpty &&
+                              address != "No address found") {
+                            PlacerOrderApi();
+                          } else {
+                            CustomSnackBar.show(
+                                context, "Please Select address!");
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => AddressListScreen(),
+                                ));
+                          }
+                        },
+                        child: Container(
+                          width: w * 0.45,
+                          height: h * 0.05,
+                          // padding: EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: Color(0xff110B0F),
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: Center(
+                            child: Text(
+                              "PLACE ORDER",
+                              style: TextStyle(
+                                color: Color(0xffCAA16C),
+                                fontFamily: 'RozhaOne',
+                                fontSize: 16,
+                                height: 21.06 / 16,
+                                fontWeight: FontWeight.w400,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
-                SizedBox(height: h * 0.008),
-                _buildItemList(w, h),
-                SizedBox(height: h * 0.008),
-              ],
-            ),
-          ),
-        );
-      }),
-      bottomNavigationBar:
-          // Container(
-          //   padding: EdgeInsets.only(top: 8, bottom: 8),
-          //   height: h * 0.04,
-          //   decoration: BoxDecoration(color: Color(0xffE7C6A0)),
-          //   child: Center(
-          //     child: Text(
-          //       "Available until 10hrs 30mins 20secs",
-          //       style: TextStyle(
-          //         color: Color(0xff110B0F),
-          //         fontFamily: 'RozhaOne',
-          //         fontSize: 16,
-          //         height: 20 / 16,
-          //         fontWeight: FontWeight.w400,
-          //       ),
-          //       textAlign: TextAlign.center,
-          //     ),
-          //   ),
-          //
-          //
-          // ),
-
-          Consumer<ShippingDetailsProvider>(
-              builder: (context, shippingProvider, child) {
-        final shipping_data = shippingProvider.shippingData;
-        return SafeArea(
-          child: Container(
-            color: Colors.white,
-            padding: const EdgeInsets.only(left: 16, right: 16, bottom: 5),
-            margin: EdgeInsets.symmetric(vertical: 10,),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    Text(
-                      "Total: ",
-                      style: TextStyle(
-                        color: Color(0xff000000),
-                        fontFamily: 'RozhaOne',
-                        fontSize: 20,
-                        height: 24 / 20,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                    Text(
-                      "₹${shipping_data?.totalAmount.toString() ?? ""}",
-                      style: TextStyle(
-                        color: Color(0xff617C9D),
-                        fontFamily: 'RozhaOne',
-                        fontSize: 20,
-                        height: 24 / 20,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                  ],
-                ),
-                InkWell(
-                  onTap: () {
-                    if (address.isNotEmpty && address != "No address found"){
-                      PlacerOrderApi();
-                    }else{
-                      CustomSnackBar.show(context, "Please Select address!");
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => AddressListScreen(),));
-                    }
-                  },
-                  child: Container(
-                    width: w * 0.45,
-                    height: h * 0.05,
-                    // padding: EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: Color(0xff110B0F),
-                      borderRadius: BorderRadius.circular(6),
-                    ),
-                    child: Center(
-                      child: Text(
-                        "PLACE ORDER",
-                        style: TextStyle(
-                          color: Color(0xffCAA16C),
-                          fontFamily: 'RozhaOne',
-                          fontSize: 16,
-                          height: 21.06 / 16,
-                          fontWeight: FontWeight.w400,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
-      }),
-    ):NoInternetWidget();
+              );
+            }),
+          )
+        : NoInternetWidget();
   }
 
   Widget _buildPaymentRow(String label, String amount,
@@ -488,12 +501,22 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               Border.all(color: Color(0xffE7C6A0), width: 1),
                         ),
                         child: Center(
-                          child: Image.network(
-                            cartItem.product?.image ?? "",
-                            width: 100,
-                            height: 100,
-                          ),
-                        ),
+                            child: CachedNetworkImage(
+                          imageUrl: cartItem.product?.image ?? "",
+                          width: 100,
+                          height: 100,
+                          fit: BoxFit.contain,
+                          placeholder: (BuildContext context, String url) {
+                            return Center(
+                              child: spinkits.getSpinningLinespinkit(),
+                            );
+                          },
+                          errorWidget: (BuildContext context, String url,
+                              dynamic error) {
+                            // Handle error in case the image fails to load
+                            return Icon(Icons.error);
+                          },
+                        )),
                       ),
                     ],
                   ),
@@ -590,7 +613,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                         ),
                         Row(
                           children: [
-                            Text("₹${cartItem.product?.salePrice.toString() ?? ""}",
+                            Text(
+                              "₹${cartItem.product?.salePrice.toString() ?? ""}",
                               style: TextStyle(
                                 color: Color(0xff181725),
                                 fontFamily: 'RozhaOne',
@@ -618,7 +642,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                 fontFamily: 'RozhaOne',
                                 fontSize: 12,
                                 decoration: TextDecoration.lineThrough,
-                                decorationColor:Color(0xffED1C24),
+                                decorationColor: Color(0xffED1C24),
                                 fontWeight: FontWeight.w400,
                               ),
                             ),

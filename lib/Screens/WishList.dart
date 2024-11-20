@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:outfitter/Screens/ProductDetailsScreen.dart';
 import 'package:outfitter/providers/WishlistProvider.dart';
@@ -5,6 +6,7 @@ import 'package:outfitter/utils/CustomAppBar.dart';
 import 'package:outfitter/utils/CustomAppBar1.dart';
 import 'package:provider/provider.dart';
 
+import '../utils/CustomSnackBar.dart';
 import 'dashbord.dart';
 
 class WishlistScreen extends StatefulWidget {
@@ -15,7 +17,7 @@ class WishlistScreen extends StatefulWidget {
 }
 
 class _WishlistScreenState extends State<WishlistScreen> {
-
+  final spinkits = Spinkits3();
   @override
   void initState() {
 
@@ -156,10 +158,26 @@ class _WishlistScreenState extends State<WishlistScreen> {
                                     border: Border.all(color: Color(0xffE7C6A0), width: 1),
                                   ),
                                   child: Center(
-                                    child: Image.network(
-                                      item.product?.image ?? "",
+                                    child:CachedNetworkImage(
+                                      imageUrl: item.product?.image ?? "",
                                       width: w * 0.25,
                                       height: h * 0.1,
+                                      fit: BoxFit.contain,
+                                      placeholder:
+                                          (BuildContext context,
+                                          String url) {
+                                        return Center(
+                                          child: spinkits
+                                              .getSpinningLinespinkit(),
+                                        );
+                                      },
+                                      errorWidget:
+                                          (BuildContext context,
+                                          String url,
+                                          dynamic error) {
+                                        // Handle error in case the image fails to load
+                                        return Icon(Icons.error);
+                                      },
                                     ),
                                   ),
                                 ),

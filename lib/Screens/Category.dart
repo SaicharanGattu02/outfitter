@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:outfitter/utils/CustomAppBar.dart';
 import 'package:outfitter/utils/CustomAppBar1.dart';
@@ -6,6 +7,7 @@ import 'package:provider/provider.dart';
 import '../Model/CategoriesModel.dart';
 import '../Services/UserApi.dart';
 import '../providers/CategoriesProvider.dart';
+import '../utils/CustomSnackBar.dart';
 import 'ProdcutListScreen.dart';
 
 class Category extends StatefulWidget {
@@ -19,9 +21,10 @@ class _CategoryState extends State<Category> {
 
   @override
   void initState() {
-    // GetCategoriesList();
     super.initState();
   }
+
+  final spinkits = Spinkits3();
 
   @override
   Widget build(BuildContext context) {
@@ -85,12 +88,26 @@ class _CategoryState extends State<Category> {
                           ),
                           padding: const EdgeInsets.all(8.0),
                           child: Center(
-                            child: Image.network(
-                              data.image ?? '',
-                              // Default to an empty string if image is null
+                            child: CachedNetworkImage(
+                              imageUrl: data.image ?? "",
                               width: 80,
                               height: 80,
                               fit: BoxFit.contain,
+                              placeholder:
+                                  (BuildContext context,
+                                  String url) {
+                                return Center(
+                                  child: spinkits
+                                      .getSpinningLinespinkit(),
+                                );
+                              },
+                              errorWidget:
+                                  (BuildContext context,
+                                  String url,
+                                  dynamic error) {
+                                // Handle error in case the image fails to load
+                                return Icon(Icons.error);
+                              },
                             ),
                           ),
                         ),
