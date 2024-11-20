@@ -189,8 +189,8 @@ class _ProdcutListScreenState extends State<ProdcutListScreen> {
                                     category_id = data.id ?? "";
                                     GetProductcategoryList(data.id ?? "", "","","");
 
-                                      selectedMinPrice = 0;  // Reset to 0 or null
-                                      selectedMaxPrice = 0;  // Reset to 0 or null
+                                      selectedMinPrice = 0;
+                                      selectedMaxPrice = 0;
 
                                   });
                                 },
@@ -260,7 +260,8 @@ class _ProdcutListScreenState extends State<ProdcutListScreen> {
                             ),
                           ],
                         ));
-                  } else if (product_list.isEmpty) {
+                  } else
+                    if (product_list.isEmpty) {
                     return Center(
                       child: Column(
                         children: [

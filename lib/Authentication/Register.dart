@@ -5,6 +5,11 @@ import 'package:outfitter/Services/UserApi.dart';
 import 'package:outfitter/utils/Mywidgets.dart';
 import '../utils/CustomSnackBar.dart';
 import '../utils/ShakeWidget.dart';
+import 'dart:developer' as developer;
+import 'dart:async';
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:flutter/services.dart';
+import '../Services/otherservices.dart';
 
 class Register extends StatefulWidget {
   const Register({super.key});
@@ -60,6 +65,14 @@ class _RegisterState extends State<Register> {
     });
   }
 
+  @override
+  void initState() {
+    initConnectivity();
+    _connectivitySubscription =
+        _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
+    super.initState();
+  }
+
   Future<void> RegisterApi() async {
     var data = await Userapi.PostRegister(
         _fullNameController.text,
@@ -87,12 +100,55 @@ class _RegisterState extends State<Register> {
     }
   }
 
+
+  late StreamSubscription<List<ConnectivityResult>> _connectivitySubscription;
+
+  var isDeviceConnected = "";
+
+  List<ConnectivityResult> _connectionStatus = [ConnectivityResult.none];
+  final Connectivity _connectivity = Connectivity();
+
+  Future<void> initConnectivity() async {
+    List<ConnectivityResult> result;
+    try {
+
+      result = await _connectivity.checkConnectivity();
+    } on PlatformException catch (e) {
+      developer.log('Couldn\'t check connectivity status', error: e);
+      return;
+    }
+
+    if (!mounted) {
+      return Future.value(null);
+    }
+
+
+    return _updateConnectionStatus(result);
+  }
+
+  Future<void> _updateConnectionStatus(List<ConnectivityResult> result) async {
+    setState(() {
+      _connectionStatus = result;
+      for (int i = 0; i < _connectionStatus.length; i++) {
+        setState(() {
+          isDeviceConnected = _connectionStatus[i].toString();
+          print("isDeviceConnected:${isDeviceConnected}");
+        });
+      }
+    });
+    print('Connectivity changed: $_connectionStatus');
+  }
   @override
   Widget build(BuildContext context) {
     var w = MediaQuery.of(context).size.width;
     var h = MediaQuery.of(context).size.height;
 
-    return Scaffold(
+    return
+      (isDeviceConnected == "ConnectivityResult.wifi" ||
+          isDeviceConnected == "ConnectivityResult.mobile")
+          ?
+
+      Scaffold(
       body: SingleChildScrollView(
         child: Container(
           width: w,
@@ -727,6 +783,6 @@ class _RegisterState extends State<Register> {
           ),
         ),
       ),
-    );
+    ):NoInternetWidget();
   }
 }
