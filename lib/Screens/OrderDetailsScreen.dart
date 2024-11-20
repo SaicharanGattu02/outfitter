@@ -21,6 +21,12 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
   bool isLoading = true;
   OrderDetails? orderDetail;
 
+  late StreamSubscription<List<ConnectivityResult>> _connectivitySubscription;
+
+  var isDeviceConnected = "";
+  List<ConnectivityResult> _connectionStatus = [ConnectivityResult.none];
+  final Connectivity _connectivity = Connectivity();
+
   @override
   void initState() {
     super.initState();
@@ -29,15 +35,6 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
     _connectivitySubscription =
         _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
   }
-
-
-  late StreamSubscription<List<ConnectivityResult>> _connectivitySubscription;
-
-  var isDeviceConnected = "";
-
-  List<ConnectivityResult> _connectionStatus = [ConnectivityResult.none];
-  final Connectivity _connectivity = Connectivity();
-
   Future<void> initConnectivity() async {
     List<ConnectivityResult> result;
     try {
@@ -205,27 +202,27 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                                             fontWeight: FontWeight.w400,
                                           ),
                                         ),
-                                        SizedBox(height: h * 0.008),
-                                        Row(
-                                          children:
-                                              List.generate(5, (starIndex) {
-                                            int rating = 0;
-                                            if (item?.product?.rating != null) {
-                                              rating = int.tryParse(item
-                                                          ?.product?.rating
-                                                          .toString() ??
-                                                      "") ??
-                                                  0;
-                                            }
-                                            return Icon(
-                                              starIndex < rating
-                                                  ? Icons.star
-                                                  : Icons.star_border,
-                                              color: Color(0xffF79009),
-                                              size: 14,
-                                            );
-                                          }),
-                                        ),
+                                        // SizedBox(height: h * 0.008),
+                                        // Row(
+                                        //   children:
+                                        //       List.generate(5, (starIndex) {
+                                        //     int rating = 0;
+                                        //     if (item?.product?.rating != null) {
+                                        //       rating = int.tryParse(item
+                                        //                   ?.product?.rating
+                                        //                   .toString() ??
+                                        //               "") ??
+                                        //           0;
+                                        //     }
+                                        //     return Icon(
+                                        //       starIndex < rating
+                                        //           ? Icons.star
+                                        //           : Icons.star_border,
+                                        //       color: Color(0xffF79009),
+                                        //       size: 14,
+                                        //     );
+                                        //   }),
+                                        // ),
                                         SizedBox(height: h * 0.008),
                                         Row(
                                           children: [

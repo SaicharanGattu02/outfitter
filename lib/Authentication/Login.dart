@@ -4,7 +4,9 @@ import 'package:outfitter/Authentication/Otp.dart';
 import 'package:outfitter/Authentication/Register.dart';
 import 'package:outfitter/Services/UserApi.dart';
 import 'package:outfitter/utils/CustomSnackBar.dart';
+import 'package:provider/provider.dart';
 
+import '../Services/ConnectivityService.dart';
 import '../utils/Mywidgets.dart';
 import '../utils/ShakeWidget.dart';
 import 'dart:developer' as developer;
@@ -27,6 +29,7 @@ class _LoginState extends State<Login> {
   String _validatePhone = "";
   bool _loading = false;
   final spinkits=Spinkits();
+  late ConnectivityService _connectivityService;
 
   void _validateFields() {
     setState(() {
@@ -58,48 +61,14 @@ class _LoginState extends State<Login> {
 
    @override
   void initState() {
-     initConnectivity();
-     _connectivitySubscription =
-         _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
+     Provider.of<ConnectivityService>(context, listen: false).initConnectivity();
     super.initState();
   }
 
-  late StreamSubscription<List<ConnectivityResult>> _connectivitySubscription;
-
-  var isDeviceConnected = "";
-
-  List<ConnectivityResult> _connectionStatus = [ConnectivityResult.none];
-  final Connectivity _connectivity = Connectivity();
-
-  Future<void> initConnectivity() async {
-    List<ConnectivityResult> result;
-    try {
-
-      result = await _connectivity.checkConnectivity();
-    } on PlatformException catch (e) {
-      developer.log('Couldn\'t check connectivity status', error: e);
-      return;
-    }
-
-    if (!mounted) {
-      return Future.value(null);
-    }
-
-
-    return _updateConnectionStatus(result);
-  }
-
-  Future<void> _updateConnectionStatus(List<ConnectivityResult> result) async {
-    setState(() {
-      _connectionStatus = result;
-      for (int i = 0; i < _connectionStatus.length; i++) {
-        setState(() {
-          isDeviceConnected = _connectionStatus[i].toString();
-          print("isDeviceConnected:${isDeviceConnected}");
-        });
-      }
-    });
-    print('Connectivity changed: $_connectionStatus');
+  @override
+  void dispose() {
+    Provider.of<ConnectivityService>(context, listen: false).dispose();
+    super.dispose();
   }
 
 
@@ -107,11 +76,10 @@ class _LoginState extends State<Login> {
   Widget build(BuildContext context) {
     var w = MediaQuery.of(context).size.width;
     var h = MediaQuery.of(context).size.height;
-
-    return
-      (isDeviceConnected == "ConnectivityResult.wifi" ||
-          isDeviceConnected == "ConnectivityResult.mobile")
-          ?
+    final _connectivityService = Provider.of<ConnectivityService>(context);
+    return (_connectivityService.isDeviceConnected == "ConnectivityResult.wifi" ||
+        _connectivityService.isDeviceConnected == "ConnectivityResult.mobile")
+        ?
       Scaffold(
       resizeToAvoidBottomInset: true,
       backgroundColor: Color(0xff),

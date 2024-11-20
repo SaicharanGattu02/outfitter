@@ -461,7 +461,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                           ),
                           Spacer(),
                           if (productData?.ratingStats.averageRating !=
-                              0.0) ...[
+                              0) ...[
                             Row(
                               children: List.generate(5, (starIndex) {
                                 int ratingValue = int.tryParse(productData
@@ -469,6 +469,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                             .toString() ??
                                         "") ??
                                     0;
+                                print("RAting:${ratingValue}");
                                 return Icon(
                                   starIndex < ratingValue
                                       ? Icons.star
@@ -1269,6 +1270,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                                 children: List.generate(5, (starIndex) {
                                                   int ratingValue = int.tryParse(data.rating
                                                       .toString() ?? "") ?? 0;
+                                                  print("Rating value:${ratingValue}");
                                                   return Icon(
                                                     starIndex < ratingValue
                                                         ? Icons.star

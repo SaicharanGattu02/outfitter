@@ -5,14 +5,12 @@ class OrderDetailsModel {
   OrderDetailsModel({this.data, this.settings});
 
   OrderDetailsModel.fromJson(Map<String, dynamic> json) {
-    data = json['data'] != null ? new OrderDetails.fromJson(json['data']) : null;
-    settings = json['settings'] != null
-        ? new Settings.fromJson(json['settings'])
-        : null;
+    data = json['data'] != null ? OrderDetails.fromJson(json['data']) : null;
+    settings = json['settings'] != null ? Settings.fromJson(json['settings']) : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     if (this.data != null) {
       data['data'] = this.data!.toJson();
     }
@@ -31,21 +29,22 @@ class OrderDetails {
   bool? isPaid;
   List<Items>? items;
   Address? address;
-  int? orderValue;
+  num? orderValue;  // Changed from int? to num?
   Product? product;
   Shipping? shipping;
 
-  OrderDetails(
-      {this.id,
-      this.orderId,
-      this.status,
-      this.paymentMethod,
-      this.isPaid,
-      this.items,
-      this.address,
-      this.orderValue,
-      this.product,
-      this.shipping});
+  OrderDetails({
+    this.id,
+    this.orderId,
+    this.status,
+    this.paymentMethod,
+    this.isPaid,
+    this.items,
+    this.address,
+    this.orderValue,
+    this.product,
+    this.shipping,
+  });
 
   OrderDetails.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -56,20 +55,17 @@ class OrderDetails {
     if (json['items'] != null) {
       items = <Items>[];
       json['items'].forEach((v) {
-        items!.add(new Items.fromJson(v));
+        items!.add(Items.fromJson(v));
       });
     }
-    address =
-        json['address'] != null ? new Address.fromJson(json['address']) : null;
+    address = json['address'] != null ? Address.fromJson(json['address']) : null;
     orderValue = json['order_value'];
-    product = json['product'];
-    shipping = json['shipping'] != null
-        ? new Shipping.fromJson(json['shipping'])
-        : null;
+    product = json['product'] != null ? Product.fromJson(json['product']) : null;
+    shipping = json['shipping'] != null ? Shipping.fromJson(json['shipping']) : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = this.id;
     data['order_id'] = this.orderId;
     data['status'] = this.status;
@@ -82,7 +78,9 @@ class OrderDetails {
       data['address'] = this.address!.toJson();
     }
     data['order_value'] = this.orderValue;
-    data['product'] = this.product;
+    if (this.product != null) {
+      data['product'] = this.product!.toJson();
+    }
     if (this.shipping != null) {
       data['shipping'] = this.shipping!.toJson();
     }
@@ -94,20 +92,19 @@ class Items {
   String? id;
   Product? product;
   int? quantity;
-  int? amount;
+  num? amount;  // Changed from int? to num?
 
   Items({this.id, this.product, this.quantity, this.amount});
 
   Items.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    product =
-        json['product'] != null ? new Product.fromJson(json['product']) : null;
+    product = json['product'] != null ? Product.fromJson(json['product']) : null;
     quantity = json['quantity'];
-    amount = json['amount'];
+    amount = json['amount'];  // Can be double or int
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = this.id;
     if (this.product != null) {
       data['product'] = this.product!.toJson();
@@ -125,24 +122,24 @@ class Product {
   bool? isBestSeller;
   String? brand;
   String? postedBy;
-  int? mrp;
-  int? salePrice;
+  num? mrp;  // Changed from int? to num?
+  num? salePrice;  // Changed from int? to num?
   bool? isInWishlist;
   String? image;
-  int? rating;
 
-  Product(
-      {this.id,
-      this.title,
-      this.category,
-      this.isBestSeller,
-      this.brand,
-      this.postedBy,
-      this.mrp,
-      this.salePrice,
-      this.isInWishlist,
-      this.image,
-      this.rating});
+
+  Product({
+    this.id,
+    this.title,
+    this.category,
+    this.isBestSeller,
+    this.brand,
+    this.postedBy,
+    this.mrp,
+    this.salePrice,
+    this.isInWishlist,
+    this.image,
+  });
 
   Product.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -155,11 +152,10 @@ class Product {
     salePrice = json['sale_price'];
     isInWishlist = json['is_in_wishlist'];
     image = json['image'];
-    rating = json['rating'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = this.id;
     data['title'] = this.title;
     data['category'] = this.category;
@@ -170,7 +166,6 @@ class Product {
     data['sale_price'] = this.salePrice;
     data['is_in_wishlist'] = this.isInWishlist;
     data['image'] = this.image;
-    data['rating'] = this.rating;
     return data;
   }
 }
@@ -180,39 +175,40 @@ class Address {
   String? mobile;
   String? alternateMobile;
   String? fullName;
-  bool? default_address;
+  bool? defaultAddress;
   String? address;
   String? addressType;
   String? pincode;
 
-  Address(
-      {this.id,
-      this.mobile,
-      this.alternateMobile,
-      this.fullName,
-      this.default_address,
-      this.address,
-      this.addressType,
-      this.pincode});
+  Address({
+    this.id,
+    this.mobile,
+    this.alternateMobile,
+    this.fullName,
+    this.defaultAddress,
+    this.address,
+    this.addressType,
+    this.pincode,
+  });
 
   Address.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     mobile = json['mobile'];
     alternateMobile = json['alternate_mobile'];
     fullName = json['full_name'];
-    default_address = json['default'];
+    defaultAddress = json['default'];
     address = json['address'];
     addressType = json['address_type'];
     pincode = json['pincode'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = this.id;
     data['mobile'] = this.mobile;
     data['alternate_mobile'] = this.alternateMobile;
     data['full_name'] = this.fullName;
-    data['default'] = this.default_address;
+    data['default'] = this.defaultAddress;
     data['address'] = this.address;
     data['address_type'] = this.addressType;
     data['pincode'] = this.pincode;
@@ -222,21 +218,22 @@ class Address {
 
 class Shipping {
   String? id;
-  int? handlingCharges;
-  int? shippingFee;
-  int? deliveryCharges;
-  int? discount;
-  int? totalAmount;
-  int? saleAmount;
+  num? handlingCharges;  // Changed from int? to num?
+  num? shippingFee;  // Changed from int? to num?
+  num? deliveryCharges;  // Changed from int? to num?
+  num? discount;  // Changed from int? to num?
+  num? totalAmount;  // Changed from int? to num?
+  num? saleAmount;  // Changed from int? to num?
 
-  Shipping(
-      {this.id,
-      this.handlingCharges,
-      this.shippingFee,
-      this.deliveryCharges,
-      this.discount,
-      this.totalAmount,
-      this.saleAmount});
+  Shipping({
+    this.id,
+    this.handlingCharges,
+    this.shippingFee,
+    this.deliveryCharges,
+    this.discount,
+    this.totalAmount,
+    this.saleAmount,
+  });
 
   Shipping.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -249,7 +246,7 @@ class Shipping {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = this.id;
     data['handling_charges'] = this.handlingCharges;
     data['shipping_fee'] = this.shippingFee;
@@ -275,7 +272,7 @@ class Settings {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['success'] = this.success;
     data['message'] = this.message;
     data['status'] = this.status;

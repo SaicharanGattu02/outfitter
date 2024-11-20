@@ -23,6 +23,7 @@ import 'package:outfitter/utils/Preferances.dart';
 import 'package:provider/provider.dart';
 
 import 'Screens/Profile.dart';
+import 'Services/ConnectivityService.dart';
 
 
 const AndroidNotificationChannel channel = AndroidNotificationChannel(
@@ -168,6 +169,9 @@ Future<void> main() async {
   runApp(
     MultiProvider(
       providers: [
+        ChangeNotifierProvider(
+          create: (_) => ConnectivityService(),
+        ),
         ChangeNotifierProvider(
           create: (context) => ProductDetailsProvider(),
         ),

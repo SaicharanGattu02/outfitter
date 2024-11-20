@@ -6,7 +6,9 @@ import 'package:flutter/services.dart';
 import 'package:outfitter/Authentication/Login.dart';
 import 'package:outfitter/Authentication/Register.dart';
 import 'package:outfitter/Screens/dashbord.dart';
+import 'package:provider/provider.dart';
 import 'dart:developer' as developer;
+import '../Services/ConnectivityService.dart';
 import '../Services/otherservices.dart';
 import '../utils/Preferances.dart';
 
@@ -20,51 +22,56 @@ class Splash extends StatefulWidget {
 
 class _SplashState extends State<Splash> {
   String token = "";
-
-  List<ConnectivityResult> _connectionStatus = [ConnectivityResult.none];
-  final Connectivity _connectivity = Connectivity();
-  late StreamSubscription<List<ConnectivityResult>> _connectivitySubscription;
-  var isDeviceConnected = "";
+  // List<ConnectivityResult> _connectionStatus = [ConnectivityResult.none];
+  // final Connectivity _connectivity = Connectivity();
+  // late StreamSubscription<List<ConnectivityResult>> _connectivitySubscription;
+  // var isDeviceConnected = "";
 
   @override
   void initState() {
     super.initState();
-    initConnectivity();
-    _connectivitySubscription =
-        _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
+    Provider.of<ConnectivityService>(context, listen: false).initConnectivity();
+    // initConnectivity();
+    // _connectivitySubscription =
+    //     _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
     fetchDetails();
   }
 
-  Future<void> initConnectivity() async {
-    List<ConnectivityResult> result;
-    try {
-
-      result = await _connectivity.checkConnectivity();
-    } on PlatformException catch (e) {
-      developer.log('Couldn\'t check connectivity status', error: e);
-      return;
-    }
-
-    if (!mounted) {
-      return Future.value(null);
-    }
-
-
-    return _updateConnectionStatus(result);
+  @override
+  void dispose() {
+    Provider.of<ConnectivityService>(context, listen: false).dispose();
+    super.dispose();
   }
 
-  Future<void> _updateConnectionStatus(List<ConnectivityResult> result) async {
-    setState(() {
-      _connectionStatus = result;
-      for (int i = 0; i < _connectionStatus.length; i++) {
-        setState(() {
-          isDeviceConnected = _connectionStatus[i].toString();
-          print("isDeviceConnected:${isDeviceConnected}");
-        });
-      }
-    });
-    print('Connectivity changed: $_connectionStatus');
-  }
+  // Future<void> initConnectivity() async {
+  //   List<ConnectivityResult> result;
+  //   try {
+  //     result = await _connectivity.checkConnectivity();
+  //   } on PlatformException catch (e) {
+  //     developer.log('Couldn\'t check connectivity status', error: e);
+  //     return;
+  //   }
+  //
+  //   if (!mounted) {
+  //     return Future.value(null);
+  //   }
+  //
+  //
+  //   return _updateConnectionStatus(result);
+  // }
+  //
+  // Future<void> _updateConnectionStatus(List<ConnectivityResult> result) async {
+  //   setState(() {
+  //     _connectionStatus = result;
+  //     for (int i = 0; i < _connectionStatus.length; i++) {
+  //       setState(() {
+  //         isDeviceConnected = _connectionStatus[i].toString();
+  //         // print("isDeviceConnected:${isDeviceConnected}");
+  //       });
+  //     }
+  //   });
+  //   // print('Connectivity changed: $_connectionStatus');
+  // }
 
 
 
@@ -94,9 +101,9 @@ class _SplashState extends State<Splash> {
   Widget build(BuildContext context) {
     var h = MediaQuery.of(context).size.height;
     var w = MediaQuery.of(context).size.width;
-
-    return (isDeviceConnected == "ConnectivityResult.wifi" ||
-        isDeviceConnected == "ConnectivityResult.mobile")
+    final _connectivityService = Provider.of<ConnectivityService>(context);
+    return    (_connectivityService.isDeviceConnected == "ConnectivityResult.wifi" ||
+        _connectivityService.isDeviceConnected == "ConnectivityResult.mobile")
         ?
       Scaffold(
 
