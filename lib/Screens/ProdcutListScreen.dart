@@ -277,8 +277,7 @@ class _ProdcutListScreenState extends State<ProdcutListScreen> {
                             ),
                           ],
                         ));
-                  } else
-                    if (product_list.isEmpty) {
+                  } else if (product_list.isEmpty) {
                     return Center(
                       child: Column(
                         children: [

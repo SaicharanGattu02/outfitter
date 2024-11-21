@@ -1,10 +1,8 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart';  // For ChangeNotifier
+import 'package:flutter/foundation.dart';
 import 'package:outfitter/Model/WishlistModel.dart';
-import '../Model/CategoriesModel.dart';
-import '../Model/ProductsListModel.dart';
 import '../Services/UserApi.dart';
 import 'ProductListProvider.dart';
 

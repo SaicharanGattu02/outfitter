@@ -71,10 +71,8 @@ class _CartState extends State<Cart> {
 
   Future<void> GetCartList() async {
     final cart_list_provider = Provider.of<CartProvider>(context, listen: false);
-    final shipping_provider =
-        Provider.of<ShippingDetailsProvider>(context, listen: false);
     cart_list_provider.fetchCartProducts();
-    shipping_provider.fetchShippingDetails();
+
   }
 
   Color hexToColor(String hexColor) {
@@ -360,7 +358,7 @@ class _CartState extends State<Cart> {
                                                 // Decrease the quantity
                                                 int newQuantity =
                                                     (cartItem.quantity ?? 0) - 1;
-                                                cartProvider.updateQuantity(
+                                                cartProvider.optimisticUpdateCartQuantity(
                                                     cartItem.product?.id ?? "",
                                                     newQuantity);
                                                 cartProvider.updateCartApi(
@@ -400,7 +398,7 @@ class _CartState extends State<Cart> {
                                             onTap: () {
                                               int newQuantity =
                                                   (cartItem.quantity ?? 0) + 1;
-                                              cartProvider.updateQuantity(
+                                              cartProvider.optimisticUpdateCartQuantity(
                                                   cartItem.product?.id ?? "",
                                                   newQuantity);
                                               cartProvider.updateCartApi(

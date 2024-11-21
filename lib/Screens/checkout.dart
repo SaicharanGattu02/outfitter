@@ -28,6 +28,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   @override
   void initState() {
     initConnectivity();
+    GetShippingData();
     _connectivitySubscription =
         _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
     super.initState();
@@ -95,6 +96,11 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               })
             }
         });
+  }
+
+  Future<void> GetShippingData() async {
+    final shipping_provider = Provider.of<ShippingDetailsProvider>(context, listen: false);
+    shipping_provider.fetchShippingDetails();
   }
 
   @override

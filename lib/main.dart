@@ -186,7 +186,6 @@ Future<void> main() async {
         ),
         ChangeNotifierProvider(
           create: (context) => CartProvider(
-            shippingDetailsProvider: Provider.of<ShippingDetailsProvider>(context, listen: false),
           ),
         ),
         ChangeNotifierProvider(
