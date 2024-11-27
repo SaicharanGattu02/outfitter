@@ -23,7 +23,7 @@ import 'package:outfitter/utils/Preferances.dart';
 import 'package:provider/provider.dart';
 
 import 'Screens/Profile.dart';
-import 'Services/ConnectivityService.dart';
+import 'providers/ConnectivityService.dart';
 
 
 const AndroidNotificationChannel channel = AndroidNotificationChannel(
@@ -166,6 +166,9 @@ Future<void> main() async {
     print("Errrrrrrrrrr:${details.exceptionAsString()}");
     // Optionally report the error to a remote server
   };
+
+
+
   runApp(
     MultiProvider(
       providers: [
@@ -246,7 +249,6 @@ void showNotification(RemoteNotification notification,
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

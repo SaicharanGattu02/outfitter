@@ -6,11 +6,13 @@ import 'package:flutter/services.dart';
 
 class ConnectivityService with ChangeNotifier {
   late StreamSubscription<List<ConnectivityResult>> _connectivitySubscription;
-  String isDeviceConnected = "ConnectivityResult.none"; // Default value is none
+
+  String isDeviceConnected = "ConnectivityResult.none";
+
   List<ConnectivityResult> _connectionStatus = [ConnectivityResult.none];
   final Connectivity _connectivity = Connectivity();
 
-  // Singleton pattern
+
   static final ConnectivityService _instance = ConnectivityService._internal();
   factory ConnectivityService() {
     return _instance;
@@ -43,7 +45,6 @@ class ConnectivityService with ChangeNotifier {
     print('Connectivity changed: $_connectionStatus');
     notifyListeners(); // Notify listeners when the connection status changes
   }
-
 
   // Dispose the subscription when no longer needed
   void dispose() {

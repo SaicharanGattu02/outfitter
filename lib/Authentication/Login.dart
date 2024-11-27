@@ -6,7 +6,7 @@ import 'package:outfitter/Services/UserApi.dart';
 import 'package:outfitter/utils/CustomSnackBar.dart';
 import 'package:provider/provider.dart';
 
-import '../Services/ConnectivityService.dart';
+import '../providers/ConnectivityService.dart';
 import '../utils/Mywidgets.dart';
 import '../utils/ShakeWidget.dart';
 import 'dart:developer' as developer;

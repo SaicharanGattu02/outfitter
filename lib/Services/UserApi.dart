@@ -732,7 +732,6 @@ class Userapi {
   }
 
   static Future<OrdersListModel?> getOrdersList(String selectDate) async {
-    print("selectDate>>${selectDate}");
     try {
       final url = Uri.parse("${host}/api/orders?date_filter=${selectDate}");
       final headers = await getheader1();
