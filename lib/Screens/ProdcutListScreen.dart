@@ -61,6 +61,7 @@ class _ProdcutListScreenState extends State<ProdcutListScreen> {
     });
   }
 
+
   @override
   void initState() {
     _selectedIndex = widget.selectid;
@@ -73,6 +74,8 @@ class _ProdcutListScreenState extends State<ProdcutListScreen> {
         _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
     super.initState();
   }
+
+
 
   late StreamSubscription<List<ConnectivityResult>> _connectivitySubscription;
 
@@ -112,19 +115,39 @@ class _ProdcutListScreenState extends State<ProdcutListScreen> {
     print('Connectivity changed: $_connectionStatus');
   }
 
-
   void _scrollToSelectedIndex() {
     final categoriesList = context.read<CategoriesProvider>().categoriesList;
-    final selectedIndex =
-        categoriesList.indexWhere((category) => category.id == _selectedIndex);
 
-    if (selectedIndex != -1) {
-      // Assuming each item has a width of 96.0 (adjust as needed based on actual layout)
-      double position = selectedIndex *
-          (96.0 + 16.0); // 96.0 for item width + 16.0 for horizontal padding
-      _scrollController.animateTo(position,
-          duration: Duration(milliseconds: 300), curve: Curves.easeInOut);
+    if (categoriesList.isNotEmpty && _selectedIndex.isNotEmpty) {
+      final selectedIndex = categoriesList.indexWhere((category) => category.id == _selectedIndex);
+      if (selectedIndex != -1) {
+        // Calculate scroll position
+        double position = selectedIndex * (96.0 + 16.0);
+        print("Scrolling to position: $position");
+
+        // Check if content width exceeds screen width
+        final screenWidth = MediaQuery.of(context).size.width;
+        final totalWidth = categoriesList.length * (96.0 + 16.0);
+        print("Screen width: $screenWidth, Total content width: $totalWidth");
+
+        if (totalWidth > screenWidth) {
+          // Scroll if content is larger than screen width
+          _scrollController.animateTo(
+            position,
+            duration: Duration(milliseconds: 300),
+            curve: Curves.easeInOut,
+          );
+        } else {
+          print("Content width is smaller than screen width. No scroll needed.");
+        }
+      }
     }
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 
   Future<void> GetProductcategoryList(String id, selectedSort,filterminprice,filtermaxprice) async {

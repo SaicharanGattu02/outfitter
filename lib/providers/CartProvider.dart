@@ -14,7 +14,7 @@ class CartProvider with ChangeNotifier {
   List<CartList> get cartList => _cartList;
   int get cartCount => _cartCount;
   int get cartAmount => _cartAmount;
-  bool get isLoading => _isLoading; // Expose the loading state
+  bool get isLoading => _isLoading;
 
   // Method to fetch cart products
 // Fetch and reload the cart if needed

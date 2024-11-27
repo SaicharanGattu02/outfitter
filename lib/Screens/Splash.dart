@@ -8,7 +8,7 @@ import 'package:outfitter/Authentication/Register.dart';
 import 'package:outfitter/Screens/dashbord.dart';
 import 'package:provider/provider.dart';
 import 'dart:developer' as developer;
-import '../Services/ConnectivityService.dart';
+import '../providers/ConnectivityService.dart';
 import '../Services/otherservices.dart';
 import '../utils/Preferances.dart';
 
