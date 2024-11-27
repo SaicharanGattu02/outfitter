@@ -220,8 +220,6 @@ class _OrderListScreenState extends State<OrderListScreen> {
                             fontWeight: FontWeight.w400,
                           ),
                         ),
-
-
                       ),
 
                     ],
@@ -365,6 +363,7 @@ class _OrderListScreenState extends State<OrderListScreen> {
                                       ),
                                     ],
                                   ),
+
                                   SizedBox(
                                     height: 10,
                                   ),
