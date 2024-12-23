@@ -10,6 +10,7 @@ import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/services.dart';
 import '../Services/otherservices.dart';
+import 'Login2.dart';
 
 class Register extends StatefulWidget {
   const Register({super.key});
@@ -86,7 +87,7 @@ class _RegisterState extends State<Register> {
           _loading = false;
           CustomSnackBar.show(context, "${data.settings?.message}");
           Navigator.push(
-              context, MaterialPageRoute(builder: (context) => Login()));
+              context, MaterialPageRoute(builder: (context) => Login2()));
           // Navigator.push(
           //     context, MaterialPageRoute(builder: (context) =>LogInScreen()));
         } else {
@@ -257,28 +258,28 @@ class _RegisterState extends State<Register> {
                         textAlignVertical: TextAlignVertical.center,
                       ),
                     ),
-                    if (_validateFullName.isNotEmpty) ...[
-                      Container(
-                        alignment: Alignment.topLeft,
-                        margin: EdgeInsets.only(left: 8, bottom: 10, top: 5),
-                        width: MediaQuery.of(context).size.width * 0.6,
-                        child: ShakeWidget(
-                          key: Key("value"),
-                          duration: Duration(milliseconds: 700),
-                          child: Text(
-                            _validateFullName,
-                            style: TextStyle(
-                              fontFamily: "Poppins",
-                              fontSize: 12,
-                              color: Colors.red,
-                              fontWeight: FontWeight.w500,
+                      if (_validateFullName.isNotEmpty) ...[
+                        Container(
+                          alignment: Alignment.topLeft,
+                          margin: EdgeInsets.only(left: 8, bottom: 10, top: 5),
+                          width: MediaQuery.of(context).size.width * 0.6,
+                          child: ShakeWidget(
+                            key: Key("value"),
+                            duration: Duration(milliseconds: 700),
+                            child: Text(
+                              _validateFullName,
+                              style: TextStyle(
+                                fontFamily: "Poppins",
+                                fontSize: 12,
+                                color: Colors.red,
+                                fontWeight: FontWeight.w500,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ] else ...[
-                      SizedBox(height: 8),
-                    ],
+                      ] else ...[
+                        SizedBox(height: 8),
+                      ],
                     Label(text: 'Mobile Number'),
                     Container(
                       height: MediaQuery.of(context).size.height * 0.050,
@@ -758,7 +759,7 @@ class _RegisterState extends State<Register> {
                   InkWell(
                     onTap: () {
                       Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => Login()));
+                          MaterialPageRoute(builder: (context) => Login2()));
                     },
                     child: Text(
                       "Login",

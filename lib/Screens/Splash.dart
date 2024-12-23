@@ -8,6 +8,7 @@ import 'package:outfitter/Authentication/Register.dart';
 import 'package:outfitter/Screens/dashbord.dart';
 import 'package:provider/provider.dart';
 import 'dart:developer' as developer;
+import '../Authentication/Login2.dart';
 import '../providers/ConnectivityService.dart';
 import '../Services/otherservices.dart';
 import '../utils/Preferances.dart';
@@ -86,7 +87,7 @@ class _SplashState extends State<Splash> {
     Future.delayed(Duration(seconds: 2), () {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (context) => (token.isEmpty) ? Login() : Dashbord(),
+          builder: (context) => (token.isEmpty) ? Login2() : Dashbord(),
         ),
       );
       // Navigator.of(context).pushReplacement(

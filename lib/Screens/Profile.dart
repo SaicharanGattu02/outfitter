@@ -1,24 +1,19 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:outfitter/Authentication/Login.dart';
 import 'package:outfitter/Screens/AddressList.dart';
 import 'package:outfitter/Screens/Edit%20Profile%20screeen.dart';
 import 'package:outfitter/Screens/OrderListScreen.dart';
-import 'package:outfitter/Screens/Orders.dart';
-import 'package:outfitter/Screens/WishList.dart';
 import 'package:outfitter/providers/UserDetailsProvider.dart';
 import 'package:outfitter/utils/CustomAppBar.dart';
 import 'package:outfitter/utils/CustomAppBar1.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import '../Authentication/Login2.dart';
 import '../Model/UserDetailsModel.dart';
-import '../Services/UserApi.dart';
 import '../utils/CustomSnackBar.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
-
   @override
   State<Profile> createState() => _ProfileState();
 }
@@ -56,7 +51,6 @@ class _ProfileState extends State<Profile> {
   Widget build(BuildContext context) {
     var w = MediaQuery.of(context).size.width;
     var h = MediaQuery.of(context).size.height;
-
     return Scaffold(
       appBar: CustomAppBar2(title: 'Profile', w: w),
       body: Padding(
@@ -271,9 +265,13 @@ class _ProfileState extends State<Profile> {
                       SharedPreferences sharedPreferences =
                           await SharedPreferences.getInstance();
                       sharedPreferences.remove('token');
+                      // Navigator.pushReplacement(
+                      //   context,
+                      //   MaterialPageRoute(builder: (context) => Login()),
+                      // );
                       Navigator.pushReplacement(
                         context,
-                        MaterialPageRoute(builder: (context) => Login()),
+                        MaterialPageRoute(builder: (context) => Login2()),
                       );
                     },
                     child: Row(

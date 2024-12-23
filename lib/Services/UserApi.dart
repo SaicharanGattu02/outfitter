@@ -23,7 +23,7 @@ import 'package:http_parser/http_parser.dart';  // Import this for MediaType
 
 class Userapi {
   // static String host = "http://192.168.0.169:8000";
-  static String host = "http://outfiter.pixl.in";
+  static String host = "https://outfiter.pixl.in";
 
   static Future<RegisterModel?> PostRegister(String fullname, String mail,
       String phone, String password, String gender) async {
@@ -74,6 +74,35 @@ class Userapi {
         final jsonResponse = jsonDecode(response.body);
         print("PostOtp Status:${response.body}");
         return RegisterModel.fromJson(jsonResponse);
+      } else {
+        print("Request failed with status: ${response.statusCode}");
+        return null;
+      }
+    } catch (e) {
+      print("Error occurred: $e");
+      return null;
+    }
+  }
+
+
+  static Future<VerifyOtpModel?>LoginWithEmail(String email,String password) async {
+    try {
+      Map<String, String> data = {
+        "email": email,
+        "password": password,
+      };
+      final url = Uri.parse("${host}/auth/login");
+      final response = await http.post(
+        url,
+        headers: {
+          HttpHeaders.contentTypeHeader: "application/json",
+        },
+        body: jsonEncode(data),
+      );
+      if (response != null) {
+        final jsonResponse = jsonDecode(response.body);
+        print("LoginWithEmail:${response.body}");
+        return VerifyOtpModel.fromJson(jsonResponse);
       } else {
         print("Request failed with status: ${response.statusCode}");
         return null;

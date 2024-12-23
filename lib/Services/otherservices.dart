@@ -20,7 +20,7 @@ Future<Map<String, String>> getheader() async {
 
 Future<Map<String, String>> getheader1() async {
   final sessionid = await PreferenceService().getString("token");
-  print(sessionid);
+  // print(sessionid);
   String Token = "Bearer ${sessionid}";
   Map<String, String> headers = {
     'Authorization': Token,

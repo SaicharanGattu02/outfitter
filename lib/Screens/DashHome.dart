@@ -352,6 +352,7 @@ class _DashHomeState extends State<DashHome> {
                         return Container(); // or you can return SizedBox.shrink() for a non-visual empty widget
                       }
                       return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           SizedBox(height: h * 0.02),
                           Center(

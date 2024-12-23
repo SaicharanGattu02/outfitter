@@ -17,7 +17,7 @@ class Searchscreen extends StatefulWidget {
 
 class _SearchscreenState extends State<Searchscreen> {
   List<ProductsList> products = [];
-  bool isLoading = true;
+  bool isLoading = false;
 
   // Define the search query
   final TextEditingController _searchController = TextEditingController();
@@ -25,7 +25,6 @@ class _SearchscreenState extends State<Searchscreen> {
   @override
   void initState() {
     super.initState();
-    fetchProductsApi(''); // Fetch default data on initial load
   }
 
   Future<void> fetchProductsApi(String query) async {
@@ -37,6 +36,7 @@ class _SearchscreenState extends State<Searchscreen> {
           isLoading = false;
         } else {
           isLoading = false;
+          products = [];
           CustomSnackBar.show(context, res.settings?.message ?? "");
         }
       });
@@ -84,11 +84,14 @@ class _SearchscreenState extends State<Searchscreen> {
                         child: TextField(
                           controller: _searchController,
                           onChanged: (query) {
-                            setState(() {
-                              products = [];
-                            });
-                            fetchProductsApi(
-                                query); // Trigger search on text change
+                            if(query.length>0){
+                              setState(() {
+                                products = [];
+                                isLoading=true;
+                              });
+                              fetchProductsApi(
+                                  query);
+                            }
                           },
                           decoration: InputDecoration(
                             isCollapsed: true,

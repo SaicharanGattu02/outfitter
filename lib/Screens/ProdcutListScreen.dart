@@ -338,7 +338,6 @@ class _ProdcutListScreenState extends State<ProdcutListScreen> {
                       ),
                     );
                   }
-
                   // If product list is not empty, show GridView
                   return GridView.builder(
                     physics: NeverScrollableScrollPhysics(),
